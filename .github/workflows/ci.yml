@@ -5,7 +5,6 @@ on:
     branches:
       - master
       - develop
-      - feature/**
   pull_request:
     branches:
       - master
@@ -24,7 +23,7 @@ jobs:
           node-version: '18'
 
       - name: Install dependencies
-        run: npm ci --include=optional --no-audit --no-fund
+        pwsh -File .specify/scripts/powershell/setup-plan.ps1 -Json        run: npm ci --include=optional --no-audit --no-fund
 
       - name: Build
         run: npm run build

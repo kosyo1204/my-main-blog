@@ -1,0 +1,17 @@
+{
+  "name": "my-main-blog",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "npx @11ty/eleventy --serve --port=8080",
+    "build": "npx @11ty/eleventy --quiet",
+    "format": "prettier --write \"**/*.{md,js,json,njk}\"",
+    "update:readme": "node scripts/update-readme.js"
+  },
+  "devDependencies": {
+    "@11ty/eleventy": "^2.0.0",
+    "@11ty/eleventy-img": "^6.0.4",
+    "sharp": "^0.32.0",
+    "prettier": "^2.8.0"
+  }
+}

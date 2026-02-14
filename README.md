@@ -2,66 +2,125 @@
 
 技術学習のログを蓄積・公開するブログプラットフォーム
 
-## 要求整理書（Requirements）
+---
 
-### 1. 背景
-技術学習のログを蓄積し、自分の知識を資産化したい。  
-また、蓄積した内容の一部は転職活動時のポートフォリオとして活用できる状態にしたい。
+## URL
+
+（後日追加予定）
 
 ---
 
-### 2. 目的（Why）
+## Repositories
+
+- **Main Repository**: https://github.com/[user]/my-main-blog
+- **関連リポジトリ**: なし
+
+---
+
+## Tech Stack
+
+<!-- AUTO-GENERATED:TECH_STACK:START -->
+**Runtime / Dependencies**
+- なし
+
+**Dev Dependencies**
+- @11ty/eleventy
+- @11ty/eleventy-img
+- prettier
+- sharp
+<!-- AUTO-GENERATED:TECH_STACK:END -->
+
+---
+
+## Requirements
+
+### 目的
 - 学習ログを継続的に蓄積する
 - 知識を整理し、後から検索・参照できるようにする
-- 公開できる記事は公開し、転職活動に活用できるようにする
+- 転職活動のポートフォリオとして活用できる状態にする
+
+### 想定利用者
+- 主な利用者：筆者本人
+- 副次的な利用者：採用担当者 / エンジニア
+
+### 主要機能
+| 機能 | ステータス |
+|------|----------|
+| 公開記事の閲覧 | 必須 |
+| 公開/非公開の切り替え | 必須 |
+| タグ・カテゴリー分類 | 必須 |
+| SEO 最適化 | 必須 |
+| モバイル最適化 | 必須 |
+| アクセス解析（PV + 流入元） | 必須 |
+| 全文検索 | 任意 |
+| 人気記事ランキング | 任意 |
+
+**詳細は** [docs/requirements/REQUIREMENTS.md](docs/requirements/REQUIREMENTS.md) **を参照してください。**
 
 ---
 
-### 3. 想定利用者（Who）
-- 主な利用者：自分（筆者）
-- 副次的な利用者：転職活動時に閲覧する採用担当者 / エンジニア
+## Setup
+
+### 前提条件
+- Node.js v16+ （またはプロジェクトで指定されたバージョン）
+- npm / yarn
+
+### インストール
+```bash
+# リポジトリをクローン
+git clone https://github.com/[user]/my-main-blog.git
+cd my-main-blog
+
+# 依存パッケージをインストール
+npm install
+# または
+yarn install
+```
+
+### 開発サーバーの起動
+<!-- AUTO-GENERATED:DEV_CMD:START -->
+```bash
+npm run dev
+```
+<!-- AUTO-GENERATED:DEV_CMD:END -->
+
+### Docker 開発
+Docker での開発手順は [docs/docker/README.md](docs/docker/README.md) を参照してください。
+
+### ビルド
+<!-- AUTO-GENERATED:BUILD_CMD:START -->
+```bash
+npm run build
+```
+<!-- AUTO-GENERATED:BUILD_CMD:END -->
 
 ---
 
-### 4. 実現したいこと（What）
-- 技術記事を投稿・蓄積できる
-- 記事を公開・非公開に分けられる
-- タグで整理できる
-- カテゴリーで整理できる
-- 記事を探しやすい（検索または分類で辿れる）
-- アクセス解析を行い、PVや流入元が確認できる
-- SEO対策された状態で公開できる
-- モバイルで閲覧できる
+## Documentation Guide
+
+ドキュメントは `docs/` 配下に整理しています。用途に応じて以下を参照してください。
+
+<!-- AUTO-GENERATED:DOCS_GUIDE:START -->
+- [docs/requirements/REQUIREMENTS.md](requirements/REQUIREMENTS.md) — 要件定義
+- [docs/docker/README.md](docker/README.md) — Docker 開発ガイド
+- [docs/git-workflow/README.md](git-workflow/README.md) — Git 運用ガイド
+- [docs/design/IMAGE_OPTIMIZATION.md](design/IMAGE_OPTIMIZATION.md) — 画像最適化ガイド
+- [README.md](git-workflow/README.md) — Git 運用の全体概要
+- [COMMIT_CONVENTION.md](git-workflow/COMMIT_CONVENTION.md) — コミットメッセージ規約
+- [BRANCH_STRATEGY.md](git-workflow/BRANCH_STRATEGY.md) — ブランチ戦略とワークフロー
+- [PR_GUIDELINES.md](git-workflow/PR_GUIDELINES.md) — Pull Request ガイドライン
+- [REQUIREMENTS.md](requirements/REQUIREMENTS.md) — 詳細な要件定義・仕様書
+- [README.md](docker/README.md) — Docker 開発ガイド
+- [IMAGE_OPTIMIZATION.md](design/IMAGE_OPTIMIZATION.md) — 画像最適化ガイド（Eleventy）
+- [docs/design/](design/IMAGE_OPTIMIZATION.md) — 設計ドキュメント
+- [docs/testing/](testing/) — テスト戦略・テストガイドライン
+- [docs/deployment/](deployment/) — デプロイメントガイド
+- [ルート README](../README.md)
+- [Git 運用ガイド](git-workflow/README.md)
+<!-- AUTO-GENERATED:DOCS_GUIDE:END -->
 
 ---
 
-### 5. 必須機能（Must）
-- 公開記事を閲覧できるブログ機能
-- 公開/非公開の切り替え
-- タグ機能
-- カテゴリー機能
-- SEO最適化
-- モバイル最適化（レスポンシブ）
-- アクセス解析（PV + 流入元）
+## 開発に参加する際は
 
----
-
-### 6. 任意機能（Want）
-- 人気記事ランキング（PV順）
-- 全文検索（本文検索）
-  - 工数やコストが大きい場合は不要
-
----
-
-### 7. 制約条件
-- Git管理したい
-- GitHub上で公開できる状態にしたい（転職用途）
-- ランニングコストは無料が理想
-- 独自ドメインは無料でないなら不要
-
----
-
-### 8. 優先順位
-- 最優先：学習ログを溜められること、公開/非公開を分けられること
-- 次点：SEO、モバイル対応、アクセス解析
-- 余裕があれば：全文検索、人気記事ランキング
+Git ワークフロー・コミットメッセージ規約・ブランチ戦略については、[docs/git-workflow/](docs/git-workflow/) を参照してください。

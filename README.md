@@ -2,6 +2,101 @@
 
 技術学習のログを蓄積・公開するブログプラットフォーム
 
+## クイックスタート
+
+- **開発ブランチ**: `develop`
+- **リリースブランチ**: `main`
+- **コミットメッセージ規約**: 日本語 + Conventional Commits形式
+- **詳細**: [CONTRIBUTING.md](./CONTRIBUTING.md) を参照
+
+## ブランチ戦略（Git flow）
+
+このプロジェクトは **Git flow** に従います。
+
+```
+main      ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━ (本番環境)
+          │                    ↑
+          │         release/v1.0.0
+          │         ↑            │
+          │         │            ↓
+develop   ━━━━━━━┃━━━━━━━━━━━━━┃━━━━━━━━ (開発の統合)
+          ↑       ↑             ↓
+          │       │     hotfix/bug-fix
+          │       │     ↑       │
+          │       ↓     │       ↓
+          ├─feature/add-tag
+          │       ↑
+          │       │
+          ├─feature/seo-optimize
+                  ↑
+```
+
+### ブランチ説明
+
+| ブランチ | 説明 | ベース |
+|---------|------|--------|
+| `main` | 本番環境・リリース版 | 安定版のみ |
+| `develop` | 開発の統合ブランチ | feature / release / hotfix の統合先 |
+| `feature/*` | 新機能開発 | develop から分岐 |
+| `release/*` | リリース準備 | develop から分岐 |
+| `hotfix/*` | 本番環境の緊急修正 | main から分岐 |
+
+## 開発フロー
+
+### 新機能を開発する場合
+
+```bash
+# develop の最新状態を取得
+git checkout develop
+git pull origin develop
+
+# feature ブランチを作成
+git checkout -b feature/記事検索機能
+
+# 実装してコミット（日本語メッセージ）
+git add .
+git commit -m "feat(検索): 全文検索機能を実装"
+
+# origin にプッシュ
+git push origin feature/記事検索機能
+
+# GitHub で Pull Request を作成（develop へ）
+```
+
+## コミットメッセージルール
+
+### 形式
+
+```
+{type}({scope}): {description}
+```
+
+### Type の種類
+
+| Type | 説明 |
+|------|------|
+| `feat` | 新しい機能 |
+| `fix` | バグ修正 |
+| `docs` | ドキュメント |
+| `style` | スタイル（機能に影響なし） |
+| `refactor` | リファクタリング |
+| `perf` | パフォーマンス改善 |
+| `test` | テスト追加・更新 |
+| `chore` | ビルドツール・依存関係更新など |
+
+### 例
+
+```
+feat(記事): 記事投稿機能を実装
+fix(検索): キーワード検索時のエラーを修正
+docs(セットアップ): インストール手順を追加
+chore(依存関係): Express を 4.17.1 にアップデート
+```
+
+詳細は **[CONTRIBUTING.md](./CONTRIBUTING.md)** を参照してください。
+
+---
+
 ## 要求整理書（Requirements）
 
 ### 1. 背景

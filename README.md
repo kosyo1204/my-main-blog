@@ -19,7 +19,16 @@
 
 ## Tech Stack
 
-（package.json から自動生成予定）
+<!-- AUTO-GENERATED:TECH_STACK:START -->
+**Runtime / Dependencies**
+- なし
+
+**Dev Dependencies**
+- @11ty/eleventy
+- @11ty/eleventy-img
+- prettier
+- sharp
+<!-- AUTO-GENERATED:TECH_STACK:END -->
 
 ---
 
@@ -69,14 +78,46 @@ yarn install
 ```
 
 ### 開発サーバーの起動
+<!-- AUTO-GENERATED:DEV_CMD:START -->
 ```bash
 npm run dev
 ```
+<!-- AUTO-GENERATED:DEV_CMD:END -->
+
+### Docker 開発
+Docker での開発手順は [docs/docker/README.md](docs/docker/README.md) を参照してください。
 
 ### ビルド
+<!-- AUTO-GENERATED:BUILD_CMD:START -->
 ```bash
 npm run build
 ```
+<!-- AUTO-GENERATED:BUILD_CMD:END -->
+
+---
+
+## Documentation Guide
+
+ドキュメントは `docs/` 配下に整理しています。用途に応じて以下を参照してください。
+
+<!-- AUTO-GENERATED:DOCS_GUIDE:START -->
+- [docs/requirements/REQUIREMENTS.md](requirements/REQUIREMENTS.md) — 要件定義
+- [docs/docker/README.md](docker/README.md) — Docker 開発ガイド
+- [docs/git-workflow/README.md](git-workflow/README.md) — Git 運用ガイド
+- [docs/design/IMAGE_OPTIMIZATION.md](design/IMAGE_OPTIMIZATION.md) — 画像最適化ガイド
+- [README.md](git-workflow/README.md) — Git 運用の全体概要
+- [COMMIT_CONVENTION.md](git-workflow/COMMIT_CONVENTION.md) — コミットメッセージ規約
+- [BRANCH_STRATEGY.md](git-workflow/BRANCH_STRATEGY.md) — ブランチ戦略とワークフロー
+- [PR_GUIDELINES.md](git-workflow/PR_GUIDELINES.md) — Pull Request ガイドライン
+- [REQUIREMENTS.md](requirements/REQUIREMENTS.md) — 詳細な要件定義・仕様書
+- [README.md](docker/README.md) — Docker 開発ガイド
+- [IMAGE_OPTIMIZATION.md](design/IMAGE_OPTIMIZATION.md) — 画像最適化ガイド（Eleventy）
+- [docs/design/](design/IMAGE_OPTIMIZATION.md) — 設計ドキュメント
+- [docs/testing/](testing/) — テスト戦略・テストガイドライン
+- [docs/deployment/](deployment/) — デプロイメントガイド
+- [ルート README](../README.md)
+- [Git 運用ガイド](git-workflow/README.md)
+<!-- AUTO-GENERATED:DOCS_GUIDE:END -->
 
 ---
 

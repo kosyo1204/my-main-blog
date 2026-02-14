@@ -1,0 +1,125 @@
+openapi: 3.0.3
+info:
+  title: 学習ログブログ API (設計用)
+  version: 1.0.0
+  description: |
+    静的サイトを主体とするため主要 API は読み取り用に限定しています。ビルドツールやダッシュボードがこれらのエンドポイントを利用できます。
+servers:
+  - url: https://example.com
+
+paths:
+  /api/articles:
+    get:
+      summary: 公開記事の一覧を取得
+      parameters:
+        - in: query
+          name: q
+          schema:
+            type: string
+          description: タイトルまたはタグ/カテゴリー名での簡易検索
+        - in: query
+          name: tag
+          schema:
+            type: string
+          description: タグでフィルタ
+        - in: query
+          name: category
+          schema:
+            type: string
+          description: カテゴリーでフィルタ
+        - in: query
+          name: limit
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ArticleSummary'
+  /api/articles/{slug}:
+    get:
+      summary: 指定スラッグの記事を取得
+      parameters:
+        - in: path
+          name: slug
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: 成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Article'
+        '404':
+          description: 記事が見つからない
+
+  /api/analytics/event:
+    post:
+      summary: 簡易アクセスイベントを受け取る（オプション、外部解析に送る場合の中継）
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnalyticsEvent'
+      responses:
+        '202':
+          description: 受理
+
+components:
+  schemas:
+    ArticleSummary:
+      type: object
+      properties:
+        title:
+          type: string
+        slug:
+          type: string
+        publish_date:
+          type: string
+          format: date-time
+        excerpt:
+          type: string
+        tags:
+          type: array
+          items:
+            type: string
+        category:
+          type: string
+    Article:
+      allOf:
+        - $ref: '#/components/schemas/ArticleSummary'
+        - type: object
+          properties:
+            body:
+              type: string
+            author:
+              type: string
+            hero_image:
+              type: string
+    AnalyticsEvent:
+      type: object
+      properties:
+        article_id:
+          type: string
+        date:
+          type: string
+          format: date
+        source:
+          type: string
+        views:
+          type: integer
+
+# Notes:
+# - この OpenAPI は参考設計です。静的サイト方式のため必ずしもランタイムAPIが必要ではありません。
+# - API を公開する場合は認証やレート制限、プライバシー設計を追加してください。

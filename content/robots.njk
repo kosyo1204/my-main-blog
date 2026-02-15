@@ -1,0 +1,18 @@
+---
+permalink: /robots.txt
+eleventyExcludeFromCollections: true
+---
+# このサイトをスキャンする検索エンジンを制御する
+# See: https://en.wikipedia.org/wiki/Robots_exclusion_standard
+
+User-agent: *
+Allow: /
+
+# サイトマップへの参照
+Sitemap: {{ site.baseUrl }}/sitemap.xml
+
+# 不必要なリソースはクロール対象外にする（パフォーマンス最適化）
+Disallow: /_site/
+Disallow: /node_modules/
+Disallow: /.env
+Disallow: /.git

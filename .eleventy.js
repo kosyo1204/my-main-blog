@@ -34,6 +34,15 @@ module.exports = function (eleventyConfig) {
   // 画像などの静的ファイルを出力ディレクトリへコピー
   eleventyConfig.addPassthroughCopy({ "static/": "/" });
 
+  // グローバルデータ: 現在の日付（sitemap 用）
+  eleventyConfig.addGlobalData("buildDate", () => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const day = String(now.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  });
+
   // ========== Filters ==========
 
   /**
@@ -98,6 +107,37 @@ module.exports = function (eleventyConfig) {
       .trim()
       .replace(/[\s]+/g, "-")
       .replace(/[^\w-]/g, "");
+  });
+
+  /**
+   * date フィルター
+   * 日付をフォーマット済み文字列に変換
+   * 
+   * Usage: {{ publishedAt | date("YYYY-MM-DD") }}
+   * Input: Date object, format string
+   * Output: formatted date string
+   */
+  eleventyConfig.addFilter("date", (dateValue, format) => {
+    if (!dateValue) return "";
+    
+    let dateObj = dateValue;
+    if (typeof dateValue === "string") {
+      dateObj = new Date(dateValue);
+    }
+    
+    if (!(dateObj instanceof Date) || isNaN(dateObj.getTime())) {
+      return "";
+    }
+
+    // 簡易な format サポート（YYYY-MM-DD）
+    if (format === "YYYY-MM-DD") {
+      const year = dateObj.getFullYear();
+      const month = String(dateObj.getMonth() + 1).padStart(2, "0");
+      const day = String(dateObj.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    }
+
+    return dateObj.toISOString().split("T")[0];
   });
 
   // ========== Image Shortcode ==========

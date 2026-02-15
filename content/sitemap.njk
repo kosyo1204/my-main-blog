@@ -1,0 +1,65 @@
+---
+permalink: /sitemap.xml
+---
+<?xml version="1.0" encoding="utf-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <!-- ホームページ -->
+  <url>
+    <loc>{{ site.baseUrl }}/</loc>
+    <lastmod>{{ buildDate }}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>1.0</priority>
+  </url>
+
+  <!-- 404 ページ -->
+  <url>
+    <loc>{{ site.baseUrl }}/404.html</loc>
+    <priority>0.1</priority>
+  </url>
+
+  <!-- タグ一覧ページ -->
+  <url>
+    <loc>{{ site.baseUrl }}/tags/</loc>
+    <lastmod>{{ buildDate }}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- カテゴリー一覧ページ -->
+  <url>
+    <loc>{{ site.baseUrl }}/categories/</loc>
+    <lastmod>{{ buildDate }}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+
+  <!-- 記事ページ -->
+  {%- for article in collections.articles %}
+  <url>
+    <loc>{{ site.baseUrl }}{{ article.url }}</loc>
+    <lastmod>{{ article.date | date("YYYY-MM-DD") }}</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.7</priority>
+  </url>
+  {%- endfor %}
+
+  <!-- タグ別ページ -->
+  {%- for tag in collections.tags %}
+  <url>
+    <loc>{{ site.baseUrl }}/tags/{{ tag | slugify }}/</loc>
+    <lastmod>{{ buildDate }}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  {%- endfor %}
+
+  <!-- カテゴリー別ページ -->
+  {%- for category in collections.categories %}
+  <url>
+    <loc>{{ site.baseUrl }}/categories/{{ category | slugify }}/</loc>
+    <lastmod>{{ buildDate }}</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  {%- endfor %}
+</urlset>

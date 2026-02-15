@@ -40,6 +40,10 @@ jobs:
       - name: Build site
         run: npm run build
 
+      # Run test:typography
+      - name: Test typography configuration
+        run: npm run test:typography
+
       # Run test:published
       - name: Test published filter
         run: npm run test:published

@@ -44,7 +44,7 @@ Docker 開発環境に関するドキュメント
 
 - [docs/design/](design/IMAGE_OPTIMIZATION.md) — 設計ドキュメント
 - [docs/testing/](testing/) — テスト戦略・テストガイドライン
-- [docs/deployment/](deployment/GITHUB_PAGES.md) — デプロイメントガイド
+- [docs/deployment/](deployment/) — デプロイメントガイド
 
 ---
 
@@ -60,4 +60,3 @@ Docker 開発環境に関するドキュメント
 
 - [ルート README](../README.md)
 - [Git 運用ガイド](git-workflow/README.md)
-- [Pages デプロイ](deployment/GITHUB_PAGES.md)

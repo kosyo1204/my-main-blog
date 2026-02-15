@@ -1,7 +1,9 @@
 ---
 title: サンプル記事
 date: 2026-02-14
-status: published
+publishedAt: 2026-02-14
+published: true
+layout: layouts/article
 tags:
   - sample
 category: general

@@ -1,0 +1,91 @@
+name: Lighthouse CI
+
+on:
+  push:
+    branches: [001-tech-blog]
+  pull_request:
+    branches: [develop, 001-tech-blog]
+
+jobs:
+  lighthouse:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: read
+      pull-requests: write
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+      
+      - name: Install dependencies
+        run: npm ci
+      
+      - name: Build site
+        run: npm run build
+      
+      - name: Run Lighthouse
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: npx @lhci/cli@0.14.x autorun --config=.lighthouserc.json
+        continue-on-error: true
+      
+      - name: Comment PR with Lighthouse scores
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ github.token }}
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            const reportDir = '.lighthouseci';
+            
+            let scores = { perf: 'N/A', a11y: 'N/A', bp: 'N/A', seo: 'N/A' };
+            
+            if (fs.existsSync(reportDir)) {
+              try {
+                const files = fs.readdirSync(reportDir);
+                const jsonFiles = files.filter(f => f.startsWith('lhr-') && f.endsWith('.json'));
+                
+                if (jsonFiles.length > 0) {
+                  const latestFile = jsonFiles.sort().pop();
+                  const data = JSON.parse(fs.readFileSync(path.join(reportDir, latestFile), 'utf8'));
+                  
+                  scores.perf = Math.round(data.categories.performance.score * 100);
+                  scores.a11y = Math.round(data.categories.accessibility.score * 100);
+                  scores.bp = Math.round(data.categories['best-practices'].score * 100);
+                  scores.seo = Math.round(data.categories.seo.score * 100);
+                }
+              } catch (e) {
+                console.error('Failed to parse Lighthouse results:', e);
+              }
+            }
+            
+            const message = [
+              '## Lighthouse Score',
+              '',
+              '| Category | Score |',
+              '|----------|-------|',
+              `| Performance | ${scores.perf} |`,
+              `| Accessibility | ${scores.a11y} |`,
+              `| Best Practices | ${scores.bp} |`,
+              `| SEO | ${scores.seo} |`,
+              ''
+            ].join('\n');
+            
+            if (context.payload.pull_request) {
+              github.rest.issues.createComment({
+                issue_number: context.payload.pull_request.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: message
+              });
+            } else {
+              console.log('Not a PR, skipping comment');
+            }

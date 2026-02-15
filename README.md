@@ -68,6 +68,3 @@
 
 ---
 
-## Deploy
-
-GitHub Pages の `master` デプロイ手順は [docs/deployment/GITHUB_PAGES.md](docs/deployment/GITHUB_PAGES.md) を参照してください。

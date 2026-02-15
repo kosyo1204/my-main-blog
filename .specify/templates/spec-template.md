@@ -1,142 +1,115 @@
-<!-- ⚠️ OUTPUT LANGUAGE: All content MUST be in 日本語 (Japanese) - required by project constitution -->
-
 # 機能仕様書: [FEATURE NAME]
 
 **機能ブランチ**: `[###-feature-name]`  
 **作成日**: [DATE]  
-**ステータス**: ドラフト  
+**ステータス**: Draft  
 **入力**: ユーザー説明: "$ARGUMENTS"
 
-## ユーザーシナリオとテスト *（必須）*
+## ユーザーシナリオとテスト *(必須)*
 
 <!--
-  重要: ユーザーストーリーは重要度の順にユーザージャーニーとして優先順位付けする必要があります。
-  各ユーザーストーリー/ジャーニーは独立してテスト可能である必要があります。
-  つまり、それらの1つだけを実装しても、価値を提供する実行可能な MVP (最小実行可能製品) が得られるべきです。
-  
-  各ストーリーに優先度 (P1, P2, P3 など) を割り当てます。P1 が最も重要です。
-  各ストーリーを、以下の特性を持つ機能の独立したスライスと考えてください：
-  - 独立して開発可能
-  - 独立してテスト可能
-  - 独立してデプロイ可能
-  - ユーザーに独立して実演可能
+  IMPORTANT: ユーザーストーリーは重要度順に並べてください。
+  各ユーザーストーリーは独立してテスト可能でなければならず、
+  1つだけ実装しても価値のある MVP が成立する必要があります。
+
+  優先度は P1, P2, P3... を付与してください。
+  各ストーリーは以下を満たす独立した機能単位として考えてください:
+  - 個別に開発できる
+  - 個別にテストできる
+  - 個別にデプロイできる
+  - 個別にデモできる
 -->
 
-### ユーザーストーリー 1 - [簡潔なタイトル] (優先度: P1)
+### ユーザーストーリー 1 - [短いタイトル] (優先度: P1)
 
-[このユーザージャーニーを平易な言葉で説明してください]
+[このユーザー行動を平易な日本語で記述]
 
-**この優先度の理由**: [その価値とこの優先度レベルを持つ理由を説明してください]
+**なぜこの優先度か**: [この優先度の価値と理由を説明]
 
-**独立テスト**: [これを独立してテストする方法を説明してください。例: "[具体的なアクション] によって完全にテスト可能で、[具体的な価値] を提供できます"]
+**独立テスト**: [このストーリーを単独で検証できる方法を記述（例: "[具体的な操作] で完結し、[具体的価値] を提供できる")]
 
 **受け入れシナリオ**:
 
-1. **前提** [初期状態]、**実行時** [アクション]、**結果** [期待される結果]
-2. **前提** [初期状態]、**実行時** [アクション]、**結果** [期待される結果]
+1. **Given** [初期状態], **When** [操作], **Then** [期待結果]
+2. **Given** [初期状態], **When** [操作], **Then** [期待結果]
 
 ---
 
-### User Story 2 - [Brief Title] (Priority: P2)
+### ユーザーストーリー 2 - [短いタイトル] (優先度: P2)
 
-[Describe this user journey in plain language]
+[このユーザー行動を平易な日本語で記述]
 
-**Why this priority**: [Explain the value and why it has this priority level]
+**なぜこの優先度か**: [この優先度の価値と理由を説明]
 
-**Independent Test**: [Describe how this can be tested independently]
+**独立テスト**: [このストーリーを単独で検証できる方法を記述]
 
-**Acceptance Scenarios**:
+**受け入れシナリオ**:
 
-1. **Given** [initial state], **When** [action], **Then** [expected outcome]
-
----
-
-### User Story 3 - [Brief Title] (Priority: P3)
-
-[Describe this user journey in plain language]
-
-**Why this priority**: [Explain the value and why it has this priority level]
-
-**Independent Test**: [Describe how this can be tested independently]
-
-**Acceptance Scenarios**:
-
-1. **Given** [initial state], **When** [action], **Then** [expected outcome]
+1. **Given** [初期状態], **When** [操作], **Then** [期待結果]
 
 ---
 
-[Add more user stories as needed, each with an assigned priority]
+### ユーザーストーリー 3 - [短いタイトル] (優先度: P3)
 
-### Edge Cases
+[このユーザー行動を平易な日本語で記述]
 
-<!--
-  ACTION REQUIRED: The content in this section represents placeholders.
-  Fill them out with the right edge cases.
--->
+**なぜこの優先度か**: [この優先度の価値と理由を説明]
 
-- What happens when [boundary condition]?
-- How does system handle [error scenario]?
+**独立テスト**: [このストーリーを単独で検証できる方法を記述]
 
-## Requirements *(mandatory)*
+**受け入れシナリオ**:
 
-<!--
-  ACTION REQUIRED: The content in this section represents placeholders.
-  Fill them out with the right functional requirements.
--->
+1. **Given** [初期状態], **When** [操作], **Then** [期待結果]
 
-### Functional Requirements
+---
 
-- **FR-001**: System MUST [specific capability, e.g., "allow users to create accounts"]
-- **FR-002**: System MUST [specific capability, e.g., "validate email addresses"]  
-- **FR-003**: Users MUST be able to [key interaction, e.g., "reset their password"]
-- **FR-004**: System MUST [data requirement, e.g., "persist user preferences"]
-- **FR-005**: System MUST [behavior, e.g., "log all security events"]
+[必要に応じてユーザーストーリーを追加し、各ストーリーに優先度を付与]
 
-*Example of marking unclear requirements:*
-
-- **FR-006**: System MUST authenticate users via [NEEDS CLARIFICATION: auth method not specified - email/password, SSO, OAuth?]
-- **FR-007**: System MUST retain user data for [NEEDS CLARIFICATION: retention period not specified]
-
-### Constitution Compliance Requirements
-
-my-main-blog Constitution v1.0.0 に基づく必須要件：
-
-#### I. Test-Driven Development
-- **TR-001**: Unit tests are written BEFORE implementation (Red Phase)
-- **TR-002**: Integration tests cover key user journeys
-- **TR-003**: Tests must be reviewed and approved with feature specification
-
-#### II. Code Quality
-- **TR-004**: Code must pass ESLint / Prettier checks
-- **TR-005**: Cyclomatic complexity must be ≤ 10 per function
-- **TR-006**: All error cases must have explicit error handling
-- **TR-007**: Code comments (in 日本語) for complex logic
-
-#### III. User Experience Consistency
-- **TR-008**: UI components use project design system
-- **TR-009**: All user-facing messages are in 日本語 with clear actions
-- **TR-010**: Accessibility compliant (WCAG 2.1 Level AA minimum)
-
-#### IV. Performance Requirements
-- **TR-011**: Page load time (FCP) ≤ 1.5 seconds
-- **TR-012**: Bundle size < 150 KB (gzip)
-- **TR-013**: Response time for user interactions ≤ 300ms
-
-### Key Entities *(include if feature involves data)*
-
-- **[Entity 1]**: [What it represents, key attributes without implementation]
-- **[Entity 2]**: [What it represents, relationships to other entities]
-
-## Success Criteria *(mandatory)*
+### エッジケース
 
 <!--
-  ACTION REQUIRED: Define measurable success criteria.
-  These must be technology-agnostic and measurable.
+  ACTION REQUIRED: このセクションの内容はプレースホルダーです。
+  適切なエッジケースに置き換えてください。
 -->
 
-### Measurable Outcomes
+- [境界条件] の場合はどうなるか？
+- [エラーシナリオ] をシステムはどう扱うか？
 
-- **SC-001**: [Measurable metric, e.g., "Users can complete account creation in under 2 minutes"]
-- **SC-002**: [Measurable metric, e.g., "System handles 1000 concurrent users without degradation"]
-- **SC-003**: [User satisfaction metric, e.g., "90% of users successfully complete primary task on first attempt"]
-- **SC-004**: [Business metric, e.g., "Reduce support tickets related to [X] by 50%"]
+## 要件 *(必須)*
+
+<!--
+  ACTION REQUIRED: このセクションの内容はプレースホルダーです。
+  適切な機能要件に置き換えてください。
+-->
+
+### 機能要件
+
+- **FR-001**: システムは [具体的な機能] を満たすこと
+- **FR-002**: システムは [具体的な機能] を満たすこと  
+- **FR-003**: 利用者は [主要な操作] を実行できること
+- **FR-004**: システムは [データ要件] を満たすこと
+- **FR-005**: システムは [挙動要件] を満たすこと
+
+*不明確な要件の記載例:*
+
+- **FR-006**: システムは [NEEDS CLARIFICATION: 認証方式が未指定 - メール/パスワード、SSO、OAuth など?] で認証すること
+- **FR-007**: システムは [NEEDS CLARIFICATION: 保持期間が未指定] の間データを保持すること
+
+### 主要エンティティ *(データが関わる場合に記載)*
+
+- **[Entity 1]**: [意味と主要属性（実装詳細なし）]
+- **[Entity 2]**: [意味と関連関係]
+
+## 成功基準 *(必須)*
+
+<!--
+  ACTION REQUIRED: 測定可能な成功基準を定義してください。
+  技術に依存しない形で、定量的に評価できる内容にしてください。
+-->
+
+### 測定可能な成果
+
+- **SC-001**: [測定指標（例: "ユーザーがアカウント作成を2分以内に完了できる")]
+- **SC-002**: [測定指標（例: "1000同時ユーザーで性能劣化がない")]
+- **SC-003**: [ユーザー満足指標（例: "主要タスクを初回で完了できる割合が90%以上")]
+- **SC-004**: [ビジネス指標（例: "[X] に関するサポート問い合わせを50%削減")]

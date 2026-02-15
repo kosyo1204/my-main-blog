@@ -22,9 +22,9 @@ jobs:
         with:
           node-version: '18'
 
-            - name: Install dependencies
-              # NOTE: Keep setup-plan invocation per merge resolution request.
-        pwsh -File .specify/scripts/powershell/setup-plan.ps1 -Json        run: npm ci --include=optional --no-audit --no-fund
+      - name: Install dependencies
+        # Install dependencies for the build job.
+        run: npm ci --include=optional --no-audit --no-fund
 
       - name: Build
         run: npm run build

@@ -1,0 +1,25 @@
+{#
+  ga4.njk
+  
+  Purpose: Google Analytics 4 measurement script
+  
+  This template includes the GA4 tracking code.
+  It should only be included if GA4_MEASUREMENT_ID is set.
+  
+  Usage:
+    {% include "ga4.njk" %}
+    
+  Requires:
+    - analytics.ga4MeasurementId from content/_data/analytics.js
+#}
+
+{%- if analytics and analytics.ga4MeasurementId -%}
+<!-- Google Analytics 4 -->
+<script async src="https://www.googletagmanager.com/gtag/js?id={{ analytics.ga4MeasurementId }}"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', '{{ analytics.ga4MeasurementId }}');
+</script>
+{%- endif -%}

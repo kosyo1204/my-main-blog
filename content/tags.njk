@@ -1,0 +1,45 @@
+---
+layout: layouts/base
+pagination:
+  data: collections.tags
+  size: 1
+  alias: tag
+permalink: /tags/{{ tag | slugify }}/index.html
+computedTitle: "タグ - "
+---
+
+{%- set site = site | default({}) -%}
+
+# 📌 タグ: {{ tag }}
+
+{% set articlesWithTag = [] %}
+{% for article in collections.articles %}
+  {% if article.data.tags and article.data.tags.includes(tag) %}
+    {% set articlesWithTag = articlesWithTag.concat(article) %}
+  {% endif %}
+{% endfor %}
+
+{% if articlesWithTag | length > 0 %}
+
+## このタグの記事 ({{ articlesWithTag | length }})
+
+{% for article in articlesWithTag %}
+- **[{{ article.data.title }}]({{ article.url | url }})** — {{ article.data.publishedAt | dateISO }}
+  {% if article.data.category %}
+  _Category: {{ article.data.category }}_
+  {% endif %}
+{% endfor %}
+
+---
+
+## 他のタグを探す
+
+[すべてのタグに戻る]({{ '/tags/' | url }})
+
+{% else %}
+
+このタグに記事はまだありません。
+
+[ホームに戻る]({{ '/' | url }}){.btn}
+
+{% endif %}

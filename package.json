@@ -5,12 +5,24 @@
   "scripts": {
     "dev": "npx @11ty/eleventy --serve --port=8080",
     "build": "npx @11ty/eleventy --quiet",
-    "format": "prettier --write \"**/*.{md,js,json,njk}\""
+    "format": "prettier --write \"**/*.{md,js,json,njk}\"",
+    "test:published": "node scripts/validate-published.js",
+    "test:404": "node scripts/validate-404.js",
+    "test:taxonomy": "node scripts/validate-taxonomy.js",
+    "test:ga4": "node scripts/validate-ga4.js",
+    "test:alt-text": "node scripts/validate-alt-text.js",
+    "test:link-validation": "node scripts/validate-internal-links.js",
+    "test:lint": "eslint . --ext .js",
+    "test:a11y": "node scripts/validate-a11y.js",
+    "test:e2e": "playwright test"
   },
   "devDependencies": {
     "@11ty/eleventy": "^2.0.0",
     "@11ty/eleventy-img": "^6.0.4",
-    "sharp": "^0.32.0",
-    "prettier": "^2.8.0"
+    "@lhci/cli": "^0.9.0",
+    "@playwright/test": "^1.40.0",
+    "jsdom": "^23.2.0",
+    "prettier": "^2.8.0",
+    "sharp": "^0.32.0"
   }
 }

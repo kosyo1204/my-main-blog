@@ -1,23 +1,112 @@
 {#
   base.njk: ページ共通レイアウト
-  - ブログの基本的な HTML 構造を提供します
+  
+  Purpose: すべてのページの基本的な HTML 構造を提供
+  - HTML 骨組み (<!DOCTYPE>, <head>, <body>)
+  - Meta タグ (viewport, charset, SEO)
+  - ヘッダー (サイトタイトル、ナビゲーション)
+  - フッター (著作権表記)
+  - GA4 計測タグ (条件付き)
+  
+  Usage:
+    ---
+    layout: base
+    title: "ページタイトル"
+    ---
+    
+    <h1>見出し</h1>
+    <p>本文</p>
 #}
-<!doctype html>
-<html lang="ja">
-  <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>{{ title | default("学習ログブログ") }}</title>
-  </head>
-  <body>
-    <header>
-      <h1><a href="/">学習ログブログ</a></h1>
-    </header>
-    <main>
+{%- set site = site | default({}) -%}
+<!DOCTYPE html>
+<html lang="{{ site.locale | default('ja-JP') }}">
+<head>
+  <!-- ========== メタ情報 ========== -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="{{ page.excerpt or site.description or '' }}">
+  <meta name="theme-color" content="#ffffff">
+  
+  <!-- ========== SEO ========== -->
+  <!-- 注: SEO メタタグ詳細は seo.njk に分離（T006 で実装） -->
+  <title>
+    {%- if page.title or title -%}
+      {{ page.title or title }} | {{ site.title }}
+    {%- else -%}
+      {{ site.title }}
+    {%- endif -%}
+  </title>
+
+  <!-- ========== スタイル ========== -->
+  <link rel="stylesheet" href="{{ '/css/site.css' | url }}">
+  
+  <!-- フォーカス可視化（アクセシビリティ） -->
+  <style>
+    /* フォーカス表示の視認性向上（FR-023: キーボード操作で到達可能） */
+    :focus-visible {
+      outline: 2px solid #0066cc;
+      outline-offset: 2px;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- スキップリンク（アクセシビリティ: キーボードユーザーがナビをスキップ） -->
+  <a href="#main-content" class="sr-only">メインコンテンツへスキップ</a>
+
+  <!-- ========== ヘッダー ========== -->
+  <header role="banner">
+    <div class="container">
+      <div class="header-content">
+        <!-- ロゴ / サイトタイトル -->
+        <h1 class="site-title">
+          <a href="{{ '/' | url }}" title="{{ site.title }}">
+            {{ site.title }}
+          </a>
+        </h1>
+        
+        <!-- サブタイトル/説明 -->
+        {%- if site.description %}
+        <p class="site-description">{{ site.description }}</p>
+        {%- endif %}
+      </div>
+
+      <!-- ========== ナビゲーション ========== -->
+      <!-- 実装: T007 で navigation.json から動的に生成 -->
+      <nav role="navigation" aria-label="Main navigation">
+        <ul>
+          <li><a href="{{ '/' | url }}">ホーム</a></li>
+          <li><a href="{{ '/tags/' | url }}">タグ</a></li>
+          <li><a href="{{ '/categories/' | url }}">カテゴリー</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ========== メインコンテンツ ========== -->
+  <main id="main-content" role="main">
+    <div class="container">
       {{ content | safe }}
-    </main>
-    <footer>
-      <p>© 作者</p>
-    </footer>
-  </body>
+    </div>
+  </main>
+
+  <!-- ========== フッター ========== -->
+  <footer role="contentinfo">
+    <div class="container footer-content">
+      <p>
+        &copy; 2026 {{ site.author or site.title }}.
+        All rights reserved.
+      </p>
+      <p class="footer-note">
+        Powered by <a href="https://www.11ty.dev/" target="_blank" rel="noopener">Eleventy</a> &amp;
+        hosted on <a href="https://pages.github.com/" target="_blank" rel="noopener">GitHub Pages</a>
+      </p>
+    </div>
+  </footer>
+
+  <!-- ========== GA4 計測タグ（条件付き） ========== -->
+  {%- if site.gaId %}
+    {%- include "ga4.njk" %}
+  {%- endif %}
+</body>
 </html>

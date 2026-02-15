@@ -1,0 +1,80 @@
+{#
+  empty-state.njk: 空状態表示（記事・タグ・カテゴリーが0件）
+  
+  Purpose: 件数0 の場合の UX 設計（FR-020）
+  
+  Usage:
+    {% include "empty-state.njk" %}
+    
+    または
+    
+    {% include "empty-state.njk", message="カテゴリーが見つかりません", icon="folder-open" %}
+  
+  Params:
+    - message: 表示メッセージ
+    - icon: アイコン (emoji または class 名)
+    - link: アクション用リンク URL（省略可）
+    - linkText: リンクテキスト（省略可）
+#}
+
+{%- set defaultMessage = message or "該当する記事がまだありません" -%}
+{%- set defaultIcon = icon or "📄" -%}
+{%- set actionLink = link or "/" -%}
+{%- set actionText = linkText or "ホームに戻る" -%}
+
+<div class="empty-state" role="status" aria-live="polite">
+  <div class="empty-state-icon">
+    {{ defaultIcon }}
+  </div>
+  
+  <div class="empty-state-content">
+    <h2 class="empty-state-title">記事がありません</h2>
+    <p class="empty-state-message">{{ defaultMessage }}</p>
+  </div>
+  
+  <div class="empty-state-action">
+    <a href="{{ actionLink | url }}" class="btn btn-primary">
+      {{ actionText }}
+    </a>
+  </div>
+</div>
+
+<!-- ========== 空状態スタイル ========== -->
+<style>
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 300px;
+    padding: 2rem;
+    text-align: center;
+    background-color: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    margin: 2rem 0;
+  }
+
+  .empty-state-icon {
+    font-size: 4rem;
+    margin-bottom: 1rem;
+    opacity: 0.7;
+  }
+
+  .empty-state-title {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+    color: #333;
+  }
+
+  .empty-state-message {
+    font-size: 1rem;
+    color: #666;
+    margin-bottom: 1.5rem;
+    max-width: 300px;
+  }
+
+  .empty-state-action .btn {
+    padding: 0.75rem 1.5rem;
+  }
+</style>

@@ -1,0 +1,53 @@
+{#
+  seo.njk: SEO メタタグ（Open Graph, Twitter Card, Structured Data等）
+  
+  Purpose: 検索エンジン・SNS での記事表示を最適化
+  
+  Included in: base.njk または article.njk の <head> 内
+  
+  Variables:
+    - title: ページタイトル
+    - page.excerpt または description: ページ説明
+    - page.url: ページ URL
+    - publishedAt: 記事公開日
+    - image: OG 画像 URL（省略時は既定値）
+#}
+{%- set site = site | default({}) -%}
+{%- set baseUrl = site.baseUrl or '' -%}
+{%- set currentUrl = baseUrl + (page.url or '/') -%}
+{%- set seoTitle = (seoTitle or title or site.title) | default('') -%}
+{%- set seoDescription = (seoDescription or page.excerpt or site.description or '') | default('') -%}
+{%- set ogImage = (image or '/og-image.png') | default('') -%}
+
+<!-- ========== Open Graph (Facebook, LINE等) ========== -->
+<meta property="og:title" content="{{ seoTitle }}">
+<meta property="og:description" content="{{ seoDescription }}">
+<meta property="og:url" content="{{ currentUrl }}">
+<meta property="og:type" content="{% if publishedAt %}article{% else %}website{% endif %}">
+<meta property="og:image" content="{{ baseUrl }}{{ ogImage }}">
+<meta property="og:locale" content="{{ site.locale | default('ja_JP') }}">
+
+<!-- ========== Twitter Card ========== -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="{{ seoTitle }}">
+<meta name="twitter:description" content="{{ seoDescription }}">
+<meta name="twitter:image" content="{{ baseUrl }}{{ ogImage }}">
+
+<!-- ========== Article 固有メタ（publishedAt がある場合） ========== -->
+{%- if publishedAt %}
+<meta property="article:published_time" content="{{ publishedAt | dateISO }}">
+<meta property="article:author" content="{{ site.author or site.title }}">
+{%- if category %}
+<meta property="article:section" content="{{ category }}">
+{%- endif %}
+{%- if tags %}
+  {%- for tag in tags %}
+  <meta property="article:tag" content="{{ tag }}">
+  {%- endfor %}
+{%- endif %}
+{%- endif %}
+
+<!-- ========== 構造化データ (Schema.org) ========== -->
+<!-- 注: 詳細な JSON-LD は、SEO 要件に応じて article.njk に追加可能 -->
+<meta property="schema:name" content="{{ site.title }}">
+<meta property="schema:url" content="{{ baseUrl }}">

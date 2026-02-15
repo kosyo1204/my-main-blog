@@ -1,0 +1,44 @@
+---
+layout: layouts/base
+pagination:
+  data: collections.categories
+  size: 1
+  alias: category
+permalink: /categories/{{ category | slugify }}/index.html
+---
+
+{%- set site = site | default({}) -%}
+
+# 📂 カテゴリー: {{ category }}
+
+{% set articlesWithCategory = [] %}
+{% for article in collections.articles %}
+  {% if article.data.category == category %}
+    {% set articlesWithCategory = articlesWithCategory.concat(article) %}
+  {% endif %}
+{% endfor %}
+
+{% if articlesWithCategory | length > 0 %}
+
+## このカテゴリーの記事 ({{ articlesWithCategory | length }})
+
+{% for article in articlesWithCategory %}
+- **[{{ article.data.title }}]({{ article.url }})** — {{ article.data.publishedAt | dateISO }}
+  {% if article.data.tags %}
+  _Tags: {{ article.data.tags | join(", ") }}_
+  {% endif %}
+{% endfor %}
+
+---
+
+## 他のカテゴリーを探す
+
+[すべてのカテゴリーに戻る](/categories/)
+
+{% else %}
+
+このカテゴリーに記事はまだありません。
+
+[ホームに戻る](/){.btn}
+
+{% endif %}

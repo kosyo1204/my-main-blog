@@ -30,7 +30,9 @@
   <!-- ========== SEO ========== -->
   <!-- 注: SEO メタタグ詳細は seo.njk に分離（T006 で実装） -->
   <title>
-    {%- if tag -%}
+    {%- if category -%}
+      カテゴリー - {{ category }} | {{ site.title }}
+    {%- elif tag -%}
       タグ - {{ tag }} | {{ site.title }}
     {%- elif page.title or title -%}
       {{ page.title or title }} | {{ site.title }}

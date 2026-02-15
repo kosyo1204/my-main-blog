@@ -51,7 +51,7 @@ description: "Learning Log Blog のタスクリスト"
 
 **目的**: プロジェクト初期化と基本構造
 
-- [ ] T001 .eleventy.js に Eleventy 入出力設定（content/ → _site/）と静的ファイル passthrough を追加
+- [x] T001 .eleventy.js に Eleventy 入出力設定（content/ → _site/）と静的ファイル passthrough を追加
 - [ ] T002 [P] content/_data/site.json にサイト基本情報（title/description/baseUrl）を追加
 - [ ] T003 [P] static/css/site.css にタイポグラフィとレイアウトの基本スタイルを追加
 

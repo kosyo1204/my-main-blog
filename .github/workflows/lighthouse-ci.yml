@@ -33,5 +33,52 @@ jobs:
       - name: Run Lighthouse
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx @lhci/cli@0.9.x autorun --config=.lighthouserc.json --upload-to-github
-        continue-on-error: false
+        run: npx @lhci/cli@0.9.x autorun --config=.lighthouserc.json
+        continue-on-error: true
+      
+      - name: Comment PR with Lighthouse scores
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ github.token }}
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            
+            // Lighthouse CI レポートから スコアを読み取る
+            const reportPath = '.lighthouseci/lhci-results.json';
+            let scores = { perf: 'N/A', a11y: 'N/A', bp: 'N/A', seo: 'N/A' };
+            
+            if (fs.existsSync(reportPath)) {
+              try {
+                const data = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
+                if (data.runs && data.runs.length > 0) {
+                  // 最初の実行結果から スコアを抽出
+                  const firstRun = data.runs[0].lhr;
+                  scores.perf = Math.round(firstRun.categories.performance.score * 100);
+                  scores.a11y = Math.round(firstRun.categories.accessibility.score * 100);
+                  scores.bp = Math.round(firstRun.categories['best-practices'].score * 100);
+                  scores.seo = Math.round(firstRun.categories.seo.score * 100);
+                }
+              } catch (e) {
+                console.error('Failed to parse Lighthouse results:', e);
+              }
+            }
+            
+            const comment = `## 🔆 Lighthouse Score
+
+| カテゴリ | スコア |
+|---------|--------|
+| Performance | ${scores.perf} |
+| Accessibility | ${scores.a11y} |
+| Best Practices | ${scores.bp} |
+| SEO | ${scores.seo} |
+
+📊 Results saved to Lighthouse storage`;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });

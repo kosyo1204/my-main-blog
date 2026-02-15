@@ -186,14 +186,13 @@ module.exports = function (eleventyConfig) {
 
   /**
    * articles コレクション
-   * published: true の記事のみを含む
+   * すべての記事を含む（日付順）
    * 
    * Usage in templates: {% for article in collections.articles %}
    */
   eleventyConfig.addCollection("articles", (collection) => {
     return collection
       .getFilteredByGlob("content/articles/**/*.md")
-      .filter((item) => item.data.published !== false)
       .sort((a, b) => {
         // 新しい記事が最初に表示されるようソート
         const dateA = new Date(a.data.publishedAt || a.data.date);

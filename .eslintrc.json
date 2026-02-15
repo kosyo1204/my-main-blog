@@ -1,0 +1,40 @@
+{
+  "env": {
+    "node": true,
+    "es2020": true
+  },
+  "extends": "eslint:recommended",
+  "parserOptions": {
+    "ecmaVersion": 2020,
+    "sourceType": "module",
+    "requireConfigFile": false
+  },
+  "rules": {
+    "no-console": ["warn", {
+      "allow": ["warn", "error", "info"]
+    }],
+    "no-unused-vars": ["error", {
+      "argsIgnorePattern": "^_"
+    }],
+    "indent": ["error", 2],
+    "linebreak-style": ["error", "unix"],
+    "quotes": ["error", "double", {
+      "avoidEscape": true
+    }],
+    "semi": ["error", "always"],
+    "eqeqeq": ["error", "always"],
+    "no-var": "error",
+    "prefer-const": "error",
+    "no-duplicate-imports": "error",
+    "no-use-before-define": ["error", {
+      "functions": false
+    }],
+    "no-shadow": "warn"
+  },
+  "ignorePatterns": [
+    "_site/",
+    "node_modules/",
+    ".eleventy.js",
+    "*.config.js"
+  ]
+}

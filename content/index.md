@@ -1,6 +1,6 @@
 ---
 title: ホーム
-layout: layouts/base.njk
+layout: layouts/base
 ---
 
 ## 公開記事

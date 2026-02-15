@@ -5,7 +5,9 @@
   "scripts": {
     "dev": "npx @11ty/eleventy --serve --port=8080",
     "build": "npx @11ty/eleventy --quiet",
-    "format": "prettier --write \"**/*.{md,js,json,njk}\""
+    "format": "prettier --write \"**/*.{md,js,json,njk}\"",
+    "test:published": "node scripts/validate-published.js",
+    "test:404": "node scripts/validate-404.js"
   },
   "devDependencies": {
     "@11ty/eleventy": "^2.0.0",

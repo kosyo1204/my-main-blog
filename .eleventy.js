@@ -34,6 +34,42 @@ module.exports = function (eleventyConfig) {
   // 画像などの静的ファイルを出力ディレクトリへコピー
   eleventyConfig.addPassthroughCopy({ "static/": "/" });
 
+  // ========== Filters ==========
+
+  /**
+   * dateISO フィルター
+   * 日付を ISO 8601 形式（YYYY-MM-DD）に変換
+   * 
+   * Usage: {{ publishedAt | dateISO }}
+   * Input: "2026-02-14" or Date object
+   * Output: "2026-02-14"
+   */
+  eleventyConfig.addFilter("dateISO", (dateValue) => {
+    if (!dateValue) return "";
+    
+    // 既に文字列の場合（"2026-02-14"）
+    if (typeof dateValue === "string") {
+      const dateObj = new Date(dateValue);
+      if (isNaN(dateObj.getTime())) {
+        // パース失敗時は元の値をそのまま返す
+        return dateValue;
+      }
+      dateValue = dateObj;
+    }
+
+    // Date オブジェクトから ISO 形式を抽出
+    if (dateValue instanceof Date) {
+      const year = dateValue.getFullYear();
+      const month = String(dateValue.getMonth() + 1).padStart(2, "0");
+      const day = String(dateValue.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    }
+
+    return "";
+  });
+
+  // ========== Image Shortcode ==========
+
   // 画像最適化ショートコード: {% image "/images/foo.jpg", "代替テキスト" %}
   eleventyConfig.addNunjucksAsyncShortcode(
     "image",

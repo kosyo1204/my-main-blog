@@ -89,4 +89,3 @@ jobs:
             } else {
               console.log('Not in a PR context, skipping comment');
             }
-            });

@@ -36,6 +36,13 @@ jobs:
         run: npx @lhci/cli@0.9.x autorun --config=.lighthouserc.json
         continue-on-error: true
       
+      - name: Debug Lighthouse output
+        run: |
+          echo "Event name: ${{ github.event_name }}"
+          echo "GitHub event path: ${{ github.event_path }}"
+          ls -la .lighthouseci/ || echo "No .lighthouseci dir"
+          find . -name "*lhci*" -o -name "*lighthouse*" 2>/dev/null | head -20
+      
       - name: Comment PR with Lighthouse scores
         if: github.event_name == 'pull_request'
         uses: actions/github-script@v7

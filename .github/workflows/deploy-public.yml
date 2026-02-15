@@ -56,6 +56,10 @@ jobs:
       - name: Test internal links (pathPrefix)
         run: npm run test:link-validation
 
+      # Run test:animations
+      - name: Test animations and micro-interactions
+        run: npm run test:animations
+
       # Deploy to GitHub Pages (on both main and 001-tech-blog push)
       - name: Deploy to GitHub Pages
         if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/001-tech-blog')

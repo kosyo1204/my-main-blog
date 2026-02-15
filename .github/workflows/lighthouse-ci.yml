@@ -32,6 +32,8 @@ jobs:
       
       - name: Run Lighthouse
         id: lighthouse
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npx @lhci/cli@0.9.x autorun --config=.lighthouserc.json
         continue-on-error: true
       

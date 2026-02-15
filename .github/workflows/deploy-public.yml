@@ -10,6 +10,11 @@ on:
       - main
       - 001-tech-blog
 
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest

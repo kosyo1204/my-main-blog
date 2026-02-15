@@ -86,7 +86,7 @@
           </span>
         </button>
 
-        <ul id="nav-menu" class="nav-menu" aria-hidden="false">
+        <ul id="nav-menu" class="nav-menu" aria-hidden="true">
           <li><a href="{{ '/' | url }}">ホーム</a></li>
           <li><a href="{{ '/tags/' | url }}">タグ</a></li>
           <li><a href="{{ '/categories/' | url }}">カテゴリー</a></li>
@@ -129,6 +129,20 @@
       const navMenu = document.querySelector('.nav-menu');
 
       if (!menuToggle || !navMenu) return;
+
+      // 初期化：デスクトップではaria-hiddenをfalseに設定
+      function initMenuState() {
+        if (window.innerWidth > 768) {
+          navMenu.setAttribute('aria-hidden', 'false');
+          menuToggle.setAttribute('aria-expanded', 'false');
+        } else {
+          navMenu.setAttribute('aria-hidden', 'true');
+          menuToggle.setAttribute('aria-expanded', 'false');
+        }
+      }
+
+      // 初期状態を設定
+      initMenuState();
 
       function toggleMenu() {
         const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
@@ -173,10 +187,7 @@
       window.addEventListener('resize', function() {
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(function() {
-          if (window.innerWidth > 768) {
-            menuToggle.setAttribute('aria-expanded', 'false');
-            navMenu.setAttribute('aria-hidden', 'false');
-          }
+          initMenuState();
         }, 250);
       });
     })();

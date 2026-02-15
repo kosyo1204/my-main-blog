@@ -435,6 +435,20 @@ nav {
   outline-offset: 2px;
 }
 
+/* デスクトップでメニューを表示 */
+@media (min-width: 769px) {
+  .nav-menu {
+    display: flex !important;
+    position: static !important;
+    width: auto !important;
+    height: auto !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    flex-direction: row !important;
+    padding: 1rem 0 !important;
+  }
+}
+
 /* ページネーション */
 .pagination {
   display: flex;
@@ -599,6 +613,11 @@ label {
   /* メニューを開いた状態 */
   .nav-menu[aria-hidden="false"] {
     right: 0;
+  }
+
+  /* メニューを閉じた状態 */
+  .nav-menu[aria-hidden="true"] {
+    right: -100%;
   }
 
   .nav-menu li {

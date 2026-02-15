@@ -45,7 +45,7 @@
 
       <!-- ========== ナビゲーション ========== -->
       <!-- 実装: T007 で navigation.json から動的に生成 -->
-      <nav role="navigation" aria-label="Main navigation">
+      <nav role="navigation" aria-label="Main navigation" data-testid="main-nav">
         <ul>
           <li><a href="/my-main-blog/">ホーム</a></li>
           <li><a href="/my-main-blog/tags/">タグ</a></li>
@@ -153,23 +153,27 @@
       // サポートされていない環境ではスキップ
     }
   
-    // INP (Interaction to Next Paint) - 簡易版
-    document.addEventListener('click', () => {
-      const startTime = performance.now();
-      
-      // 次の paint まで計測
-      setTimeout(() => {
-        const inpValue = Math.round(performance.now() - startTime);
-        
-        if (inpValue > 0) {
-          gtag('event', 'interaction_to_next_paint', {
-            'event_category': 'web_vitals',
-            'value': inpValue,
-            'event_label': 'INP'
-          });
+    // INP (Interaction to Next Paint) - PerformanceObserver で正確に測定
+    // event エントリタイプで最大のインタラクション遅延を記録
+    if ('PerformanceObserver' in window && PerformanceObserver.supportedEntryTypes.includes('event')) {
+      let maxINP = 0;
+      const observer = new PerformanceObserver((list) => {
+        for (const entry of list.getEntries()) {
+          // processingStart - startTime = インタラクション遅延
+          const duration = entry.processingStart ? entry.processingStart - entry.startTime : entry.duration;
+          if (duration > maxINP) {
+            maxINP = duration;
+            gtag('event', 'interaction_to_next_paint', {
+              'event_category': 'web_vitals',
+              'value': Math.round(maxINP),
+              'event_label': 'INP',
+              'interaction_type': entry.name
+            });
+          }
         }
-      }, 0);
-    }, { capture: true });
+      });
+      observer.observe({ type: 'event', buffered: true, durationThreshold: 16 });
+    }
   }
 </script>
 

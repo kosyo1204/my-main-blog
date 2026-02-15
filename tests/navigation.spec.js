@@ -90,8 +90,9 @@ test.describe('Learning Log Blog - Navigation Flow', () => {
     const main = page.locator('main');
     await expect(main).toBeVisible();
     
-    // ナビゲーション (<nav>) が存在することを確認
-    const nav = page.locator('nav');
+    // メインナビゲーション (<nav>) が存在することを確認
+    // 複数の <nav> 要素がある可能性があるため、aria-label で特定
+    const nav = page.getByRole('navigation', { name: 'Main navigation' });
     await expect(nav).toBeVisible();
     
     // ヘッダー (<header>) が存在することを確認

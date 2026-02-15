@@ -24,7 +24,7 @@ computedTitle: "タグ - "
 ## このタグの記事 ({{ articlesWithTag | length }})
 
 {% for article in articlesWithTag %}
-- **[{{ article.data.title }}]({{ article.url }})** — {{ article.data.publishedAt | dateISO }}
+- **[{{ article.data.title }}]({{ article.url | url }})** — {{ article.data.publishedAt | dateISO }}
   {% if article.data.category %}
   _Category: {{ article.data.category }}_
   {% endif %}
@@ -34,12 +34,12 @@ computedTitle: "タグ - "
 
 ## 他のタグを探す
 
-[すべてのタグに戻る](/tags/)
+[すべてのタグに戻る]({{ '/tags/' | url }})
 
 {% else %}
 
 このタグに記事はまだありません。
 
-[ホームに戻る](/){.btn}
+[ホームに戻る]({{ '/' | url }}){.btn}
 
 {% endif %}

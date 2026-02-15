@@ -11,6 +11,7 @@
     "test:taxonomy": "node scripts/validate-taxonomy.js",
     "test:ga4": "node scripts/validate-ga4.js",
     "test:alt-text": "node scripts/validate-alt-text.js",
+    "test:link-validation": "node scripts/validate-internal-links.js",
     "test:lint": "eslint . --ext .js",
     "test:a11y": "node scripts/validate-a11y.js",
     "test:e2e": "playwright test"

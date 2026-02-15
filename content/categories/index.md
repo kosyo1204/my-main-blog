@@ -17,7 +17,7 @@ permalink: /categories/index.html
     {% set articlesWithCategory = articlesWithCategory.concat(article) %}
   {% endif %}
 {% endfor %}
-- **[{{ category }}](/categories/{{ category | slugify }})** ({{ articlesWithCategory | length }} 記事)
+- **[{{ category }}]({{ ('/categories/' + (category | slugify) + '/') | url }})** ({{ articlesWithCategory | length }} 記事)
 {% endfor %}
 
 {% else %}
@@ -26,6 +26,6 @@ permalink: /categories/index.html
 
 記事を公開すると、ここにカテゴリーが表示されます。
 
-[ホームに戻る](/){.btn}
+[ホームに戻る]({{ '/' | url }}){.btn}
 
 {% endif %}

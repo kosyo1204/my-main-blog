@@ -23,7 +23,7 @@ permalink: /categories/{{ category | slugify }}/index.html
 ## このカテゴリーの記事 ({{ articlesWithCategory | length }})
 
 {% for article in articlesWithCategory %}
-- **[{{ article.data.title }}]({{ article.url }})** — {{ article.data.publishedAt | dateISO }}
+- **[{{ article.data.title }}]({{ article.url | url }})** — {{ article.data.publishedAt | dateISO }}
   {% if article.data.tags %}
   _Tags: {{ article.data.tags | join(", ") }}_
   {% endif %}
@@ -33,12 +33,12 @@ permalink: /categories/{{ category | slugify }}/index.html
 
 ## 他のカテゴリーを探す
 
-[すべてのカテゴリーに戻る](/categories/)
+[すべてのカテゴリーに戻る]({{ '/categories/' | url }})
 
 {% else %}
 
 このカテゴリーに記事はまだありません。
 
-[ホームに戻る](/){.btn}
+[ホームに戻る]({{ '/' | url }}){.btn}
 
 {% endif %}

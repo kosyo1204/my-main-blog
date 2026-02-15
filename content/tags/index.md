@@ -12,7 +12,7 @@ permalink: /tags/index.html
 
 {% for tag in collections.tags %}
 {% set articlesWithTag = collections.articles | tagFilter(tag) %}
-- **[{{ tag }}](/tags/{{ tag | slugify }})** ({{ articlesWithTag | length }} 記事)
+- **[{{ tag }}]({{ ('/tags/' + (tag | slugify) + '/') | url }})** ({{ articlesWithTag | length }} 記事)
 {% endfor %}
 
 {% else %}
@@ -21,6 +21,6 @@ permalink: /tags/index.html
 
 記事を公開すると、ここにタグが表示されます。
 
-[ホームに戻る](/){.btn}
+[ホームに戻る]({{ '/' | url }}){.btn}
 
 {% endif %}

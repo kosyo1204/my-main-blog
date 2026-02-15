@@ -51,7 +51,7 @@ layout: base
       {%- if category %}
       <div class="category">
         <span class="label">カテゴリー:</span>
-        <a href="{{ '/categories/' + category | slugify | url }}" class="category-link">
+        <a href="{{ ('/categories/' + (category | slugify) + '/') | url }}" class="category-link">
           {{ category }}
         </a>
       </div>
@@ -64,7 +64,7 @@ layout: base
         <ul class="tag-list">
           {%- for tag in tags %}
           <li>
-            <a href="{{ '/tags/' + tag | slugify | url }}" class="tag-link">
+            <a href="{{ ('/tags/' + (tag | slugify) + '/') | url }}" class="tag-link">
               {{ tag }}
             </a>
           </li>

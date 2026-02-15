@@ -1,3 +1,17 @@
+<!--
+Sync Impact Report
+- Version change: 1.0.1 -> 1.1.0
+- Modified principles: none
+- Added sections: none
+- Removed sections: none
+- Templates requiring updates:
+	- ✅ .specify/templates/plan-template.md
+	- ✅ .specify/templates/spec-template.md
+	- ✅ .specify/templates/tasks-template.md
+- Follow-up TODOs:
+	- TODO(COMMAND_TEMPLATES): .specify/templates/commands/ is missing; verify if command templates are required.
+-->
+
 # my-main-blog Constitution
 
 ## Core Principles
@@ -74,6 +88,7 @@
 - **ドキュメント言語** — 日本語が主言語、国際的な技術ドキュメントは英語
 - **コメント** — 日本語で記述し、複雑なロジックは丁寧に説明
 - **テスト記述** — Given-When-Then 形式で、日本語でテストシナリオを明記可
+- **speckit 出力** — すべての speckit コマンド出力は日本語で記述する
 
 ## Development Workflow
 
@@ -92,10 +107,13 @@
 - **版管理** — 本憲法の改正は Semantic Versioning に従い、変更履歴を記録
 - **改正手続き** — 大幅な変更は GitHub Issue / Discussion で事前協議、最低 2 名のコア開発者の合意が必須
 
-**Version**: 1.0.0 | **Ratified**: 2026-02-14 | **Last Amended**: 2026-02-14
+**Version**: 1.1.0 | **Ratified**: 2026-02-14 | **Last Amended**: 2026-02-14
 
 ## speckit 日本語出力ポリシー
 
-すべての speckit コマンド (`/speckit.plan`、`/speckit.spec`、`/speckit.tasks`) の出力は日本語で生成されます。詳細は `.specify/JAPANESE_OUTPUT_POLICY.md` を参照してください。
+すべての speckit コマンド（`/speckit.plan`、`/speckit.spec`、`/speckit.tasks`）の出力は
+日本語で生成します。テンプレートの見出し・説明・プレースホルダーも日本語で統一し、
+英語が必要な固有名詞は補足として括弧で併記します。
 
-このポリシーにより、生成される実装計画、機能仕様書、タスク一覧がすべて日本語で出力され、開発プロセス全体が日本語で一貫して進行します。
+このポリシーにより、生成される実装計画、機能仕様書、タスク一覧がすべて日本語で
+出力され、開発プロセス全体が日本語で一貫して進行します。

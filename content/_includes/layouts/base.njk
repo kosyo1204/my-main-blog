@@ -78,7 +78,15 @@
       <!-- ========== ナビゲーション ========== -->
       <!-- 実装: T007 で navigation.json から動的に生成 -->
       <nav role="navigation" aria-label="Main navigation" data-testid="main-nav">
-        <ul>
+        <button class="menu-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="メニュー">
+          <span class="hamburger-icon">
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+        </button>
+
+        <ul id="nav-menu" class="nav-menu" aria-hidden="false">
           <li><a href="{{ '/' | url }}">ホーム</a></li>
           <li><a href="{{ '/tags/' | url }}">タグ</a></li>
           <li><a href="{{ '/categories/' | url }}">カテゴリー</a></li>
@@ -113,5 +121,65 @@
 
   <!-- ========== RUM イベント（GA4 の後に読込） ========== -->
   {%- include "rum-events.njk" %}
+
+  <!-- ========== モバイルナビゲーション JavaScript ========== -->
+  <script>
+    (function() {
+      const menuToggle = document.querySelector('.menu-toggle');
+      const navMenu = document.querySelector('.nav-menu');
+
+      if (!menuToggle || !navMenu) return;
+
+      function toggleMenu() {
+        const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
+        menuToggle.setAttribute('aria-expanded', !isExpanded);
+        navMenu.setAttribute('aria-hidden', isExpanded);
+      }
+
+      function closeMenu() {
+        menuToggle.setAttribute('aria-expanded', 'false');
+        navMenu.setAttribute('aria-hidden', 'true');
+      }
+
+      // ハンバーガーメニュークリック
+      menuToggle.addEventListener('click', toggleMenu);
+
+      // Escキーでメニューを閉じる
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+          closeMenu();
+        }
+      });
+
+      // メニュー外クリックで閉じる
+      document.addEventListener('click', function(e) {
+        if (!menuToggle.contains(e.target) && !navMenu.contains(e.target)) {
+          closeMenu();
+        }
+      });
+
+      // ナビゲーションリンククリックでメニューを閉じる（モバイルのみ）
+      const navLinks = navMenu.querySelectorAll('a');
+      navLinks.forEach(function(link) {
+        link.addEventListener('click', function() {
+          if (window.innerWidth <= 768) {
+            closeMenu();
+          }
+        });
+      });
+
+      // ウィンドウリサイズ時にメニューをリセット
+      let resizeTimer;
+      window.addEventListener('resize', function() {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function() {
+          if (window.innerWidth > 768) {
+            menuToggle.setAttribute('aria-expanded', 'false');
+            navMenu.setAttribute('aria-hidden', 'false');
+          }
+        }, 250);
+      });
+    })();
+  </script>
 </body>
 </html>

@@ -12,11 +12,14 @@
     "test:ga4": "node scripts/validate-ga4.js",
     "test:alt-text": "node scripts/validate-alt-text.js",
     "test:lint": "eslint . --ext .js",
-    "test:a11y": "node scripts/validate-a11y.js"
+    "test:a11y": "node scripts/validate-a11y.js",
+    "test:e2e": "playwright test"
   },
   "devDependencies": {
     "@11ty/eleventy": "^2.0.0",
     "@11ty/eleventy-img": "^6.0.4",
+    "@lhci/cli": "^0.9.0",
+    "@playwright/test": "^1.40.0",
     "jsdom": "^23.2.0",
     "prettier": "^2.8.0",
     "sharp": "^0.32.0"

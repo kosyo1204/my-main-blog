@@ -10,6 +10,31 @@
 
 /* ========== 1. CSS リセット & 基本スタイル ========== */
 
+:root {
+  /* Shadow System */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.07);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.15);
+  --shadow-2xl: 0 25px 50px rgba(0, 0, 0, 0.25);
+  --shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.06);
+
+  /* Border Radius */
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+  --radius-2xl: 24px;
+  --radius-full: 9999px;
+
+  /* Primary Colors (for gradients) */
+  --color-primary-50: #e3f2fd;
+  --color-primary-500: #0066cc;
+  --color-accent: #004b99;
+  --color-bg-primary: #fff;
+  --color-bg-secondary: #f9f9f9;
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -34,6 +59,42 @@ body {
   /* テキストレンダリング最適化 */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  /* レイアウト */
+  max-width: 720px; /* FR-022: 本文幅 max 720px */
+  margin: 0 auto;
+  padding: 1rem;
+  position: relative;
+}
+
+/* 微妙なノイズテクスチャ */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.03;
+  z-index: -1;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='400' height='400'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+}
+
+/* 装飾的トップバー */
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background: linear-gradient(
+    90deg,
+    var(--color-primary-500) 0%,
+    var(--color-accent) 100%
+  );
+  z-index: 9999;
 }
 
 /* ========== 2. タイポグラフィ ========== */
@@ -112,15 +173,17 @@ code {
   font-size: 0.9em;
   background-color: #f5f5f5;
   padding: 0.2em 0.4em;
-  border-radius: 3px;
+  border-radius: var(--radius-sm);
 }
 
 pre {
   background-color: #f5f5f5;
   padding: 1em;
   border-left: 4px solid #0066cc;
+  border-radius: var(--radius-md);
   overflow-x: auto;
   margin-bottom: 1em;
+  box-shadow: var(--shadow-sm);
 }
 
 pre code {
@@ -140,12 +203,6 @@ blockquote {
 }
 
 /* ========== 3. レイアウト ========== */
-
-body {
-  max-width: 720px; /* FR-022: 本文幅 max 720px */
-  margin: 0 auto;
-  padding: 1rem;
-}
 
 @media (min-width: 768px) {
   body {
@@ -182,6 +239,18 @@ header[role="banner"] {
   border-bottom: 1px solid #e0e0e0;
   padding: 1.5rem 0;
   margin-bottom: 2rem;
+  box-shadow: var(--shadow-sm);
+  background-image:
+    linear-gradient(135deg, var(--color-primary-50) 0%, transparent 100%),
+    repeating-linear-gradient(
+      45deg,
+      transparent,
+      transparent 20px,
+      rgba(0, 0, 0, 0.02) 20px,
+      rgba(0, 0, 0, 0.02) 40px
+    );
+  background-color: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(12px) saturate(180%);
 }
 
 .header-content {
@@ -218,6 +287,11 @@ footer[role="contentinfo"] {
   font-size: 0.9rem;
   color: #666;
   text-align: center;
+  background: linear-gradient(
+    to bottom,
+    var(--color-bg-primary),
+    var(--color-bg-secondary)
+  );
 }
 
 .footer-content {
@@ -236,13 +310,16 @@ button, .btn {
   border: 1px solid #0066cc;
   background-color: #0066cc;
   color: white;
-  border-radius: 4px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: all 0.2s ease;
 }
 
 button:hover, .btn:hover {
   background-color: #004b99;
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
 }
 
 button:focus-visible, .btn:focus-visible {
@@ -254,12 +331,14 @@ button:focus-visible, .btn:focus-visible {
 .article-card {
   border: 1px solid #ddd;
   padding: 1.5em;
-  border-radius: 4px;
-  transition: box-shadow 0.2s ease;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-md);
+  transition: box-shadow 0.2s ease, transform 0.2s ease;
 }
 
 .article-card:hover {
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
 }
 
 .article-card h3 {
@@ -300,7 +379,8 @@ button:focus-visible, .btn:focus-visible {
   height: auto;
   display: block;
   margin: 1.5rem 0;
-  border-radius: 4px;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
 }
 
 .article-footer {
@@ -327,13 +407,17 @@ button:focus-visible, .btn:focus-visible {
   padding: 0.3rem 0.6rem;
   background-color: #f5f5f5;
   border: 1px solid #ddd;
-  border-radius: 3px;
+  border-radius: var(--radius-full);
+  box-shadow: var(--shadow-sm);
   font-size: 0.85rem;
+  transition: all 0.2s ease;
 }
 
 .category-list a:hover, .tag-list a:hover {
   background-color: #e0e0e0;
   color: #0066cc;
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
 }
 
 /* ナビゲーション */
@@ -365,11 +449,13 @@ nav a:hover, nav a:focus-visible {
 .pagination a, .pagination span {
   padding: 0.5em 0.75em;
   border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: var(--radius-md);
+  transition: all 0.2s ease;
 }
 
 .pagination a:hover {
   background-color: #f5f5f5;
+  box-shadow: var(--shadow-sm);
 }
 
 .pagination .current {
@@ -388,8 +474,9 @@ nav a:hover, nav a:focus-visible {
   align-items: center;
   justify-content: center;
   background-color: #f9f9f9;
-  border-radius: 4px;
+  border-radius: var(--radius-lg);
   margin: 2rem 0;
+  box-shadow: var(--shadow-sm);
 }
 
 .empty-state-icon {
@@ -442,13 +529,15 @@ input, textarea, select {
   font-size: 1rem;
   padding: 0.75em;
   border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: var(--radius-md);
   font-family: inherit;
+  transition: all 0.2s ease;
 }
 
 input:focus-visible, textarea:focus-visible, select:focus-visible {
   outline: 3px solid #0066cc;
   border-color: #0066cc;
+  box-shadow: var(--shadow-sm);
 }
 
 label {
@@ -540,6 +629,19 @@ label {
 /* ========== 8.5 ダークモード対応 ========== */
 
 @media (prefers-color-scheme: dark) {
+  :root {
+    /* Shadow System (Dark Mode) */
+    --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.4);
+    --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.5);
+    --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.6);
+    --shadow-2xl: 0 25px 50px rgba(0, 0, 0, 0.7);
+
+    /* Primary Colors (Dark Mode) */
+    --color-bg-primary: #1e1e1e;
+    --color-bg-secondary: #2d2d2d;
+  }
+
   body {
     background-color: #1e1e1e;
     color: #e0e0e0;
@@ -577,6 +679,17 @@ label {
 
   header[role="banner"] {
     border-bottom-color: #444;
+    background-image:
+      linear-gradient(135deg, rgba(0, 102, 204, 0.1) 0%, transparent 100%),
+      repeating-linear-gradient(
+        45deg,
+        transparent,
+        transparent 20px,
+        rgba(255, 255, 255, 0.02) 20px,
+        rgba(255, 255, 255, 0.02) 40px
+      );
+    background-color: rgba(10, 10, 10, 0.8);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   }
 
   footer[role="contentinfo"] {

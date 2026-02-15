@@ -489,6 +489,167 @@ label {
 .mb-2 { margin-bottom: 1em; }
 .mb-3 { margin-bottom: 1.5em; }
 
+/* ========== 7.5. 404 エラーページ ========== */
+
+.error-page {
+  min-height: calc(100vh - 200px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.error-content {
+  max-width: 600px;
+  text-align: center;
+}
+
+.error-illustration {
+  position: relative;
+  margin-bottom: 2rem;
+  height: 150px;
+}
+
+.error-code {
+  font-size: 8rem;
+  font-weight: 900;
+  color: #0066cc;
+  opacity: 0.2;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", sans-serif;
+  line-height: 1;
+  display: block;
+}
+
+.error-emoji {
+  font-size: 4rem;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translate(-50%, -50%);
+  }
+  50% {
+    transform: translate(-50%, -60%);
+  }
+}
+
+/* アクセシビリティ: アニメーションを無効化 */
+@media (prefers-reduced-motion: reduce) {
+  .error-emoji {
+    animation: none;
+  }
+
+  .btn-primary:hover {
+    transform: none;
+  }
+}
+
+.error-title {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #222;
+}
+
+.error-description {
+  font-size: 1.125rem;
+  color: #666;
+  margin-bottom: 2rem;
+}
+
+.error-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  margin-bottom: 3rem;
+}
+
+/* ボタンスタイル（404ページ用の拡張） */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.2s ease;
+  border: none;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.btn-primary {
+  background: #0066cc;
+  color: white;
+  box-shadow: 0 2px 8px rgba(0, 102, 204, 0.2);
+  border-bottom: none;
+}
+
+.btn-primary:hover {
+  background: #004b99;
+  box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background: #f5f5f5;
+  color: #333;
+  border: 1px solid #ddd;
+}
+
+.btn-secondary:hover {
+  background: #e0e0e0;
+  border-color: #0066cc;
+}
+
+/* おすすめ記事セクション */
+.error-suggestions {
+  margin-top: 4rem;
+  padding-top: 2rem;
+  border-top: 2px solid #e0e0e0;
+}
+
+.error-suggestions h2 {
+  font-size: 1.5rem;
+  margin-bottom: 1.5rem;
+  color: #222;
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.error-suggestions .article-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  text-align: left;
+}
+
+.error-suggestions .article-card {
+  padding: 1rem;
+}
+
+.error-suggestions .article-card h3 {
+  font-size: 1rem;
+  margin-top: 0;
+  margin-bottom: 0.5rem;
+}
+
+.error-suggestions .article-card h3 a {
+  color: #0066cc;
+}
+
+.error-suggestions .article-meta {
+  font-size: 0.85rem;
+  color: #999;
+  margin-bottom: 0;
+}
+
 /* ========== 8. レスポンシブ ========== */
 
 @media (max-width: 768px) {
@@ -534,6 +695,32 @@ label {
 
   th, td {
     padding: 0.5rem;
+  }
+
+  /* 404ページのモバイル対応 */
+  .error-code {
+    font-size: 5rem;
+  }
+
+  .error-emoji {
+    font-size: 3rem;
+  }
+
+  .error-title {
+    font-size: 1.5rem;
+  }
+
+  .error-description {
+    font-size: 1rem;
+  }
+
+  .error-actions {
+    flex-direction: column;
+    width: 100%;
+  }
+
+  .error-suggestions .article-cards {
+    grid-template-columns: 1fr;
   }
 }
 
@@ -647,6 +834,38 @@ label {
 
   .category-list a:hover, .tag-list a:hover {
     background-color: #3d3d3d;
+  }
+
+  /* 404ページのダークモード */
+  .error-code {
+    color: #64b5f6;
+  }
+
+  .error-title {
+    color: #f5f5f5;
+  }
+
+  .error-description {
+    color: #aaa;
+  }
+
+  .btn-secondary {
+    background-color: #2d2d2d;
+    border-color: #444;
+    color: #e0e0e0;
+  }
+
+  .btn-secondary:hover {
+    background-color: #3d3d3d;
+    border-color: #64b5f6;
+  }
+
+  .error-suggestions {
+    border-top-color: #444;
+  }
+
+  .error-suggestions h2 {
+    color: #f5f5f5;
   }
 }
 

@@ -36,35 +36,34 @@ jobs:
         run: npx @lhci/cli@0.9.x autorun --config=.lighthouserc.json
         continue-on-error: true
       
-      - name: Debug Lighthouse output
-        run: |
-          echo "Event name: ${{ github.event_name }}"
-          echo "GitHub event path: ${{ github.event_path }}"
-          ls -la .lighthouseci/ || echo "No .lighthouseci dir"
-          find . -name "*lhci*" -o -name "*lighthouse*" 2>/dev/null | head -20
-      
       - name: Comment PR with Lighthouse scores
-        if: github.event_name == 'pull_request'
+        if: always()
         uses: actions/github-script@v7
         with:
           github-token: ${{ github.token }}
           script: |
             const fs = require('fs');
-            const reportPath = '.lighthouseci/lhci-results.json';
+            const path = require('path');
+            const reportDir = '.lighthouseci';
+            
             let scores = { perf: 'N/A', a11y: 'N/A', bp: 'N/A', seo: 'N/A' };
             
-            if (fs.existsSync(reportPath)) {
+            if (fs.existsSync(reportDir)) {
               try {
-                const data = JSON.parse(fs.readFileSync(reportPath, 'utf8'));
-                if (data.runs && data.runs.length > 0) {
-                  const firstRun = data.runs[0].lhr;
-                  scores.perf = Math.round(firstRun.categories.performance.score * 100);
-                  scores.a11y = Math.round(firstRun.categories.accessibility.score * 100);
-                  scores.bp = Math.round(firstRun.categories['best-practices'].score * 100);
-                  scores.seo = Math.round(firstRun.categories.seo.score * 100);
+                const files = fs.readdirSync(reportDir);
+                const jsonFiles = files.filter(f => f.startsWith('lhr-') && f.endsWith('.json'));
+                
+                if (jsonFiles.length > 0) {
+                  const latestFile = jsonFiles.sort().pop();
+                  const data = JSON.parse(fs.readFileSync(path.join(reportDir, latestFile), 'utf8'));
+                  
+                  scores.perf = Math.round(data.categories.performance.score * 100);
+                  scores.a11y = Math.round(data.categories.accessibility.score * 100);
+                  scores.bp = Math.round(data.categories['best-practices'].score * 100);
+                  scores.seo = Math.round(data.categories.seo.score * 100);
                 }
               } catch (e) {
-                console.error('Failed to parse results:', e);
+                console.error('Failed to parse Lighthouse results:', e);
               }
             }
             
@@ -80,9 +79,14 @@ jobs:
               ''
             ].join('\n');
             
-            github.rest.issues.createComment({
-              issue_number: context.issue.number,
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              body: message
+            if (context.issue && context.issue.number) {
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: message
+              });
+            } else {
+              console.log('Not in a PR context, skipping comment');
+            }
             });

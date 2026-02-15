@@ -10,10 +10,12 @@ permalink: /tags/index.html
 
 ## 利用可能なタグ
 
+<div class="tag-list">
 {% for tag in collections.tags %}
 {% set articlesWithTag = collections.articles | tagFilter(tag) %}
-- **[{{ tag }}]({{ ('/tags/' + (tag | slugify) + '/') | url }})** ({{ articlesWithTag | length }} 記事)
+<a href="{{ ('/tags/' + (tag | slugify) + '/') | url }}">{{ tag }} ({{ articlesWithTag | length }})</a>
 {% endfor %}
+</div>
 
 {% else %}
 

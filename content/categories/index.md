@@ -10,6 +10,7 @@ permalink: /categories/index.html
 
 ## 利用可能なカテゴリー
 
+<div class="category-list">
 {% for category in collections.categories %}
 {% set articlesWithCategory = [] %}
 {% for article in collections.articles %}
@@ -17,8 +18,9 @@ permalink: /categories/index.html
     {% set articlesWithCategory = articlesWithCategory.concat(article) %}
   {% endif %}
 {% endfor %}
-- **[{{ category }}]({{ ('/categories/' + (category | slugify) + '/') | url }})** ({{ articlesWithCategory | length }} 記事)
+<a href="{{ ('/categories/' + (category | slugify) + '/') | url }}">{{ category }} ({{ articlesWithCategory | length }})</a>
 {% endfor %}
+</div>
 
 {% else %}
 

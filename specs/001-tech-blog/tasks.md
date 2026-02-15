@@ -65,11 +65,13 @@ description: "Learning Log Blog のタスクリスト"
 
 **⚠️ 重要**: このフェーズが完了するまでユーザーストーリー作業を開始しない
 
-- [ ] T004 content/_includes/layouts/base.njk に共通レイアウト（header/footer/viewport/stylesheet）を実装
-- [ ] T005 [P] content/_includes/layouts/article.njk に記事レイアウト（タイトル/日付/本文/SEO枠）を実装
-- [ ] T006 [P] content/_includes/seo.njk に SEO メタ（title/description/OG/Twitter）の枠を追加
-- [ ] T007 [P] content/_data/navigation.json にナビゲーション定義（home/tags/categories）を追加
-- [ ] T008 [P] content/_includes/empty-state.njk に空状態メッセージの共通テンプレートを追加
+- [x] T004 content/_includes/layouts/base.njk に共通レイアウト（header/footer/viewport/stylesheet）を実装
+- [x] T005 [P] content/_includes/layouts/article.njk に記事レイアウト（タイトル/日付/本文/SEO枠）を実装
+- [x] T006 [P] content/_includes/seo.njk に SEO メタ（title/description/OG/Twitter）の枠を追加
+- [x] T007 [P] content/_data/navigation.json にナビゲーション定義（home/tags/categories）を追加
+- [x] T008 [P] content/_includes/empty-state.njk に空状態メッセージの共通テンプレートを追加
+
+**✅ フェーズ2 完了**: `npm run build` 成功、base/article/seo/nav/empty-state テンプレート生成確認
 
 **チェックポイント**: 基盤準備完了。ユーザーストーリーを並行実装可能
 

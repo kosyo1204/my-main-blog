@@ -57,10 +57,8 @@
     // h2, h3 見出しを自動的に監視対象に追加
     const headings = document.querySelectorAll('main h2, main h3');
     headings.forEach(heading => {
-      if (!heading.classList.contains('animate-in')) {
-        heading.classList.add('animate-on-scroll');
-        observer.observe(heading);
-      }
+      heading.classList.add('animate-on-scroll');
+      observer.observe(heading);
     });
   }
 })();

@@ -103,10 +103,10 @@ a::after {
   position: absolute;
   bottom: -2px;
   left: 0;
-  width: 100%;
+  width: 0;
   height: 1px;
   background: currentColor;
-  transition: width 0.3s ease, background 0.2s ease;
+  transition: width 0.3s ease;
 }
 
 a:hover {
@@ -115,7 +115,6 @@ a:hover {
 
 a:hover::after {
   width: 100%;
-  background: #004b99;
 }
 
 /* キーボードフォーカス（FR-023） */
@@ -295,12 +294,12 @@ button:focus-visible, .btn:focus-visible {
   padding: 1.5em;
   border-radius: 4px;
   transition: box-shadow 0.3s ease, transform 0.3s ease;
-  will-change: transform;
 }
 
 .article-card:hover {
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
   transform: translateY(-4px);
+  will-change: transform;
 }
 
 .article-card h3 {

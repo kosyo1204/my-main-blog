@@ -32,8 +32,7 @@ jobs:
       
       - name: Run Lighthouse
         id: lighthouse
-        run: |
-          npx @lhci/cli@0.9.x autorun --config=.lighthouserc.json || true
+        run: npx @lhci/cli@0.9.x autorun --config=.lighthouserc.json
         continue-on-error: true
       
       - name: Upload Lighthouse results
@@ -41,7 +40,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: lighthouse-reports
-          path: .lighthouse/
+          path: .lighthouseci/
           retention-days: 30
       
       - name: Comment PR with Lighthouse scores

@@ -47,13 +47,13 @@ jobs:
       - name: Test taxonomy pages
         run: npm run test:taxonomy
 
-      # Deploy to GitHub Pages (only on main branch)
+      # Deploy to GitHub Pages (on both main and 001-tech-blog push)
       - name: Deploy to GitHub Pages
-        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-        uses: actions/upload-artifact@v4
+        if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/001-tech-blog')
+        uses: peaceiris/actions-gh-pages@v3
         with:
-          name: site
-          path: _site/
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./_site
 
       # Archive build output for pull requests
       - name: Archive build output

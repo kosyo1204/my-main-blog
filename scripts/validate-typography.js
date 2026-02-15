@@ -175,10 +175,18 @@ function validateFontApplication() {
     'Body uses --font-body variable'
   );
 
-  // 見出しに font-display が適用されているか
+  // h1-h3 に font-display が適用されているか
   runner.assert(
     /h1,\s*h2,\s*h3,\s*h4,\s*h5,\s*h6\s*\{[^}]*font-family:\s*var\(--font-display\)/s.test(content),
-    'Headings use --font-display variable'
+    'Headings h1-h3 use --font-display variable'
+  );
+
+  // h4-h6 に font-body が適用されているか
+  runner.assert(
+    /h4\s*\{[^}]*font-family:\s*var\(--font-body\)/s.test(content) &&
+      /h5\s*\{[^}]*font-family:\s*var\(--font-body\)/s.test(content) &&
+      /h6\s*\{[^}]*font-family:\s*var\(--font-body\)/s.test(content),
+    'Headings h4-h6 use --font-body variable'
   );
 
   // コードブロックに font-mono が適用されているか

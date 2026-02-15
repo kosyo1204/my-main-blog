@@ -1,0 +1,77 @@
+---
+title: ホーム
+layout: layouts/base
+pagination:
+  data: collections.articles
+  size: 5
+  alias: articlesPage
+permalink: "{% if pagination.pageNumber == 0 %}/{% else %}/page-{{ pagination.pageNumber + 1 }}/{% endif %}"
+---
+
+## 公開記事
+
+{% if collections.articles | length > 0 %}
+
+### 最新の記事 
+
+{% for article in articlesPage %}
+- **[{{ article.data.title }}]({{ article.url }})** — {{ article.data.publishedAt | dateISO }}
+  {% if article.data.tags %}
+  _Tags: {{ article.data.tags | join(", ") }}_
+  {% endif %}
+{% endfor %}
+
+---
+
+## ページネーション
+
+<nav aria-label="Pagination">
+  <div style="display: flex; gap: 1rem; justify-content: center; margin: 2rem 0; flex-wrap: wrap;">
+    {% if pagination.previousPageHref %}
+      <a href="{{ pagination.previousPageHref }}" class="btn" rel="prev">← 前のページ</a>
+    {% endif %}
+    
+    <div style="display: flex; gap: 0.5rem; align-items: center; flex-wrap: wrap; justify-content: center;">
+      {% for page in pagination.pages %}
+        {% if loop.index0 == pagination.pageNumber %}
+          <span aria-current="page" style="padding: 0.5rem 0.75rem; background: #0066cc; color: white; border-radius: 4px; font-weight: bold;">
+            {{ loop.index }}
+          </span>
+        {% else %}
+          <a href="{{ page }}" style="padding: 0.5rem 0.75rem; border: 1px solid #0066cc; border-radius: 4px; text-decoration: none; color: #0066cc;">
+            {{ loop.index }}
+          </a>
+        {% endif %}
+      {% endfor %}
+    </div>
+    
+    {% if pagination.nextPageHref %}
+      <a href="{{ pagination.nextPageHref }}" class="btn" rel="next">次のページ →</a>
+    {% endif %}
+  </div>
+  
+  <p style="text-align: center; color: #666; font-size: 0.9rem;">
+    ページ {{ pagination.pageNumber + 1 }} / {{ pagination.pages | length }}（全 {{ collections.articles | length }} 件）
+  </p>
+</nav>
+
+---
+
+## 他の探し方
+
+- **[すべてのタグで探す](/tags/)**
+- **[すべてのカテゴリーで探す](/categories/)**
+
+{% else %}
+
+### 記事はまだありません
+
+このブログに公開された記事はまだありません。後に戻ってきてください。
+
+[タグで探す](/tags/) | [カテゴリーで探す](/categories/)
+
+{% endif %}
+
+---
+
+### このブログについて

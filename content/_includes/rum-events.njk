@@ -1,0 +1,76 @@
+{#
+  rum-events.njk: Real User Monitoring (RUM) イベント
+  
+  Purpose: Web Vitals を GA4 へ送信
+  - LCP (Largest Contentful Paint)
+  - INP (Interaction to Next Paint)
+  - CLS (Cumulative Layout Shift)
+  
+  Requires: GA4 スクリプト が先に読込済み
+#}
+
+<script>
+  // Web Vitals API を使用したRUM計測
+  // 参考: https://web.dev/vitals/
+  
+  if (typeof gtag === 'function') {
+    // LCP (Largest Contentful Paint)
+    const observer = new PerformanceObserver((entryList) => {
+      const entries = entryList.getEntries();
+      const lastEntry = entries[entries.length - 1];
+      const lcpValue = Math.round(lastEntry.renderTime || lastEntry.loadTime);
+      
+      gtag('event', 'page_view_lcp', {
+        'event_category': 'web_vitals',
+        'value': lcpValue,
+        'event_label': 'LCP'
+      });
+    });
+    
+    try {
+      observer.observe({ entryTypes: ['largest-contentful-paint'] });
+    } catch (e) {
+      // サポートされていない環境ではスキップ
+    }
+  
+    // CLS (Cumulative Layout Shift)
+    let clsValue = 0;
+    const clsObserver = new PerformanceObserver((entryList) => {
+      for (const entry of entryList.getEntries()) {
+        if (!entry.hadRecentInput) {
+          clsValue += entry.value;
+          
+          gtag('event', 'layout_shift', {
+            'event_category': 'web_vitals',
+            'value': Math.round(clsValue * 1000) / 1000,
+            'event_label': 'CLS'
+          });
+        }
+      }
+    });
+    
+    try {
+      clsObserver.observe({ entryTypes: ['layout-shift'] });
+    } catch (e) {
+      // サポートされていない環境ではスキップ
+    }
+  
+    // INP (Interaction to Next Paint) - 簡易版
+    document.addEventListener('click', () => {
+      const startTime = performance.now();
+      
+      // 次の paint まで計測
+      setTimeout(() => {
+        const inpValue = Math.round(performance.now() - startTime);
+        
+        if (inpValue > 0) {
+          gtag('event', 'interaction_to_next_paint', {
+            'event_category': 'web_vitals',
+            'value': inpValue,
+            'event_label': 'INP'
+          });
+        }
+      }, 0);
+    }, { capture: true });
+  }
+</script>

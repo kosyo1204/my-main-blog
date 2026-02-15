@@ -142,6 +142,38 @@ npm run format:check
    - PV（ページビュー）確認
    - ユーザー流入元分析
 
+## 環境変数設定
+
+### GA4_MEASUREMENT_ID
+
+Google Analytics 4 の測定 ID を設定します。
+
+```bash
+# ローカル開発環境
+export GA4_MEASUREMENT_ID=G-XXXXXXXXXX
+
+# .env ファイルを使う場合（.env.local に記述）
+GA4_MEASUREMENT_ID=G-XXXXXXXXXX
+```
+
+設定後、ビルドすると GA4 計測タグがページに自動埋め込みされます。
+
+### 測定 ID の確認方法
+
+1. [Google Analytics 4 管理画面](https://analytics.google.com/)にアクセス
+2. 左下の「管理」 > 「データストリーム」
+3. ウェブサイトを選択
+4. 「測定 ID」をコピー（G-XXXXXXXXXX 形式）
+
+### テスト実行
+
+```bash
+# GA4 計測タグの埋め込み確認
+npm run test:ga4
+```
+
+設定されていない場合は警告が表示されますが、ビルドは成功します。
+
 ## 公開サイト
 
 - GitHub Pages でホスティング

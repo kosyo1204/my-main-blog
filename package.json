@@ -8,7 +8,8 @@
     "format": "prettier --write \"**/*.{md,js,json,njk}\"",
     "test:published": "node scripts/validate-published.js",
     "test:404": "node scripts/validate-404.js",
-    "test:taxonomy": "node scripts/validate-taxonomy.js"
+    "test:taxonomy": "node scripts/validate-taxonomy.js",
+    "test:ga4": "node scripts/validate-ga4.js"
   },
   "devDependencies": {
     "@11ty/eleventy": "^2.0.0",

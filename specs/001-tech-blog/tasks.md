@@ -57,9 +57,11 @@ description: "Learning Log Blog のタスク進捗"
 
 ---
 
-## Phase 4: US2 - 検索・分類（⏳ 進行中 4/6）
+## Phase 4: US2 - 検索・分類（✅ 完了 6/6）
 
 **ゴール**: タグとカテゴリーで記事を探せる
+
+**ビルド**: ✅ 成功 (`npm run build` → 7ファイル生成: ホーム、タグ一覧、タグ別×1、カテゴリー一覧、カテゴリー別×1、CSS、404)
 
 ### コレクション定義
 - [x] **T019**: `.eleventy.js` に `articles/tags/categories` コレクションを追加
@@ -82,16 +84,17 @@ description: "Learning Log Blog のタスク進捗"
 - [x] **T024-1**: `.eleventy.js` に `dateISO` フィルターを追加
 - [x] **T024-2**: `base.njk` にカテゴリー・タグ別ページのタイトル処理を追加
 
-**ビルド**: ✅ 成功 (`npm run build` → 5ファイル生成: ホーム、タグ一覧、タグ別、カテゴリー一覧、カテゴリー別)
+### テスト実装
+- [x] **T025**: `scripts/validate-taxonomy.js` でタグ/カテゴリーページの生成チェック実装
+  - ✅ テスト結果: 6/6 成功
+- [x] **T026**: `.github/workflows/deploy-public.yml` に GitHub Actions デプロイワークフロー実装
+  - ✅ ビルド、テスト（3種類）、アーティファクト保存
 
-### 残り
-- [ ] **T025**: タグ/カテゴリーページの Integration テスト実装（validate-taxonomy.js）
-  - 対応: `npm run test:taxonomy`
-- [ ] **T026**: GitHub Actions デプロイワークフロー（deploy-public.yml）
-
-**テスト**: ✅ 全継続成功
+**テスト**: ✅ 全テスト成功
 - `npm run test:published` → ✅ 1/1 成功
 - `npm run test:404` → ✅ 4/4 成功
+- `npm run test:taxonomy` → ✅ 6/6 成功
+- **合計**: ✅ 11/11 成功
 
 ---
 

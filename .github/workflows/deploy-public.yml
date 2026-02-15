@@ -1,0 +1,65 @@
+name: Build and Deploy Blog
+
+on:
+  push:
+    branches:
+      - main
+      - 001-tech-blog
+  pull_request:
+    branches:
+      - main
+      - 001-tech-blog
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    name: Build, Test, and Deploy
+
+    steps:
+      # Checkout code
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      # Setup Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      # Install dependencies
+      - name: Install dependencies
+        run: npm ci
+
+      # Build the site
+      - name: Build site
+        run: npm run build
+
+      # Run test:published
+      - name: Test published filter
+        run: npm run test:published
+
+      # Run test:404
+      - name: Test 404 page
+        run: npm run test:404
+
+      # Run test:taxonomy
+      - name: Test taxonomy pages
+        run: npm run test:taxonomy
+
+      # Deploy to GitHub Pages (only on main branch)
+      - name: Deploy to GitHub Pages
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        uses: actions/upload-artifact@v4
+        with:
+          name: site
+          path: _site/
+
+      # Archive build output for pull requests
+      - name: Archive build output
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v4
+        with:
+          name: site-pr-${{ github.event.pull_request.number }}
+          path: _site/
+          retention-days: 5

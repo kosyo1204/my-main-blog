@@ -98,16 +98,48 @@ description: "Learning Log Blog のタスク進捗"
 
 ---
 
-## Phase 5: US3 - GA4 計測（⏱️ 未開始 0/6）
+## Phase 5: US3 - GA4 計測（✅ 完了 6/6）
 
 **ゴール**: GA4 で PV と流入元を確認できる
 
-- [ ] **T027**: `content/_data/analytics.js` に GA4_MEASUREMENT_ID 読み込みを追加
-- [ ] **T028**: `content/_includes/ga4.njk` に GA4 計測スニペットを追加
-- [ ] **T029**: `content/_includes/layouts/base.njk` に GA4 条件付き埋め込みを追加
-- [ ] **T030**: `scripts/validate-ga4.js` に GA4 計測タグ出力チェックを実装
-- [ ] **T031**: `package.json` に `test:ga4` スクリプトを追加
-- [ ] **T032**: 環境変数 `GA4_MEASUREMENT_ID` の設定ガイドを追加
+**ビルド**: ✅ 成功 (`npm run build` → 7ファイル生成)
+
+### 実装
+- [x] **T027**: `content/_data/analytics.js` に GA4_MEASUREMENT_ID の環境変数読み込みを追加
+  - ✅ process.env.GA4_MEASUREMENT_ID から値を読み込む
+  - ✅ isGa4Enabled フラグを計算
+- [x] **T028**: `content/_includes/ga4.njk` に GA4 計測スニペットを追加
+  - ✅ Google Analytics 4 スクリプト タグ
+  - ✅ gtag() 関数設定
+- [x] **T029**: `content/_includes/layouts/base.njk` に GA4 条件付き埋め込みを追加
+  - ✅ </body> 前に GA4 テンプレート挿入
+
+### テスト実装
+- [x] **T030**: `scripts/validate-ga4.js` に GA4 計測タグ出力チェック実装
+  - ✅ GA4_MEASUREMENT_ID 環境変数確認
+  - ✅ GA4 スクリプト タグ埋め込み確認
+  - ✅ 測定 ID が正しく埋め込まれているか確認
+  - ✅ gtag() 関数呼び出し確認
+- [x] **T031**: `package.json` に `test:ga4` スクリプト追加
+
+### ドキュメント
+- [x] **T032**: `specs/001-tech-blog/quickstart.md` に GA4 環境変数設定ガイド追加
+  - ✅ GA4_MEASUREMENT_ID の設定方法
+  - ✅ 測定 ID の確認方法
+  - ✅ テスト実行方法
+
+**テスト**: ✅ 全テスト成功（GA4_MEASUREMENT_ID 設定時）
+- `npm run test:ga4` → ✅ 7/7 成功
+- `npm run test:published` → ✅ 1/1 成功
+- `npm run test:404` → ✅ 4/4 成功
+- `npm run test:taxonomy` → ✅ 6/6 成功
+- **合計**: ✅ 18/18 成功
+
+**環境変数設定例**:
+```bash
+export GA4_MEASUREMENT_ID=G-XXXXXXXXXX
+npm run build
+```
 
 ---
 
@@ -148,11 +180,11 @@ description: "Learning Log Blog のタスク進捗"
 | **Phase 1** | ✅ 完了 | 3/3 | ✅ OK | - |
 | **Phase 2** | ✅ 完了 | 5/5 | ✅ OK | - |
 | **Phase 3** | ✅ 完了 | 8/8 | ✅ OK | ✅ 5/5 |
-| **Phase 4** | ⏳ 進行中 | 4/6 | ✅ OK | ✅ 継続 |
-| **Phase 5** | ⏱️ 未開始 | 0/6 | - | - |
+| **Phase 4** | ✅ 完了 | 6/6 | ✅ OK | ✅ 6/6 |
+| **Phase 5** | ✅ 完了 | 6/6 | ✅ OK | ✅ 7/7 |
 | **Phase 6** | ⏱️ 未開始 | 0/8 | - | - |
 | **Phase 7** | ⏱️ 未開始 | 0/8 | - | - |
-| **総計** | **50% 進行中** | **24/48** | - | - |
+| **総計** | **58% 進行中** | **28/48** | - | - |
 
 ---
 
@@ -172,9 +204,10 @@ eb8070c feat(T019-T020): implement collections and home article listing
 
 ## Next Action
 
-**推奨**: T025-T026 を完了して Phase 4 を終了し、Phase 5 へ移行
-- T025: `validate-taxonomy.js` テスト実装
-- T026: GitHub Actions デプロイワークフロー設定
+**推奨**: Phase 6 (Polish) 開始 → Phase 7 (Performance & Monitoring) へ
+- CSS ハンドリング（レスポンシブ、アクセシビリティ向上）
+- 404 エラーハンドリング改善
+- ページネーション実装、SEO 最適化
 
-**または**: Phase 5 (GA4) 開始
-- GA4 計測タグの実装
+**または**: Phase 7 開始
+- Lighthouse CI、Core Web Vitals、E2E テスト実装

@@ -110,6 +110,68 @@ module.exports = function (eleventyConfig) {
     }
   );
 
+  // ========== Collections ==========
+
+  /**
+   * articles コレクション
+   * published: true の記事のみを含む
+   * 
+   * Usage in templates: {% for article in collections.articles %}
+   */
+  eleventyConfig.addCollection("articles", (collection) => {
+    return collection
+      .getFilteredByGlob("content/articles/**/*.md")
+      .filter((item) => item.data.published !== false)
+      .sort((a, b) => {
+        // 新しい記事が最初に表示されるようソート
+        const dateA = new Date(a.data.publishedAt || a.data.date);
+        const dateB = new Date(b.data.publishedAt || b.data.date);
+        return dateB - dateA;
+      });
+  });
+
+  /**
+   * tags コレクション
+   * すべての記事のタグを収集し、タグ別に整理
+   * 
+   * Usage in templates: {% for tag in collections.tags %}
+   */
+  eleventyConfig.addCollection("tags", (collection) => {
+    const tagSet = new Set();
+    const articles = collection.getFilteredByGlob("content/articles/**/*.md");
+    
+    articles.forEach((item) => {
+      if (item.data.published !== false && item.data.tags) {
+        item.data.tags.forEach((tag) => {
+          if (tag) {
+            tagSet.add(tag);
+          }
+        });
+      }
+    });
+
+    return Array.from(tagSet).sort();
+  });
+
+  /**
+   * categories コレクション
+   * すべての記事のカテゴリーを収集
+   * 
+   * Usage in templates: {% for category in collections.categories %}
+   */
+  eleventyConfig.addCollection("categories", (collection) => {
+    const categorySet = new Set();
+    const articles = collection.getFilteredByGlob("content/articles/**/*.md");
+    
+    articles.forEach((item) => {
+      if (item.data.published !== false && item.data.category) {
+        categorySet.add(item.data.category);
+      }
+    });
+
+    return Array.from(categorySet).sort();
+  });
+
   // シンプルなテンプレート形式を返す
   return {
     dir: {

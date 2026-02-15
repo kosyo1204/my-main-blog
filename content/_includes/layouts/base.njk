@@ -62,12 +62,12 @@
   <header role="banner">
     <div class="container">
       <div class="header-content">
-        <!-- ロゴ / サイトタイトル -->
-        <h1 class="site-title">
+        <!-- ロゴ / サイトタイトル（各ページの h1 が主見出し） -->
+        <div class="site-title">
           <a href="{{ '/' | url }}" title="{{ site.title }}">
             {{ site.title }}
           </a>
-        </h1>
+        </div>
         
         <!-- サブタイトル/説明 -->
         {%- if site.description %}

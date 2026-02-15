@@ -1,0 +1,53 @@
+
+---
+layout: base
+---<article role="article" class="article-page">
+  <!-- ========== 記事ヘッダー ========== -->
+  <header class="article-header">
+    <!-- タイトル -->
+    <h1 class="article-title">サンプル記事</h1>
+    
+    <!-- メタ情報 (日付) -->
+    <div class="article-meta">
+      <time datetime="2026-02-14" class="published-date">
+        2026-02-14
+      </time>
+    </div>
+  </header>
+
+  <!-- ========== 記事本文 ========== -->
+  <div class="article-content">
+    <p>これはサンプル記事です。CI で Eleventy のビルドが通ることを確認するための最小コンテンツです。</p>
+
+  </div>
+
+  <!-- ========== 記事フッター（タグ・カテゴリー） ========== -->
+  <footer class="article-footer">
+    
+    <div class="article-taxonomy">
+      <!-- カテゴリー -->
+      <div class="category">
+        <span class="label">カテゴリー:</span>
+        <a href="/categories/general" class="category-link">
+          general
+        </a>
+      </div>
+
+      <!-- タグ -->
+      <div class="tags">
+        <span class="label">タグ:</span>
+        <ul class="tag-list">
+          <li>
+            <a href="/tags/sample" class="tag-link">
+              sample
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    
+  </footer>
+</article>
+
+<!-- ========== SEO メタ情報（Open Graph, Twitter等） ========== -->
+<!-- 実装: T006 で seo.njk に分離 -->

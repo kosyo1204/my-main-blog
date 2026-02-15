@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="ja-JP">
+<head>
+  <!-- ========== メタ情報 ========== -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="学習の蓄積と技術知見の公開ポートフォリオ">
+  <meta name="theme-color" content="#ffffff">
+  
+  <!-- ========== SEO ========== -->
+  <!-- 注: SEO メタタグ詳細は seo.njk に分離（T006 で実装） -->
+  <title>カテゴリー - general | My Learning Log</title>
+
+  <!-- ========== スタイル ========== -->
+  <link rel="stylesheet" href="/css/site.css">
+  
+  <!-- フォーカス可視化（アクセシビリティ） -->
+  <style>
+    /* フォーカス表示の視認性向上（FR-023: キーボード操作で到達可能） */
+    :focus-visible {
+      outline: 2px solid #0066cc;
+      outline-offset: 2px;
+    }
+  </style>
+</head>
+
+<body>
+  <!-- スキップリンク（アクセシビリティ: キーボードユーザーがナビをスキップ） -->
+  <a href="#main-content" class="sr-only">メインコンテンツへスキップ</a>
+
+  <!-- ========== ヘッダー ========== -->
+  <header role="banner">
+    <div class="container">
+      <div class="header-content">
+        <!-- ロゴ / サイトタイトル（各ページの h1 が主見出し） -->
+        <div class="site-title">
+          <a href="/" title="My Learning Log">
+            My Learning Log
+          </a>
+        </div>
+        
+        <!-- サブタイトル/説明 -->
+        <p class="site-description">学習の蓄積と技術知見の公開ポートフォリオ</p>
+      </div>
+
+      <!-- ========== ナビゲーション ========== -->
+      <!-- 実装: T007 で navigation.json から動的に生成 -->
+      <nav role="navigation" aria-label="Main navigation">
+        <ul>
+          <li><a href="/">ホーム</a></li>
+          <li><a href="/tags/">タグ</a></li>
+          <li><a href="/categories/">カテゴリー</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <!-- ========== メインコンテンツ ========== -->
+  <main id="main-content" role="main">
+    <div class="container">
+      # 📂 カテゴリー: general
+
+
+
+  
+    
+  
+
+
+
+
+## このカテゴリーの記事 (1)
+
+
+- **[サンプル記事](/articles/2026-02-14-sample-post/)** — 2026-02-14
+  
+  _Tags: sample_
+  
+
+
+---
+
+## 他のカテゴリーを探す
+
+[すべてのカテゴリーに戻る](/categories/)
+
+
+
+    </div>
+  </main>
+
+  <!-- ========== フッター ========== -->
+  <footer role="contentinfo">
+    <div class="container footer-content">
+      <p>
+        &copy; 2026 Author Name.
+        All rights reserved.
+      </p>
+      <p class="footer-note">
+        Powered by <a href="https://www.11ty.dev/" target="_blank" rel="noopener">Eleventy</a> &amp;
+        hosted on <a href="https://pages.github.com/" target="_blank" rel="noopener">GitHub Pages</a>
+      </p>
+    </div>
+  </footer>
+
+  <!-- ========== GA4 計測タグ（条件付き） ========== -->
+
+  <!-- ========== RUM イベント（GA4 の後に読込） ========== -->
+
+<script>
+  // Web Vitals API を使用したRUM計測
+  // 参考: https://web.dev/vitals/
+  
+  if (typeof gtag === 'function') {
+    // LCP (Largest Contentful Paint)
+    const observer = new PerformanceObserver((entryList) => {
+      const entries = entryList.getEntries();
+      const lastEntry = entries[entries.length - 1];
+      const lcpValue = Math.round(lastEntry.renderTime || lastEntry.loadTime);
+      
+      gtag('event', 'page_view_lcp', {
+        'event_category': 'web_vitals',
+        'value': lcpValue,
+        'event_label': 'LCP'
+      });
+    });
+    
+    try {
+      observer.observe({ entryTypes: ['largest-contentful-paint'] });
+    } catch (e) {
+      // サポートされていない環境ではスキップ
+    }
+  
+    // CLS (Cumulative Layout Shift)
+    let clsValue = 0;
+    const clsObserver = new PerformanceObserver((entryList) => {
+      for (const entry of entryList.getEntries()) {
+        if (!entry.hadRecentInput) {
+          clsValue += entry.value;
+          
+          gtag('event', 'layout_shift', {
+            'event_category': 'web_vitals',
+            'value': Math.round(clsValue * 1000) / 1000,
+            'event_label': 'CLS'
+          });
+        }
+      }
+    });
+    
+    try {
+      clsObserver.observe({ entryTypes: ['layout-shift'] });
+    } catch (e) {
+      // サポートされていない環境ではスキップ
+    }
+  
+    // INP (Interaction to Next Paint) - 簡易版
+    document.addEventListener('click', () => {
+      const startTime = performance.now();
+      
+      // 次の paint まで計測
+      setTimeout(() => {
+        const inpValue = Math.round(performance.now() - startTime);
+        
+        if (inpValue > 0) {
+          gtag('event', 'interaction_to_next_paint', {
+            'event_category': 'web_vitals',
+            'value': inpValue,
+            'event_label': 'INP'
+          });
+        }
+      }, 0);
+    }, { capture: true });
+  }
+</script>
+
+</body>
+</html>

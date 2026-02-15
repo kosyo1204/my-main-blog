@@ -157,6 +157,10 @@ def _is_run(node) -> bool:
 
 
 def _can_merge(run1, run2) -> bool:
+    """2つのランが同じフォーマットを持つかを意味的に比較。
+    
+    属性の順序に依存せず、XML要素の内容を比較します。
+    """
     rpr1 = _get_child(run1, "rPr")
     rpr2 = _get_child(run2, "rPr")
 
@@ -164,7 +168,32 @@ def _can_merge(run1, run2) -> bool:
         return False
     if rpr1 is None:
         return True
-    return rpr1.toxml() == rpr2.toxml()  
+    
+    # 属性と子要素を意味的に比較（順序非依存）
+    return _elements_equal(rpr1, rpr2)
+
+
+def _elements_equal(elem1, elem2) -> bool:
+    """2つのXML要素が意味的に等しいかを判定（属性順序非依存）。"""
+    # タグ名の比較
+    name1 = elem1.localName or elem1.tagName
+    name2 = elem2.localName or elem2.tagName
+    if name1 != name2:
+        return False
+    
+    # 属性の比較（順序非依存）
+    attrs1 = {attr.name: attr.value for attr in elem1.attributes.values()}
+    attrs2 = {attr.name: attr.value for attr in elem2.attributes.values()}
+    if attrs1 != attrs2:
+        return False
+    
+    # 子要素の比較
+    children1 = [c for c in elem1.childNodes if c.nodeType == c.ELEMENT_NODE]
+    children2 = [c for c in elem2.childNodes if c.nodeType == c.ELEMENT_NODE]
+    if len(children1) != len(children2):
+        return False
+    
+    return all(_elements_equal(c1, c2) for c1, c2 in zip(children1, children2))  
 
 
 def _merge_run_content(target, source):

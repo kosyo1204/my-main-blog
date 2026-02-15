@@ -122,7 +122,13 @@ module.exports = function (eleventyConfig) {
     
     let dateObj = dateValue;
     if (typeof dateValue === "string") {
-      dateObj = new Date(dateValue);
+      // YYYY-MM-DD 形式の文字列を UTC として明示的にパース
+      // タイムゾーン問題を回避（off-by-one 防止）
+      if (/^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
+        dateObj = new Date(dateValue + "T00:00:00Z");
+      } else {
+        dateObj = new Date(dateValue);
+      }
     }
     
     if (!(dateObj instanceof Date) || isNaN(dateObj.getTime())) {

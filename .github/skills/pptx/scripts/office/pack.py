@@ -51,7 +51,8 @@ def pack(
 
     with tempfile.TemporaryDirectory() as temp_dir:
         temp_content_dir = Path(temp_dir) / "content"
-        shutil.copytree(input_dir, temp_content_dir)
+        # シンボリックリンクをフォローしない（セキュリティ対策）
+        shutil.copytree(input_dir, temp_content_dir, symlinks=False)
 
         for pattern in ["*.xml", "*.rels"]:
             for xml_file in temp_content_dir.rglob(pattern):

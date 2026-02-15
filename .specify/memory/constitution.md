@@ -107,7 +107,7 @@ Sync Impact Report
 - **版管理** — 本憲法の改正は Semantic Versioning に従い、変更履歴を記録
 - **改正手続き** — 大幅な変更は GitHub Issue / Discussion で事前協議、最低 2 名のコア開発者の合意が必須
 
-**Version**: 1.1.0 | **Ratified**: 2026-02-14 | **Last Amended**: 2026-02-14
+**Version**: 1.1.0 | **Ratified**: 2026-02-14 | **Last Amended**: 2026-02-15
 
 ## speckit 日本語出力ポリシー
 

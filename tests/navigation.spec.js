@@ -76,9 +76,9 @@ test.describe('Learning Log Blog - Navigation Flow', () => {
       
       console.log(`${path}: LoadTime=${loadTime}ms, LCP=${lcp}ms`);
       
-      // 非常に遅い読込を検出（e.g., > 5 秒）
-      if (loadTime > 5000) {
-        console.warn(`⚠️  Slow load detected on ${path}: ${loadTime}ms`);
+      // パフォーマンス予算: LCP ≤ 2.5s (performance-budget.md 準拠)
+      if (lcp > 2500) {
+        console.warn(`⚠️  LCP exceeds budget on ${path}: ${lcp}ms (target: ≤2500ms)`);
       }
     }
   });
@@ -91,8 +91,8 @@ test.describe('Learning Log Blog - Navigation Flow', () => {
     await expect(main).toBeVisible();
     
     // メインナビゲーション (<nav>) が存在することを確認
-    // 複数の <nav> 要素がある可能性があるため、aria-label で特定
-    const nav = page.getByRole('navigation', { name: 'Main navigation' });
+    // data-testid を使用して堅牢なセレクタを実現
+    const nav = page.getByTestId('main-nav');
     await expect(nav).toBeVisible();
     
     // ヘッダー (<header>) が存在することを確認

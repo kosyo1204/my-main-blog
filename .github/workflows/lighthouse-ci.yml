@@ -33,7 +33,7 @@ jobs:
       - name: Run Lighthouse
         env:
           LHCI_GITHUB_APP_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: npx @lhci/cli@0.9.x autorun --config=.lighthouserc.json
+        run: npx @lhci/cli@0.14.x autorun --config=.lighthouserc.json
         continue-on-error: true
       
       - name: Comment PR with Lighthouse scores

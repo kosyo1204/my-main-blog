@@ -14,7 +14,8 @@
     "test:link-validation": "node scripts/validate-internal-links.js",
     "test:lint": "eslint . --ext .js",
     "test:a11y": "node scripts/validate-a11y.js",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "test:article-design": "node scripts/validate-article-design.js"
   },
   "devDependencies": {
     "@11ty/eleventy": "^2.0.0",

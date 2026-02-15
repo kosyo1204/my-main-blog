@@ -52,6 +52,10 @@ jobs:
       - name: Test taxonomy pages
         run: npm run test:taxonomy
 
+      # Run test:link-validation
+      - name: Test internal links (pathPrefix)
+        run: npm run test:link-validation
+
       # Deploy to GitHub Pages (on both main and 001-tech-blog push)
       - name: Deploy to GitHub Pages
         if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/001-tech-blog')

@@ -68,6 +68,38 @@ module.exports = function (eleventyConfig) {
     return "";
   });
 
+  /**
+   * tagFilter フィルター
+   * articles コレクションから指定タグを持つ記事をフィルタリング
+   * 
+   * Usage: {% set articlesWithTag = collections.articles | tagFilter("sample") %}
+   * Input: articles array, tag name
+   * Output: filtered articles array
+   */
+  eleventyConfig.addFilter("tagFilter", (articles, tag) => {
+    if (!tag) return articles;
+    return articles.filter((article) => {
+      return article.data.tags && article.data.tags.includes(tag);
+    });
+  });
+
+  /**
+   * slugify フィルター
+   * 文字列をスラッグ形式に変換（URL パス用）
+   * 
+   * Usage: {{ "My Article Title" | slugify }}
+   * Input: "My Article Title"
+   * Output: "my-article-title"
+   */
+  eleventyConfig.addFilter("slugify", (str) => {
+    if (!str) return "";
+    return String(str)
+      .toLowerCase()
+      .trim()
+      .replace(/[\s]+/g, "-")
+      .replace(/[^\w-]/g, "");
+  });
+
   // ========== Image Shortcode ==========
 
   // 画像最適化ショートコード: {% image "/images/foo.jpg", "代替テキスト" %}

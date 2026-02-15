@@ -246,6 +246,7 @@ module.exports = function (eleventyConfig) {
 
   // シンプルなテンプレート形式を返す
   return {
+    pathPrefix: "/my-main-blog/",
     dir: {
       input: "content",
       includes: "_includes",

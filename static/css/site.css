@@ -101,7 +101,7 @@ a:hover {
 
 /* キーボードフォーカス（FR-023） */
 a:focus-visible {
-  outline: 2px solid #0066cc;
+  outline: 3px solid #0066cc;
   outline-offset: 2px;
 }
 
@@ -177,6 +177,58 @@ body {
 
 /* ========== 4. コンポーネント ========== */
 
+/* ヘッダー */
+header[role="banner"] {
+  border-bottom: 1px solid #e0e0e0;
+  padding: 1.5rem 0;
+  margin-bottom: 2rem;
+}
+
+.header-content {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.site-title {
+  margin: 0 0 0.5rem 0;
+  font-size: 2rem;
+}
+
+.site-title a {
+  color: #222;
+  border-bottom: none;
+  text-decoration: none;
+}
+
+.site-title a:hover {
+  color: #0066cc;
+}
+
+.site-description {
+  margin: 0;
+  font-size: 0.95rem;
+  color: #666;
+}
+
+/* フッター */
+footer[role="contentinfo"] {
+  border-top: 1px solid #e0e0e0;
+  padding: 2rem 0;
+  margin-top: 3rem;
+  font-size: 0.9rem;
+  color: #666;
+  text-align: center;
+}
+
+.footer-content {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.footer-note {
+  margin-top: 0.5rem;
+}
+
 /* ボタン */
 button, .btn {
   font-size: 1rem;
@@ -194,7 +246,7 @@ button:hover, .btn:hover {
 }
 
 button:focus-visible, .btn:focus-visible {
-  outline: 2px solid #004b99;
+  outline: 3px solid #004b99;
   outline-offset: 2px;
 }
 
@@ -212,6 +264,76 @@ button:focus-visible, .btn:focus-visible {
 
 .article-card h3 {
   margin-top: 0;
+}
+
+/* 記事ページ */
+.article-page {
+  max-width: 720px;
+  margin: 0 auto;
+}
+
+.article-header {
+  margin-bottom: 2rem;
+}
+
+.article-title {
+  margin: 0 0 0.5rem 0;
+  line-height: 1.2;
+}
+
+.article-meta {
+  font-size: 0.9rem;
+  color: #666;
+}
+
+.published-date {
+  color: #999;
+}
+
+.article-content {
+  margin: 2rem 0;
+  line-height: 1.8;
+}
+
+.article-content img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  margin: 1.5rem 0;
+  border-radius: 4px;
+}
+
+.article-footer {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #e0e0e0;
+}
+
+.article-taxonomy {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-size: 0.9rem;
+}
+
+.category-list, .tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.category-list a, .tag-list a {
+  display: inline-block;
+  padding: 0.3rem 0.6rem;
+  background-color: #f5f5f5;
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  font-size: 0.85rem;
+}
+
+.category-list a:hover, .tag-list a:hover {
+  background-color: #e0e0e0;
+  color: #0066cc;
 }
 
 /* ナビゲーション */
@@ -256,6 +378,41 @@ nav a:hover, nav a:focus-visible {
   border-color: #0066cc;
 }
 
+/* 空状態 */
+.empty-state {
+  text-align: center;
+  padding: 3rem 1rem;
+  min-height: 300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #f9f9f9;
+  border-radius: 4px;
+  margin: 2rem 0;
+}
+
+.empty-state-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  opacity: 0.5;
+}
+
+.empty-state h2 {
+  margin-top: 0;
+  font-size: 1.5rem;
+  color: #666;
+}
+
+.empty-state p {
+  color: #999;
+  max-width: 400px;
+}
+
+.empty-state-action {
+  margin-top: 1.5rem;
+}
+
 /* ========== 5. テーブル ========== */
 
 table {
@@ -290,7 +447,7 @@ input, textarea, select {
 }
 
 input:focus-visible, textarea:focus-visible, select:focus-visible {
-  outline: 2px solid #0066cc;
+  outline: 3px solid #0066cc;
   border-color: #0066cc;
 }
 
@@ -349,6 +506,147 @@ label {
 
   body {
     font-size: 1rem; /* 16px 最小値維持（FR-022） */
+    padding: 1rem;
+  }
+
+  nav {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  nav a {
+    display: block;
+    padding: 0.5rem 0;
+  }
+
+  .article-card {
+    padding: 1rem;
+  }
+
+  button, .btn {
+    width: 100%;
+    padding: 1em;
+  }
+
+  table {
+    font-size: 0.9rem;
+  }
+
+  th, td {
+    padding: 0.5rem;
+  }
+}
+
+/* ========== 8.5 ダークモード対応 ========== */
+
+@media (prefers-color-scheme: dark) {
+  body {
+    background-color: #1e1e1e;
+    color: #e0e0e0;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: #f5f5f5;
+  }
+
+  h2 {
+    border-bottom-color: #444;
+  }
+
+  a {
+    color: #64b5f6;
+  }
+
+  a:hover {
+    color: #90caf9;
+  }
+
+  code {
+    background-color: #2d2d2d;
+    color: #e0e0e0;
+  }
+
+  pre {
+    background-color: #2d2d2d;
+  }
+
+  blockquote {
+    border-left-color: #555;
+    color: #aaa;
+  }
+
+  header[role="banner"] {
+    border-bottom-color: #444;
+  }
+
+  footer[role="contentinfo"] {
+    border-top-color: #444;
+    color: #aaa;
+  }
+
+  .site-title a {
+    color: #f5f5f5;
+  }
+
+  .article-card {
+    border-color: #444;
+    background-color: #2d2d2d;
+  }
+
+  .article-card:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+  }
+
+  .article-footer {
+    border-top-color: #444;
+  }
+
+  .empty-state {
+    background-color: #2d2d2d;
+  }
+
+  .empty-state h2 {
+    color: #aaa;
+  }
+
+  .empty-state p {
+    color: #888;
+  }
+
+  table {
+    border-bottom-color: #444;
+  }
+
+  thead {
+    background-color: #2d2d2d;
+  }
+
+  th, td {
+    border-bottom-color: #444;
+  }
+
+  input, textarea, select {
+    background-color: #2d2d2d;
+    border-color: #444;
+    color: #e0e0e0;
+  }
+
+  .pagination a, .pagination span {
+    border-color: #444;
+  }
+
+  .pagination a:hover {
+    background-color: #2d2d2d;
+  }
+
+  .category-list a, .tag-list a {
+    background-color: #2d2d2d;
+    border-color: #444;
+    color: #e0e0e0;
+  }
+
+  .category-list a:hover, .tag-list a:hover {
+    background-color: #3d3d3d;
   }
 }
 

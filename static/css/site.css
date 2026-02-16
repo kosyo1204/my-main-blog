@@ -142,6 +142,9 @@ h5 {
 
 h6 {
   font-size: 1rem; /* 16px */
+  font-family: var(--font-body);
+  font-weight: 600;
+  letter-spacing: normal;
   color: var(--color-text-secondary);
 }
 

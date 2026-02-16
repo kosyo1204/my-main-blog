@@ -3,12 +3,12 @@ name: Build and Deploy Blog
 on:
   push:
     branches:
-      - main
-      - 001-tech-blog
+      - master
+      - develop
   pull_request:
     branches:
-      - main
-      - 001-tech-blog
+      - master
+      - develop
 
 permissions:
   contents: write

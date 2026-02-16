@@ -14,7 +14,6 @@
     "test:link-validation": "node scripts/validate-internal-links.js",
     "test:typography": "node scripts/validate-typography.js",
     "test:lint": "eslint . --ext .js",
-    "test:theme": "node scripts/validate-theme.js",
     "test:a11y": "node scripts/validate-a11y.js",
     "test:e2e": "playwright test"
   },

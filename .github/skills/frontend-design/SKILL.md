@@ -374,9 +374,10 @@ license: Complete terms in LICENSE.txt
 ### ブレークポイント
 
 ```css
-/* モバイル: < 768px (デフォルト) */
-@media (min-width: 768px) { /* タブレット: 768px–1024px */ }
-@media (min-width: 1025px) { /* デスクトップ: ≥ 1025px */ }
+/* モバイル: 〜768px（デフォルト。768px はモバイルに含める） */
+@media (max-width: 768px) { /* モバイル: 〜768px */ }
+@media (min-width: 769px) and (max-width: 1024px) { /* タブレット: 769px–1024px */ }
+@media (min-width: 1025px) { /* デスクトップ: 1025px〜 */ }
 ```
 
 ### 最低基準

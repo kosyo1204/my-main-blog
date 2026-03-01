@@ -33,6 +33,13 @@ let passed = 0;
 let failed = 0;
 
 /**
+ * 正規表現メタ文字をエスケープする
+ */
+function escapeRegExp(value) {
+  return String(value).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+/**
  * 記事ディレクトリ配下の index.html 一覧を再帰的に取得する
  */
 function getArticleHtmlFiles(directoryPath) {
@@ -66,12 +73,24 @@ function validateArticlePage(filePath) {
   const html = fs.readFileSync(filePath, "utf-8");
   const relativePath = path.relative(SITE_DIR, filePath);
 
-  const hasStylesheetLink = new RegExp(
-    `<link\\s+rel=["']stylesheet["']\\s+href=["']${REQUIRED_STYLESHEET_HREF}["']`,
+  const linkTagRegex = /<link\b[^>]*>/gi;
+  const relStylesheetRegex = /\brel=["']stylesheet["']/i;
+  const hrefRegex = new RegExp(
+    `\\bhref=["']${escapeRegExp(REQUIRED_STYLESHEET_HREF)}["']`,
     "i"
-  ).test(html);
+  );
 
-  const hasFrontMatterArtifact = /^\s*---\s*\r?\n\s*layout:\s*base\s*\r?\n\s*---/i.test(html);
+  let hasStylesheetLink = false;
+  let linkMatch;
+  while ((linkMatch = linkTagRegex.exec(html)) !== null) {
+    const linkTag = linkMatch[0];
+    if (relStylesheetRegex.test(linkTag) && hrefRegex.test(linkTag)) {
+      hasStylesheetLink = true;
+      break;
+    }
+  }
+
+  const hasFrontMatterArtifact = /(?:^|\r?\n)\s*---\s*\r?\n\s*layout:\s*(?:base|layouts\/base)\s*\r?\n\s*---/i.test(html);
 
   if (!hasStylesheetLink) {
     failed++;

@@ -4,9 +4,10 @@ title: パフォーマンス予算
 
 # パフォーマンス予算 (Performance Budget)
 
-**最終更新**: 2026-02-15  
-**監視対象**: 本番環境 GitHub Pages  
+**最終更新**: 2026-03-01
+**監視対象**: 本番環境 GitHub Pages
 **計測方法**: Lighthouse CI (自動) + WebPageTest (月1回手動)
+**測定条件**: Lighthouse 3回実行、中央値を採用
 
 ---
 

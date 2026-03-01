@@ -1,0 +1,85 @@
+{#
+  article.njk: 記事ページの専用レイアウト
+  
+  Purpose: ブログ記事の構造化（タイトル、日付、タグ、本文、SEO）
+  
+  Usage:
+    ---
+    layout: article
+    title: "記事タイトル"
+    publishedAt: 2026-02-14
+    tags:
+      - JavaScript
+      - Eleventy
+    category: "技術"
+    ---
+    
+    記事本文 (Markdown)
+#}
+---
+layout: base
+---
+
+{%- set site = site | default({}) -%}
+
+<article role="article" class="article-page">
+  <!-- ========== 記事ヘッダー ========== -->
+  <header class="article-header">
+    <!-- タイトル -->
+    <h1 class="article-title">{{ title }}</h1>
+
+    <!-- メタ情報 (日付、カテゴリー) -->
+    <div class="article-meta">
+      {%- if publishedAt %}
+      <time datetime="{{ publishedAt | dateISO }}" class="published-date">
+        {{ publishedAt | dateISO }}
+      </time>
+      {%- endif %}
+
+      {%- if category %}
+      <span class="article-category">{{ category }}</span>
+      {%- endif %}
+    </div>
+  </header>
+
+  <!-- ========== 記事本文 ========== -->
+  <div class="article-content">
+    {{ content | safe }}
+  </div>
+
+  <!-- ========== 記事フッター（タグ・カテゴリー） ========== -->
+  <footer class="article-footer">
+    {% if category or tags %}
+    <div class="article-taxonomy">
+      <!-- カテゴリー -->
+      {%- if category %}
+      <div class="category">
+        <span class="label">カテゴリー:</span>
+        <a href="{{ ('/categories/' + (category | slugify) + '/') | url }}" class="category-link">
+          {{ category }}
+        </a>
+      </div>
+      {%- endif %}
+
+      <!-- タグ -->
+      {%- if tags %}
+      <div class="tags">
+        <span class="label">タグ:</span>
+        <ul class="tag-list">
+          {%- for tag in tags %}
+          <li>
+            <a href="{{ ('/tags/' + (tag | slugify) + '/') | url }}" class="tag-link">
+              {{ tag }}
+            </a>
+          </li>
+          {%- endfor %}
+        </ul>
+      </div>
+      {%- endif %}
+    </div>
+    {% endif %}
+  </footer>
+</article>
+
+<!-- ========== SEO メタ情報（Open Graph, Twitter等） ========== -->
+<!-- 実装: T006 で seo.njk に分離 -->

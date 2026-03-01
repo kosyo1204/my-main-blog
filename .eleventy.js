@@ -34,6 +34,120 @@ module.exports = function (eleventyConfig) {
   // 画像などの静的ファイルを出力ディレクトリへコピー
   eleventyConfig.addPassthroughCopy({ "static/": "/" });
 
+  // グローバルデータ: 現在の日付（sitemap 用）
+  eleventyConfig.addGlobalData("buildDate", () => {
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, "0");
+    const day = String(now.getDate()).padStart(2, "0");
+    return `${year}-${month}-${day}`;
+  });
+
+  // ========== Filters ==========
+
+  /**
+   * dateISO フィルター
+   * 日付を ISO 8601 形式（YYYY-MM-DD）に変換
+   * 
+   * Usage: {{ publishedAt | dateISO }}
+   * Input: "2026-02-14" or Date object
+   * Output: "2026-02-14"
+   */
+  eleventyConfig.addFilter("dateISO", (dateValue) => {
+    if (!dateValue) return "";
+    
+    // 既に文字列の場合（"2026-02-14"）
+    if (typeof dateValue === "string") {
+      const dateObj = new Date(dateValue);
+      if (isNaN(dateObj.getTime())) {
+        // パース失敗時は元の値をそのまま返す
+        return dateValue;
+      }
+      dateValue = dateObj;
+    }
+
+    // Date オブジェクトから ISO 形式を抽出
+    if (dateValue instanceof Date) {
+      const year = dateValue.getFullYear();
+      const month = String(dateValue.getMonth() + 1).padStart(2, "0");
+      const day = String(dateValue.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    }
+
+    return "";
+  });
+
+  /**
+   * tagFilter フィルター
+   * articles コレクションから指定タグを持つ記事をフィルタリング
+   * 
+   * Usage: {% set articlesWithTag = collections.articles | tagFilter("sample") %}
+   * Input: articles array, tag name
+   * Output: filtered articles array
+   */
+  eleventyConfig.addFilter("tagFilter", (articles, tag) => {
+    if (!tag) return articles;
+    return articles.filter((article) => {
+      return article.data.tags && article.data.tags.includes(tag);
+    });
+  });
+
+  /**
+   * slugify フィルター
+   * 文字列をスラッグ形式に変換（URL パス用）
+   * 
+   * Usage: {{ "My Article Title" | slugify }}
+   * Input: "My Article Title"
+   * Output: "my-article-title"
+   */
+  eleventyConfig.addFilter("slugify", (str) => {
+    if (!str) return "";
+    return String(str)
+      .toLowerCase()
+      .trim()
+      .replace(/[\s]+/g, "-")
+      .replace(/[^\w-]/g, "");
+  });
+
+  /**
+   * date フィルター
+   * 日付をフォーマット済み文字列に変換
+   * 
+   * Usage: {{ publishedAt | date("YYYY-MM-DD") }}
+   * Input: Date object, format string
+   * Output: formatted date string
+   */
+  eleventyConfig.addFilter("date", (dateValue, format) => {
+    if (!dateValue) return "";
+    
+    let dateObj = dateValue;
+    if (typeof dateValue === "string") {
+      // YYYY-MM-DD 形式の文字列を UTC として明示的にパース
+      // タイムゾーン問題を回避（off-by-one 防止）
+      if (/^\d{4}-\d{2}-\d{2}$/.test(dateValue)) {
+        dateObj = new Date(dateValue + "T00:00:00Z");
+      } else {
+        dateObj = new Date(dateValue);
+      }
+    }
+    
+    if (!(dateObj instanceof Date) || isNaN(dateObj.getTime())) {
+      return "";
+    }
+
+    // 簡易な format サポート（YYYY-MM-DD）
+    if (format === "YYYY-MM-DD") {
+      const year = dateObj.getFullYear();
+      const month = String(dateObj.getMonth() + 1).padStart(2, "0");
+      const day = String(dateObj.getDate()).padStart(2, "0");
+      return `${year}-${month}-${day}`;
+    }
+
+    return dateObj.toISOString().split("T")[0];
+  });
+
+  // ========== Image Shortcode ==========
+
   // 画像最適化ショートコード: {% image "/images/foo.jpg", "代替テキスト" %}
   eleventyConfig.addNunjucksAsyncShortcode(
     "image",
@@ -74,8 +188,70 @@ module.exports = function (eleventyConfig) {
     }
   );
 
+  // ========== Collections ==========
+
+  /**
+   * articles コレクション
+   * すべての記事を含む（日付順）
+   * 
+   * Usage in templates: {% for article in collections.articles %}
+   */
+  eleventyConfig.addCollection("articles", (collection) => {
+    return collection
+      .getFilteredByGlob("content/articles/**/*.md")
+      .sort((a, b) => {
+        // 新しい記事が最初に表示されるようソート
+        const dateA = new Date(a.data.publishedAt || a.data.date);
+        const dateB = new Date(b.data.publishedAt || b.data.date);
+        return dateB - dateA;
+      });
+  });
+
+  /**
+   * tags コレクション
+   * すべての記事のタグを収集し、タグ別に整理
+   * 
+   * Usage in templates: {% for tag in collections.tags %}
+   */
+  eleventyConfig.addCollection("tags", (collection) => {
+    const tagSet = new Set();
+    const articles = collection.getFilteredByGlob("content/articles/**/*.md");
+    
+    articles.forEach((item) => {
+      if (item.data.published !== false && item.data.tags) {
+        item.data.tags.forEach((tag) => {
+          if (tag) {
+            tagSet.add(tag);
+          }
+        });
+      }
+    });
+
+    return Array.from(tagSet).sort();
+  });
+
+  /**
+   * categories コレクション
+   * すべての記事のカテゴリーを収集
+   * 
+   * Usage in templates: {% for category in collections.categories %}
+   */
+  eleventyConfig.addCollection("categories", (collection) => {
+    const categorySet = new Set();
+    const articles = collection.getFilteredByGlob("content/articles/**/*.md");
+    
+    articles.forEach((item) => {
+      if (item.data.published !== false && item.data.category) {
+        categorySet.add(item.data.category);
+      }
+    });
+
+    return Array.from(categorySet).sort();
+  });
+
   // シンプルなテンプレート形式を返す
   return {
+    pathPrefix: "/my-main-blog/",
     dir: {
       input: "content",
       includes: "_includes",

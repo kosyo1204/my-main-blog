@@ -1,0 +1,8 @@
+{
+  "title": "My Learning Log",
+  "description": "学習の蓄積と技術知見の公開ポートフォリオ",
+  "baseUrl": "https://myblog.github.io",
+  "author": "Author Name",
+  "locale": "ja-JP",
+  "keywords": ["技術", "学習", "ブログ"]
+}

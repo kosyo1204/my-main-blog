@@ -68,3 +68,71 @@
 
 ---
 
+## セットアップと開発
+
+### 前提条件
+
+- Node.js 18.17以上（18 LTS の最新バージョン推奨）
+- npm
+
+### インストール
+
+```bash
+# 依存関係のインストール
+npm install
+
+# Playwright ブラウザのインストール（E2Eテスト実行時のみ必要）
+npx playwright install --with-deps chromium firefox
+```
+
+### 開発サーバーの起動
+
+```bash
+npm run dev
+# → http://localhost:8080 でサイトが起動します
+```
+
+### ビルド
+
+```bash
+npm run build
+# → _site/ ディレクトリに静的ファイルが生成されます
+```
+
+### テスト実行
+
+#### E2Eテスト
+
+```bash
+# E2Eテストを実行（開発サーバーが自動起動します）
+npm run test:e2e
+
+# デバッグモードで実行
+npx playwright test --debug
+
+# 特定のテストファイルのみ実行
+npx playwright test navigation.spec.js
+```
+
+#### バリデーションテスト
+
+```bash
+# 公開記事のチェック
+npm run test:published
+
+# 404ページのチェック
+npm run test:404
+
+# タグ・カテゴリーのチェック
+npm run test:taxonomy
+
+# リンクの整合性チェック
+npm run test:link-validation
+
+# その他のテスト
+npm run test:a11y          # アクセシビリティチェック
+npm run test:typography    # タイポグラフィチェック
+npm run test:theme         # テーマチェック
+```
+
+---

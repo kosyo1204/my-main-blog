@@ -27,15 +27,19 @@ layout: base
   <header class="article-header">
     <!-- タイトル -->
     <h1 class="article-title">{{ title }}</h1>
-    
-    <!-- メタ情報 (日付) -->
-    {%- if publishedAt %}
+
+    <!-- メタ情報 (日付、カテゴリー) -->
     <div class="article-meta">
+      {%- if publishedAt %}
       <time datetime="{{ publishedAt | dateISO }}" class="published-date">
         {{ publishedAt | dateISO }}
       </time>
+      {%- endif %}
+
+      {%- if category %}
+      <span class="article-category">{{ category }}</span>
+      {%- endif %}
     </div>
-    {%- endif %}
   </header>
 
   <!-- ========== 記事本文 ========== -->

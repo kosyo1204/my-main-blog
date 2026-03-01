@@ -41,14 +41,19 @@
     {%- endif -%}
   </title>
 
+  <!-- ========== Google Fonts ========== -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Literata:opsz,wght@7..72,400;7..72,600;7..72,700&display=swap" rel="stylesheet">
+
   <!-- ========== スタイル ========== -->
   <link rel="stylesheet" href="{{ '/css/site.css' | url }}">
-  
+
   <!-- フォーカス可視化（アクセシビリティ） -->
   <style>
     /* フォーカス表示の視認性向上（FR-023: キーボード操作で到達可能） */
     :focus-visible {
-      outline: 2px solid #0066cc;
+      outline: 2px solid var(--color-primary-700);
       outline-offset: 2px;
     }
   </style>

@@ -19,6 +19,7 @@ const SITE_DIR = path.join(__dirname, '..', '_site');
 const ARTICLES_DIR = path.join(SITE_DIR, 'articles');
 
 let hasErrors = false;
+let validatedCount = 0;
 
 /**
  * 記事ページのHTML構造を検証
@@ -80,6 +81,8 @@ function validateArticlePage(filePath, relativePath) {
   } else {
     console.log(`✓ ${relativePath}`);
   }
+
+  validatedCount++;
 }
 
 /**
@@ -87,8 +90,9 @@ function validateArticlePage(filePath, relativePath) {
  */
 function scanArticlePages(dir, baseDir = dir) {
   if (!fs.existsSync(dir)) {
-    console.warn('⚠️  記事ディレクトリが見つかりません:', dir);
-    return;
+    console.error('❌ 記事ディレクトリが見つかりません:', dir);
+    console.error('   ビルド設定を確認してください。');
+    process.exit(1);
   }
 
   const entries = fs.readdirSync(dir, { withFileTypes: true });
@@ -115,9 +119,16 @@ if (!fs.existsSync(SITE_DIR)) {
 
 scanArticlePages(ARTICLES_DIR);
 
+// 検証結果の確認
+if (validatedCount === 0) {
+  console.error('\n❌ 検証対象の記事が見つかりませんでした');
+  console.error('   記事ページ (index.html) が _site/articles/ 配下に生成されているか確認してください。');
+  process.exit(1);
+}
+
 if (hasErrors) {
   console.error('\n❌ 検証エラーが見つかりました');
   process.exit(1);
 } else {
-  console.log('\n✅ すべての記事ページが正しいHTML構造を持っています');
+  console.log(`\n✅ すべての記事ページが正しいHTML構造を持っています (${validatedCount}件の記事を検証)`);
 }

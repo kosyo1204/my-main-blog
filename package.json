@@ -14,6 +14,7 @@
     "test:link-validation": "node scripts/validate-internal-links.js",
     "test:animations": "node scripts/validate-animations.js",
     "test:typography": "node scripts/validate-typography.js",
+    "test:slugify": "node scripts/validate-slugify.js",
     "test:lint": "eslint . --ext .js",
     "test:theme": "node scripts/validate-theme.js",
     "test:a11y": "node scripts/validate-a11y.js",

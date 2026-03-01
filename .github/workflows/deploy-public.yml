@@ -40,6 +40,10 @@ jobs:
       - name: Test typography configuration
         run: npm run test:typography
 
+      # Run test:slugify (before build - prevents taxonomy permalink conflicts)
+      - name: Test slugify behavior
+        run: npm run test:slugify
+
       # Build the site
       - name: Build site
         run: npm run build

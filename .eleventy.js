@@ -102,11 +102,21 @@ module.exports = function (eleventyConfig) {
    */
   eleventyConfig.addFilter("slugify", (str) => {
     if (!str) return "";
-    return String(str)
+
+    // Unicode 文字（日本語など）を保持しつつ、URL パスとして安全な形式に整える。
+    // 以前の実装は \w のみ許可していたため、日本語カテゴリが空文字になり
+    // /categories/index.html へ衝突していた。
+    const normalizedSlug = String(str)
+      .normalize("NFKC")
       .toLowerCase()
       .trim()
       .replace(/[\s]+/g, "-")
-      .replace(/[^\w-]/g, "");
+      .replace(/[^\p{L}\p{N}_-]/gu, "")
+      .replace(/-+/g, "-")
+      .replace(/^-|-$/g, "");
+
+    // 記号のみなどで空になった場合は衝突回避のため固定値を返す。
+    return normalizedSlug || "untitled";
   });
 
   /**

@@ -125,29 +125,54 @@
   <!-- ========== モバイルナビゲーション JavaScript ========== -->
   <script>
     (function() {
+      // ブレークポイント定数（CSSのメディアクエリと合わせる）
+      const MOBILE_MAX_WIDTH = 768;
       const menuToggle = document.querySelector('.menu-toggle');
       const navMenu = document.querySelector('.nav-menu');
 
       if (!menuToggle || !navMenu) return;
 
-      // 初期化：デスクトップではaria-hiddenをfalseに設定
-      function initMenuState() {
-        if (window.innerWidth > 768) {
+      // 現在のビューポートがデスクトップかを判定
+      function isDesktopViewport() {
+        return window.innerWidth > MOBILE_MAX_WIDTH;
+      }
+
+      // 前回のビューポート状態を保持（リサイズ時のレース条件回避に利用）
+      let wasDesktopViewport = isDesktopViewport();
+
+      // 初期化：デスクトップでは常時表示、モバイルではクローズ状態に揃える
+      function initMenuState(forceCloseOnMobile) {
+        if (isDesktopViewport()) {
           navMenu.setAttribute('aria-hidden', 'false');
           menuToggle.setAttribute('aria-expanded', 'false');
-        } else {
-          navMenu.setAttribute('aria-hidden', 'true');
-          menuToggle.setAttribute('aria-expanded', 'false');
+          return;
+        }
+
+        if (forceCloseOnMobile) {
+          closeMenu();
         }
       }
 
       // 初期状態を設定
-      initMenuState();
+      initMenuState(true);
+
+      function openMenu() {
+        menuToggle.setAttribute('aria-expanded', 'true');
+        navMenu.setAttribute('aria-hidden', 'false');
+      }
 
       function toggleMenu() {
+        // デスクトップではトグル動作を行わない
+        if (isDesktopViewport()) {
+          return;
+        }
+
         const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
-        menuToggle.setAttribute('aria-expanded', !isExpanded);
-        navMenu.setAttribute('aria-hidden', isExpanded);
+        if (isExpanded) {
+          closeMenu();
+        } else {
+          openMenu();
+        }
       }
 
       function closeMenu() {
@@ -160,14 +185,19 @@
 
       // Escキーでメニューを閉じる
       document.addEventListener('keydown', function(e) {
-        if (e.key === 'Escape') {
+        if (!isDesktopViewport() && e.key === 'Escape') {
           closeMenu();
         }
       });
 
       // メニュー外クリックで閉じる
       document.addEventListener('click', function(e) {
-        if (!menuToggle.contains(e.target) && !navMenu.contains(e.target)) {
+        if (isDesktopViewport()) {
+          return;
+        }
+
+        const isOpen = menuToggle.getAttribute('aria-expanded') === 'true';
+        if (isOpen && !menuToggle.contains(e.target) && !navMenu.contains(e.target)) {
           closeMenu();
         }
       });
@@ -176,18 +206,22 @@
       const navLinks = navMenu.querySelectorAll('a');
       navLinks.forEach(function(link) {
         link.addEventListener('click', function() {
-          if (window.innerWidth <= 768) {
+          if (!isDesktopViewport()) {
             closeMenu();
           }
         });
       });
 
-      // ウィンドウリサイズ時にメニューをリセット
+      // ウィンドウリサイズ時は「ブレークポイントを跨いだときだけ」状態をリセット
       let resizeTimer;
       window.addEventListener('resize', function() {
         clearTimeout(resizeTimer);
         resizeTimer = setTimeout(function() {
-          initMenuState();
+          const isDesktopNow = isDesktopViewport();
+          if (isDesktopNow !== wasDesktopViewport) {
+            initMenuState(true);
+            wasDesktopViewport = isDesktopNow;
+          }
         }, 250);
       });
     })();

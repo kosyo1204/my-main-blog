@@ -3,12 +3,12 @@ name: Build and Deploy Blog
 on:
   push:
     branches:
-      - main
-      - 001-tech-blog
+      - master
+      - develop
   pull_request:
     branches:
-      - main
-      - 001-tech-blog
+      - master
+      - develop
 
 permissions:
   contents: write
@@ -36,6 +36,10 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      # Run test:typography (before build - validates source files only)
+      - name: Test typography configuration
+        run: npm run test:typography
+
       # Build the site
       - name: Build site
         run: npm run build
@@ -56,9 +60,17 @@ jobs:
       - name: Test internal links (pathPrefix)
         run: npm run test:link-validation
 
-      # Deploy to GitHub Pages (on both main and 001-tech-blog push)
+      # Run test:animations
+      - name: Test animations and micro-interactions
+        run: npm run test:animations
+
+      # Run test:visual-effects
+      - name: Test visual effects (shadows, backgrounds)
+        run: npm run test:visual-effects
+
+      # Deploy to GitHub Pages (on master push only)
       - name: Deploy to GitHub Pages
-        if: github.event_name == 'push' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/001-tech-blog')
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}

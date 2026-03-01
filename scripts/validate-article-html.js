@@ -1,0 +1,123 @@
+/**
+ * Purpose: 記事ページのHTML構造とCSS参照を検証
+ * - DOCTYPE宣言の存在
+ * - CSS linkタグの存在
+ * - Front Matterの混入がないこと
+ *
+ * Usage: node scripts/validate-article-html.js
+ *
+ * Expected:
+ * - すべての記事ページが適切なHTML構造を持つ
+ * - CSSファイルが正しく参照されている
+ * - Front MatterがHTML出力に含まれていない
+ */
+
+const fs = require('fs');
+const path = require('path');
+
+const SITE_DIR = path.join(__dirname, '..', '_site');
+const ARTICLES_DIR = path.join(SITE_DIR, 'articles');
+
+let hasErrors = false;
+
+/**
+ * 記事ページのHTML構造を検証
+ */
+function validateArticlePage(filePath, relativePath) {
+  const content = fs.readFileSync(filePath, 'utf-8');
+  const errors = [];
+
+  // 1. DOCTYPE宣言の確認
+  if (!content.trimStart().startsWith('<!DOCTYPE html>')) {
+    errors.push('DOCTYPE宣言が見つかりません');
+  }
+
+  // 2. CSS linkタグの確認
+  if (!content.includes('<link rel="stylesheet"')) {
+    errors.push('CSS linkタグが見つかりません');
+  }
+
+  // 3. site.cssへの参照確認
+  if (!content.includes('href="/my-main-blog/css/site.css"') &&
+      !content.includes("href='/my-main-blog/css/site.css'")) {
+    errors.push('site.cssへの参照が見つかりません');
+  }
+
+  // 4. Front Matterの混入確認（YAML形式）
+  const lines = content.split('\n');
+  for (let i = 0; i < Math.min(10, lines.length); i++) {
+    if (lines[i].trim() === '---' && i < 5) {
+      // 先頭付近に --- が見つかった場合、Front Matterの可能性
+      if (i === 0 || (i > 0 && lines[i-1].trim() === '')) {
+        errors.push(`Front Matterの混入の可能性（${i+1}行目に '---' が見つかりました）`);
+      }
+    }
+  }
+
+  // 5. 基本的なHTML構造の確認
+  if (!content.includes('<html')) {
+    errors.push('<html>タグが見つかりません');
+  }
+  if (!content.includes('<head>')) {
+    errors.push('<head>タグが見つかりません');
+  }
+  if (!content.includes('<body>')) {
+    errors.push('<body>タグが見つかりません');
+  }
+
+  // 6. メタタグの確認
+  if (!content.includes('<meta charset="UTF-8">')) {
+    errors.push('charset meta タグが見つかりません');
+  }
+  if (!content.includes('<meta name="viewport"')) {
+    errors.push('viewport meta タグが見つかりません');
+  }
+
+  if (errors.length > 0) {
+    console.error(`\n❌ ${relativePath}:`);
+    errors.forEach(error => console.error(`   - ${error}`));
+    hasErrors = true;
+  } else {
+    console.log(`✓ ${relativePath}`);
+  }
+}
+
+/**
+ * 記事ディレクトリを再帰的にスキャン
+ */
+function scanArticlePages(dir, baseDir = dir) {
+  if (!fs.existsSync(dir)) {
+    console.warn('⚠️  記事ディレクトリが見つかりません:', dir);
+    return;
+  }
+
+  const entries = fs.readdirSync(dir, { withFileTypes: true });
+
+  for (const entry of entries) {
+    const fullPath = path.join(dir, entry.name);
+
+    if (entry.isDirectory()) {
+      scanArticlePages(fullPath, baseDir);
+    } else if (entry.name === 'index.html') {
+      const relativePath = path.relative(SITE_DIR, fullPath);
+      validateArticlePage(fullPath, relativePath);
+    }
+  }
+}
+
+// メイン処理
+console.log('📝 記事ページのHTML構造を検証中...\n');
+
+if (!fs.existsSync(SITE_DIR)) {
+  console.error('❌ _site ディレクトリが見つかりません。先に `npm run build` を実行してください。');
+  process.exit(1);
+}
+
+scanArticlePages(ARTICLES_DIR);
+
+if (hasErrors) {
+  console.error('\n❌ 検証エラーが見つかりました');
+  process.exit(1);
+} else {
+  console.log('\n✅ すべての記事ページが正しいHTML構造を持っています');
+}

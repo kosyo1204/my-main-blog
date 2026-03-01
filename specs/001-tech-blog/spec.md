@@ -194,16 +194,21 @@
 ---
 title: "記事タイトル"
 date: 2026-02-14
-tags: [sample, tech]
-categories: [general]
-description: "記事の説明（SEO用）"
+publishedAt: 2026-02-14
 published: true
+layout: layouts/article
+tags:
+  - sample
+  - tech
+category: general
+slug: 2026-02-14-sample-post
+author: 筆者
 ---
 ```
 
 ### 主要エンティティ
 
-- **Article**: タイトル、本文（Markdown）、公開状態（`published: true/false`）、公開日、タグ、カテゴリー、SEOメタ情報
+- **Article**: タイトル、本文（Markdown）、公開状態（`published: true/false`）、公開日（`publishedAt`）、タグ（`tags`配列）、カテゴリー（`category`単数）、スラッグ（`slug`）、レイアウト、著者
 - **Tag**: 記事を横断的に整理するラベル（多対多関係）
 - **Category**: 記事の主分類（多対一関係）
 - **AnalyticsSummary**: 記事ごとのPV数と流入元の集計（Google Analytics 4から取得）
@@ -255,7 +260,7 @@ published: true
 
 ### Dependency Management
 
-- Dependabot 有効化を推奨（`.github/dependabot.yml`）
+- Dependabot による依存関係の自動更新を推奨（GitHub リポジトリ設定で管理）
 - 週次または月次で依存関係の更新を確認
 - npm audit によるセキュリティスキャンをCI/CDに統合可能
 
@@ -269,19 +274,22 @@ published: true
 
 ### Validation Scripts
 
-本プロジェクトでは、以下のテストスクリプトをCI/CDに統合しています：
+本プロジェクトでは、以下のテストスクリプトを用意しています：
 
+**CI/CD で自動実行されるテスト** (`.github/workflows/deploy-public.yml`):
+- `npm run test:typography` - タイポグラフィ設定の検証
+- `npm run test:slugify` - スラッグ生成の一貫性検証
 - `npm run test:published` - Front Matter の `published` フィルター検証
 - `npm run test:404` - 404 エラーページの存在確認
 - `npm run test:taxonomy` - タグ・カテゴリーページの整合性検証
-- `npm run test:ga4` - Google Analytics 4 実装の確認
-- `npm run test:alt-text` - 画像の代替テキスト（alt属性）チェック
 - `npm run test:link-validation` - 内部リンク切れ検出（pathPrefix対応）
-- `npm run test:a11y` - アクセシビリティ検証（axe-core使用）
 - `npm run test:animations` - アニメーションとマイクロインタラクションの検証
 - `npm run test:visual-effects` - ビジュアルエフェクト（シャドウ、背景等）の検証
-- `npm run test:typography` - タイポグラフィ設定の検証
-- `npm run test:slugify` - スラッグ生成の一貫性検証
+
+**手動実行用のテスト**:
+- `npm run test:ga4` - Google Analytics 4 実装の確認
+- `npm run test:alt-text` - 画像の代替テキスト（alt属性）チェック
+- `npm run test:a11y` - アクセシビリティ検証（axe-core使用）
 - `npm run test:article-design` - 記事デザインの整合性検証
 
 ### E2E Tests (Playwright)
@@ -291,7 +299,7 @@ published: true
 - アクセシビリティ検証
 - パフォーマンス予算の確認
 
-テストは Chromium と Firefox で並列実行されます。
+テストは Chromium と Firefox の両ブラウザで実行されます。ローカル環境では並列実行、CI環境では `workers: 1` によりシリアル実行されます。
 
 ### CI Integration
 
@@ -312,7 +320,9 @@ published: true
 ### デプロイワークフロー
 
 1. `master` または `develop` ブランチで開発
-2. Pull Request を作成 → CI実行（テスト・Lighthouse）
+2. Pull Request を作成 → CI実行（ビルド・テスト）
+   - `master`/`develop` 宛てPR: `.github/workflows/ci.yml` でE2Eテスト実行
+   - `develop`/`001-tech-blog` 宛てPR: `.github/workflows/lighthouse-ci.yml` でLighthouseスコア計測
 3. `master` ブランチへマージ → `deploy-public.yml` が自動実行
 4. `_site/` ディレクトリを `gh-pages` ブランチにデプロイ
 5. GitHub Pages が自動的に公開
@@ -354,7 +364,11 @@ published: true
 
 ### ブランチ戦略
 
+このプロジェクトでは以下のブランチ戦略を採用しています：
+
 - **master**: 本番環境（デプロイ用）
 - **develop**: 開発統合ブランチ
 - **feature/{name}**: 新機能開発
 - **hotfix/{name}**: 緊急修正
+
+※ 注意: CONTRIBUTING.md では本番ブランチを `main` と記載していますが、実際のワークフロー（`.github/workflows/*.yml`）では `master` を使用しています。今後の移行を検討中です。

@@ -72,6 +72,10 @@ jobs:
       - name: Test visual effects (shadows, backgrounds)
         run: npm run test:visual-effects
 
+      # Run test:article-css
+      - name: Test article CSS loading
+        run: npm run test:article-css
+
       # Deploy to GitHub Pages (on master push only)
       - name: Deploy to GitHub Pages
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'

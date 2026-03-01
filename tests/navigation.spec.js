@@ -11,31 +11,32 @@ test.describe('Learning Log Blog - Navigation Flow', () => {
   test('should navigate from home to tags to article', async ({ page }) => {
     // Step 1: ホームページへアクセス
     await page.goto('/');
-    
+
     // ページが読込まれたことを確認
     await expect(page).toHaveTitle(/Learning Log/);
-    
+
     // ページ内容が表示されたことを確認
     const mainContent = page.locator('main');
     await expect(mainContent).toBeVisible();
-    
-    // Step 2: タグページへナビゲーション
-    await page.click('a[href="/tags/"]');
-    
+
+    // Step 2: タグページへナビゲーション（pathPrefixを考慮）
+    const tagsLink = page.locator('a[href*="/tags/"]').first();
+    await tagsLink.click();
+
     // タグページが読込まれたことを確認
-    await expect(page).toHaveURL('/tags/');
+    await page.waitForURL('**/tags/', { timeout: 5000 });
     await expect(page.locator('h1')).toContainText(/タグ|Tags/i);
-    
+
     // Step 3: 最初の記事をクリック（存在する場合）
     const firstArticleLink = page.locator('article a, .article-link').first();
     const articleExists = await firstArticleLink.isVisible().catch(() => false);
-    
+
     if (articleExists) {
       await firstArticleLink.click();
-      
+
       // 記事ページが読込まれたことを確認
       await expect(page.locator('h1')).toBeVisible();
-      
+
       // 記事メタデータが表示されていることを確認
       const articleHeader = page.locator('article, .article-header');
       await expect(articleHeader).toBeVisible();

@@ -11,14 +11,19 @@
   <!-- 注: SEO メタタグ詳細は seo.njk に分離（T006 で実装） -->
   <title>カテゴリー - general | My Learning Log</title>
 
+  <!-- ========== Google Fonts ========== -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Literata:opsz,wght@7..72,400;7..72,600;7..72,700&display=swap" rel="stylesheet">
+
   <!-- ========== スタイル ========== -->
   <link rel="stylesheet" href="/my-main-blog/css/site.css">
-  
+
   <!-- フォーカス可視化（アクセシビリティ） -->
   <style>
     /* フォーカス表示の視認性向上（FR-023: キーボード操作で到達可能） */
     :focus-visible {
-      outline: 2px solid #0066cc;
+      outline: 2px solid var(--color-primary-700);
       outline-offset: 2px;
     }
   </style>
@@ -46,7 +51,15 @@
       <!-- ========== ナビゲーション ========== -->
       <!-- 実装: T007 で navigation.json から動的に生成 -->
       <nav role="navigation" aria-label="Main navigation" data-testid="main-nav">
-        <ul>
+        <button class="menu-toggle" aria-expanded="false" aria-controls="nav-menu" aria-label="メニュー">
+          <span class="hamburger-icon">
+            <span></span>
+            <span></span>
+            <span></span>
+          </span>
+        </button>
+
+        <ul id="nav-menu" class="nav-menu" aria-hidden="true">
           <li><a href="/my-main-blog/">ホーム</a></li>
           <li><a href="/my-main-blog/tags/">タグ</a></li>
           <li><a href="/my-main-blog/categories/">カテゴリー</a></li>
@@ -61,6 +74,8 @@
       # 📂 カテゴリー: general
 
 
+
+  
 
   
     
@@ -177,5 +192,116 @@
   }
 </script>
 
+
+  <!-- ========== コードコピー機能 ========== -->
+  <script src="/my-main-blog/js/code-copy.js"></script>
+
+  <!-- ========== アニメーション（スクロール連動） ========== -->
+  <script src="/my-main-blog/js/animations.js" defer></script>
+
+  <!-- ========== モバイルナビゲーション JavaScript ========== -->
+  <script>
+    (function() {
+      // ブレークポイント定数（CSSのメディアクエリと合わせる）
+      const MOBILE_MAX_WIDTH = 768;
+      const menuToggle = document.querySelector('.menu-toggle');
+      const navMenu = document.querySelector('.nav-menu');
+
+      if (!menuToggle || !navMenu) return;
+
+      // 現在のビューポートがデスクトップかを判定
+      function isDesktopViewport() {
+        return window.innerWidth > MOBILE_MAX_WIDTH;
+      }
+
+      // 前回のビューポート状態を保持（リサイズ時のレース条件回避に利用）
+      let wasDesktopViewport = isDesktopViewport();
+
+      // 初期化：デスクトップでは常時表示、モバイルではクローズ状態に揃える
+      function initMenuState(forceCloseOnMobile) {
+        if (isDesktopViewport()) {
+          navMenu.setAttribute('aria-hidden', 'false');
+          menuToggle.setAttribute('aria-expanded', 'false');
+          return;
+        }
+
+        if (forceCloseOnMobile) {
+          closeMenu();
+        }
+      }
+
+      // 初期状態を設定
+      initMenuState(true);
+
+      function openMenu() {
+        menuToggle.setAttribute('aria-expanded', 'true');
+        navMenu.setAttribute('aria-hidden', 'false');
+      }
+
+      function toggleMenu() {
+        // デスクトップではトグル動作を行わない
+        if (isDesktopViewport()) {
+          return;
+        }
+
+        const isExpanded = menuToggle.getAttribute('aria-expanded') === 'true';
+        if (isExpanded) {
+          closeMenu();
+        } else {
+          openMenu();
+        }
+      }
+
+      function closeMenu() {
+        menuToggle.setAttribute('aria-expanded', 'false');
+        navMenu.setAttribute('aria-hidden', 'true');
+      }
+
+      // ハンバーガーメニュークリック
+      menuToggle.addEventListener('click', toggleMenu);
+
+      // Escキーでメニューを閉じる
+      document.addEventListener('keydown', function(e) {
+        if (!isDesktopViewport() && e.key === 'Escape') {
+          closeMenu();
+        }
+      });
+
+      // メニュー外クリックで閉じる
+      document.addEventListener('click', function(e) {
+        if (isDesktopViewport()) {
+          return;
+        }
+
+        const isOpen = menuToggle.getAttribute('aria-expanded') === 'true';
+        if (isOpen && !menuToggle.contains(e.target) && !navMenu.contains(e.target)) {
+          closeMenu();
+        }
+      });
+
+      // ナビゲーションリンククリックでメニューを閉じる（モバイルのみ）
+      const navLinks = navMenu.querySelectorAll('a');
+      navLinks.forEach(function(link) {
+        link.addEventListener('click', function() {
+          if (!isDesktopViewport()) {
+            closeMenu();
+          }
+        });
+      });
+
+      // ウィンドウリサイズ時は「ブレークポイントを跨いだときだけ」状態をリセット
+      let resizeTimer;
+      window.addEventListener('resize', function() {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(function() {
+          const isDesktopNow = isDesktopViewport();
+          if (isDesktopNow !== wasDesktopViewport) {
+            initMenuState(true);
+            wasDesktopViewport = isDesktopNow;
+          }
+        }, 250);
+      });
+    })();
+  </script>
 </body>
 </html>

@@ -1,0 +1,133 @@
+
+---
+layout: base
+---<article role="article" class="article-page">
+  <!-- ========== 記事ヘッダー ========== -->
+  <header class="article-header">
+    <!-- タイトル -->
+    <h1 class="article-title">デザイン改善テスト記事</h1>
+
+    <!-- メタ情報 (日付、カテゴリー) -->
+    <div class="article-meta">
+      <time datetime="2026-02-15" class="published-date">
+        2026-02-15
+      </time>
+      <span class="article-category">デザイン</span>
+    </div>
+  </header>
+
+  <!-- ========== 記事本文 ========== -->
+  <div class="article-content">
+    <p>これは記事ページのデザイン改善をテストするための記事です。この最初の段落にはドロップキャップが適用され、最初の文字が大きく表示されるはずです。また、行長は65文字程度に制限され、読みやすい行間で表示されます。</p>
+<h2>見出し2のテスト</h2>
+<p>この見出しには左側に青いボーダーが表示されるはずです。見出しの前後には適切なマージンが設定されています。</p>
+<h3>見出し3のテスト</h3>
+<p>見出し3は青色で表示され、見出し2よりも小さく表示されます。</p>
+<h2>リストのテスト</h2>
+<p>順序なしリストのテスト：</p>
+<ul>
+<li>最初のリスト項目（カスタム記号が表示される）</li>
+<li>2番目のリスト項目</li>
+<li>3番目のリスト項目
+<ul>
+<li>ネストされたリスト項目</li>
+</ul>
+</li>
+</ul>
+<p>順序付きリストのテスト：</p>
+<ol>
+<li>最初の項目</li>
+<li>2番目の項目</li>
+<li>3番目の項目</li>
+</ol>
+<h2>引用のテスト</h2>
+<blockquote>
+<p>これは引用ブロックです。背景色が薄い青色で、左側に青いボーダーが表示され、イタリック体で表示されます。引用ブロックは視覚的に際立つようにデザインされています。</p>
+</blockquote>
+<h2>コードブロックのテスト</h2>
+<p>インラインコード: <code>const hello = &quot;world&quot;;</code></p>
+<p>コードブロック（コピーボタンが表示されるはず）:</p>
+<pre><code class="language-javascript">function greet(name) {
+  console.log(`Hello, ${name}!`);
+  return `Welcome to ${name}'s blog`;
+}
+
+const result = greet('Visitor');
+console.log(result);
+</code></pre>
+<p>別の例：</p>
+<pre><code class="language-css">.article-content {
+  max-width: 65ch;
+  line-height: 1.8;
+  margin: 0 auto;
+}
+</code></pre>
+<h2>テーブルのテスト</h2>
+<table>
+<thead>
+<tr>
+<th>機能</th>
+<th>状態</th>
+<th>優先度</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>タイポグラフィ</td>
+<td>実装済み</td>
+<td>High</td>
+</tr>
+<tr>
+<td>コードコピー</td>
+<td>実装済み</td>
+<td>High</td>
+</tr>
+<tr>
+<td>ダークモード</td>
+<td>実装済み</td>
+<td>Medium</td>
+</tr>
+</tbody>
+</table>
+<h2>画像のテスト</h2>
+<p>画像は角丸とシャドウ効果が適用されます（実際の画像がある場合）。</p>
+<h2>まとめ</h2>
+<p>この記事では、記事ページのデザイン改善の各要素をテストしました。すべての要素が適切にスタイル設定されていることを確認してください。</p>
+
+  </div>
+
+  <!-- ========== 記事フッター（タグ・カテゴリー） ========== -->
+  <footer class="article-footer">
+    
+    <div class="article-taxonomy">
+      <!-- カテゴリー -->
+      <div class="category">
+        <span class="label">カテゴリー:</span>
+        <a href="/my-main-blog/categories/デザイン/" class="category-link">
+          デザイン
+        </a>
+      </div>
+
+      <!-- タグ -->
+      <div class="tags">
+        <span class="label">タグ:</span>
+        <ul class="tag-list">
+          <li>
+            <a href="/my-main-blog/tags/design/" class="tag-link">
+              design
+            </a>
+          </li>
+          <li>
+            <a href="/my-main-blog/tags/test/" class="tag-link">
+              test
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    
+  </footer>
+</article>
+
+<!-- ========== SEO メタ情報（Open Graph, Twitter等） ========== -->
+<!-- 実装: T006 で seo.njk に分離 -->

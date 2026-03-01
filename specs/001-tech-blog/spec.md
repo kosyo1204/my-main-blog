@@ -157,9 +157,9 @@
 
 ### 検証方法
 
-1. **自動検証**: axe-core または axe-core を使ったスクリプト（`scripts/validate-a11y.js`）
+1. **自動検証**: axe-core を使ったスクリプト（`scripts/validate-a11y.js`）を手動実行またはCI統合
 2. **手動検証**: キーボードナビゲーション (Tab → Enter)、スクリーンリーダー (NVDA/VoiceOver) 簡易確認
-3. **CI/CD 検証**: GitHub Actions で axe-core 実行、ARIA 違反があれば fail
+3. **CI/CD 検証**: 現状は手動実行を推奨。将来的にGitHub Actionsで axe-core 実行を統合し、ARIA 違反があれば fail とする予定
 
 ### 非準拠の許容範囲
 
@@ -206,6 +206,11 @@ author: 筆者
 ---
 ```
 
+**フィールドの使い分け**:
+- `date`: Eleventy のデフォルト日付フィールド（ファイルソート等に使用）
+- `publishedAt`: 公開日として明示的に表示する日付
+- 通常は両方を同じ値に設定します。`publishedAt` が未設定の場合は `date` をフォールバックとして使用します
+
 ### 主要エンティティ
 
 - **Article**: タイトル、本文（Markdown）、公開状態（`published: true/false`）、公開日（`publishedAt`）、タグ（`tags`配列）、カテゴリー（`category`単数）、スラッグ（`slug`）、レイアウト、著者
@@ -249,6 +254,11 @@ author: 筆者
 パフォーマンス予算の詳細は以下のドキュメントを参照してください：
 - [performance-budget.md](./performance-budget.md) - 予算値と監視スケジュール
 - [core-web-vitals.md](./core-web-vitals.md) - Core Web Vitals の詳細と最適化方法
+
+**運用上の前提**：
+- Lighthouse スコアや Core Web Vitals 等の閾値の「信頼できる唯一の情報源 (SSOT)」は `.lighthouserc.json` および CI workflow の設定とします
+- 本 spec 内の表や `performance-budget.md` に記載する具体的な目標値は、上記設定に追従して更新される対象とし、数値不整合が発生した場合は `.lighthouserc.json` / workflow 側を優先します
+- CI 上の `continue-on-error` の扱いなど、実際の判定条件も `.github/workflows/` 配下の定義に従います
 
 ## Security
 

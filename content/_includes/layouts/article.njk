@@ -1,11 +1,16 @@
+---json
+{
+  "layout": "layouts/base"
+}
+---
 {#
   article.njk: 記事ページの専用レイアウト
-  
+
   Purpose: ブログ記事の構造化（タイトル、日付、タグ、本文、SEO）
-  
+
   Usage:
     ---
-    layout: article
+    layout: layouts/article
     title: "記事タイトル"
     publishedAt: 2026-02-14
     tags:
@@ -13,13 +18,9 @@
       - Eleventy
     category: "技術"
     ---
-    
+
     記事本文 (Markdown)
 #}
----
-layout: base
----
-
 {%- set site = site | default({}) -%}
 
 <article role="article" class="article-page">

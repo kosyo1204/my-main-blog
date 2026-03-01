@@ -166,8 +166,11 @@ license: Complete terms in LICENSE.txt
 
 - **コンポーネント間**: 最低 `2rem` (32px)
 - **セクション間**: 最低 `3rem` (48px)
-- **モバイル余白**: 左右最低 `1.5rem` (24px)
+- **モバイル余白（現在実装値）**: 左右最低 `1rem` (16px, `body` の `padding`)
+- **モバイル余白（推奨・将来改善目標）**: 左右最低 `1.5rem` (24px)
 - **タップターゲット間隔**: 最低 `8px`
+
+※ 現状の `static/css/site.css` では、モバイルの左右余白は主に `body { padding: 1rem; }` によって確保されています。新規ページやレイアウト改修時には、コンテナ側での `padding` 追加などにより、推奨値の `1.5rem` に段階的に移行することを検討してください。
 
 ### Do
 - ✅ 一貫したスペーシングスケールを使用
@@ -316,9 +319,23 @@ license: Complete terms in LICENSE.txt
 - ✅ ARIAラベルの適切な使用
 
 ```html
-<button aria-label="メニュー" aria-expanded="false">
+<button type="button" aria-label="メニュー" aria-expanded="false">
+  メニュー
+</button>
+
 <nav aria-label="Main navigation">
-<main id="main-content" role="main">
+  <ul>
+    <li><a href="#section-1">セクション1</a></li>
+    <li><a href="#section-2">セクション2</a></li>
+  </ul>
+</nav>
+
+<main id="main-content">
+  <article>
+    <h1>ページタイトル</h1>
+    <p>ここにコンテンツが入ります。</p>
+  </article>
+</main>
 ```
 
 #### カラーコントラスト
@@ -354,8 +371,8 @@ license: Complete terms in LICENSE.txt
 
 ```css
 /* モバイル: < 768px (デフォルト) */
-@media (min-width: 768px) { /* タブレット */ }
-@media (min-width: 1024px) { /* デスクトップ */ }
+@media (min-width: 768px) { /* タブレット: 768px–1024px */ }
+@media (min-width: 1025px) { /* デスクトップ: ≥ 1025px */ }
 ```
 
 ### 最低基準
@@ -511,9 +528,9 @@ npm run test:animations    # アニメーション検証
 
 ### CI/CD統合
 
-主要なテストは `.github/workflows/deploy-public.yml` で自動実行されます（`test:published`, `test:404`, `test:taxonomy`, `test:link-validation`, `test:typography`, `test:slugify`）。PR マージ前には必ず CI がグリーンであることを確認してください。
+主要なテストは `.github/workflows/deploy-public.yml` で自動実行されます（`test:published`, `test:404`, `test:taxonomy`, `test:link-validation`, `test:typography`, `test:slugify`, `test:animations`, `test:visual-effects` など）。常に最新の一覧は workflow ファイルを確認してください。PR マージ前には必ず CI がグリーンであることを確認してください。
 
-また、CI でカバーされていないテスト（例: `npm run test:a11y`, `npm run test:theme`, `npm run test:visual-effects`, `npm run test:animations` など）は、レビュアーと合意したタイミングでローカル実行し、結果を PR 上で共有してください。
+また、CI でカバーされていないテスト（例: `npm run test:a11y`, `npm run test:theme` など）は、レビュアーと合意したタイミングでローカル実行し、結果を PR 上で共有してください。
 
 ---
 

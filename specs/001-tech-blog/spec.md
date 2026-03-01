@@ -209,11 +209,11 @@ author: 筆者
 **フィールドの使い分け**:
 - `date`: Eleventy のデフォルト日付フィールド（ファイルソート等に使用）
 - `publishedAt`: 公開日として明示的に表示する日付
-- 通常は両方を同じ値に設定します。`publishedAt` が未設定の場合は `date` をフォールバックとして使用します
+- 通常は両方を同じ値に設定します。`.eleventy.js` のコレクション定義において `publishedAt` が未設定の場合は `date` をソート用のフォールバックとして使用します。ただし、テンプレートでは `publishedAt` のみを表示用に参照します
 
 ### 主要エンティティ
 
-- **Article**: タイトル、本文（Markdown）、公開状態（`published: true/false`）、公開日（`publishedAt`）、タグ（`tags`配列）、カテゴリー（`category`単数）、スラッグ（`slug`）、レイアウト、著者
+- **Article**: タイトル、本文（Markdown）、公開状態（`published: true/false`）、公開日（`publishedAt`）、タグ（`tags`配列）、カテゴリー（`category`単数）、スラッグ（`slug`）、レイアウト、著者、SEOメタ情報（`seoTitle`、`seoDescription`）
 - **Tag**: 記事を横断的に整理するラベル（多対多関係）
 - **Category**: 記事の主分類（多対一関係）
 - **AnalyticsSummary**: 記事ごとのPV数と流入元の集計（Google Analytics 4から取得）
@@ -307,7 +307,7 @@ author: 筆者
 **手動実行用のテスト**:
 - `npm run test:ga4` - Google Analytics 4 実装の確認
 - `npm run test:alt-text` - 画像の代替テキスト（alt属性）チェック
-- `npm run test:a11y` - アクセシビリティ検証（axe-core使用）
+- `npm run test:a11y` - アクセシビリティ検証（jsdomベース）
 - `npm run test:article-design` - 記事デザインの整合性検証
 
 ### E2E Tests (Playwright)
@@ -321,7 +321,7 @@ author: 筆者
 
 ### CI Integration
 
-すべてのテストは以下のワークフローで自動実行されます：
+CI/CD で自動実行されるテストは以下のワークフローで実行されます：
 - `.github/workflows/deploy-public.yml` - ビルドとデプロイ前の検証
 - `.github/workflows/ci.yml` - Pull Request時の検証
 

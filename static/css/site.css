@@ -56,6 +56,8 @@
 html {
   /* デバイス幅に応じた基本フォントサイズ */
   font-size: 16px;
+  /* スムーススクロール */
+  scroll-behavior: smooth;
 }
 
 :root {
@@ -215,15 +217,31 @@ li {
 
 /* リンク */
 a {
+  position: relative;
   color: var(--color-primary-500);
   text-decoration: none;
-  border-bottom: 1px solid currentColor;
-  transition: color 0.2s ease, border-color 0.2s ease;
+  border-bottom: none;
+  transition: color 0.2s ease;
+}
+
+a::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: currentColor;
+  transition: width 0.3s ease;
 }
 
 a:hover {
   color: var(--color-primary-700);
   border-color: var(--color-primary-700);
+}
+
+a:hover::after {
+  width: 100%;
 }
 
 /* キーボードフォーカス（FR-023） */
@@ -405,6 +423,8 @@ footer[role="contentinfo"] {
 
 /* ボタン */
 button, .btn {
+  position: relative;
+  overflow: hidden;
   font-size: 1rem;
   padding: 0.75em 1.5em;
   border: 1px solid var(--color-primary-500);
@@ -413,6 +433,24 @@ button, .btn {
   border-radius: var(--radius-md);
   cursor: pointer;
   transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+button::before, .btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s ease, height 0.6s ease;
+}
+
+button:active::before, .btn:active::before {
+  width: 300px;
+  height: 300px;
 }
 
 button:hover, .btn:hover {
@@ -441,6 +479,7 @@ button:focus-visible, .btn:focus-visible {
 .article-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 12px 24px var(--color-shadow);
+  will-change: transform;
 }
 
 .article-card h3 {
@@ -684,6 +723,12 @@ nav a:focus-visible {
     flex-direction: row !important;
     padding: 1rem 0 !important;
   }
+}
+
+nav a[aria-current="page"] {
+  color: #004b99;
+  font-weight: 700;
+  border-bottom-color: #004b99;
 }
 
 /* ページネーション */
@@ -1187,6 +1232,81 @@ label {
 
   .error-suggestions h2 {
     color: #f5f5f5;
+  }
+}
+
+/* ========== 8.6 アニメーション & マイクロインタラクション ========== */
+
+/* ページロードアニメーション */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* デフォルトでは非表示（JSで制御） */
+.animate-on-scroll {
+  opacity: 0;
+  transform: translateY(20px);
+}
+
+/* アニメーション適用クラス */
+.animate-in {
+  animation: fadeInUp 0.6s ease-out forwards;
+}
+
+/* 記事カード: スタッガード表示 */
+.article-card {
+  animation: fadeInUp 0.6s ease-out;
+  animation-fill-mode: both;
+}
+
+.article-card:nth-child(1) { animation-delay: 0.1s; }
+.article-card:nth-child(2) { animation-delay: 0.2s; }
+.article-card:nth-child(3) { animation-delay: 0.3s; }
+.article-card:nth-child(4) { animation-delay: 0.4s; }
+.article-card:nth-child(5) { animation-delay: 0.5s; }
+.article-card:nth-child(6) { animation-delay: 0.6s; }
+
+/* タグ/カテゴリバッジ: スタッガード表示 */
+.tag-list a, .category-list a {
+  display: inline-block;
+  animation: fadeInUp 0.4s ease-out;
+  animation-fill-mode: both;
+}
+
+.tag-list a:nth-child(1), .category-list a:nth-child(1) { animation-delay: 0.05s; }
+.tag-list a:nth-child(2), .category-list a:nth-child(2) { animation-delay: 0.1s; }
+.tag-list a:nth-child(3), .category-list a:nth-child(3) { animation-delay: 0.15s; }
+.tag-list a:nth-child(4), .category-list a:nth-child(4) { animation-delay: 0.2s; }
+.tag-list a:nth-child(5), .category-list a:nth-child(5) { animation-delay: 0.25s; }
+.tag-list a:nth-child(6), .category-list a:nth-child(6) { animation-delay: 0.3s; }
+
+/* アクセシビリティ: prefers-reduced-motion 対応 */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .article-card {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+  
+  .animate-on-scroll {
+    opacity: 1;
+    transform: none;
   }
 }
 

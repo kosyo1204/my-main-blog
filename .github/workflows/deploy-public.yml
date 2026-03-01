@@ -60,6 +60,10 @@ jobs:
       - name: Test internal links (pathPrefix)
         run: npm run test:link-validation
 
+      # Run test:animations
+      - name: Test animations and micro-interactions
+        run: npm run test:animations
+
       # Run test:visual-effects
       - name: Test visual effects (shadows, backgrounds)
         run: npm run test:visual-effects

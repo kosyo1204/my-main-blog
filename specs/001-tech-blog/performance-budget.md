@@ -26,10 +26,10 @@ title: パフォーマンス予算
 
 | カテゴリ | 目標値 | 現在値 |
 |---------|--------|--------|
-| **Performance** | ≥ 85 | TBD |
-| **Accessibility** | ≥ 95 | TBD |
-| **Best Practices** | ≥ 90 | TBD |
-| **SEO** | ≥ 95 | TBD |
+| **Performance** | ≥ 85 | 100 |
+| **Accessibility** | ≥ 95 | 91 |
+| **Best Practices** | ≥ 90 | 96 |
+| **SEO** | ≥ 95 | 100 |
 
 ### バンドルサイズ予算
 

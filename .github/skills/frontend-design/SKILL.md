@@ -35,10 +35,10 @@ license: Complete terms in LICENSE.txt
 #### コンテナ幅
 - **最大幅**: `max-width: 720px` (`.container`) ※現状の `static/css/site.css` 実装値に準拠
 - **記事本文**: `max-width: 65ch` (可読性のため) ※現状は `body` で720px制限
-- **中央揃え**: `margin: 0 auto` + `padding: 0 1.5rem`（モバイル余白確保）
+- **中央揃え**: `margin: 0 auto`（コンテナの中央揃え）。左右の余白は現状どおり `body { padding: 1rem; }`（768px以上は `2rem`）で確保する。`.container` に `padding: 0 1.5rem` を付与する案は将来の改善候補（推奨）として検討する。
 
 #### グリッドシステム
-- フレックスボックスベース（`.flex`, `.flex-col`, `.items-center`など）
+- フレックスボックスを基本とする（`display: flex` / `flex-direction` / `gap` などのプロパティを活用）
 - 複雑なレイアウトには CSS Grid を検討
 - モバイルファーストで設計（基本は1カラム、デスクトップで複数カラム展開）
 
@@ -47,8 +47,8 @@ license: Complete terms in LICENSE.txt
 **原則となる主要ブレークポイント（2軸）**
 ```css
 /* モバイル: デフォルト (< 768px) */
-/* タブレット: 768px 〜 1023px */
-/* デスクトップ: 1024px 〜 */
+/* タブレット: 768px 〜 1024px */
+/* デスクトップ: 1025px 〜 */
 ```
 
 **補助ブレークポイント（コンポーネント都合で追加する場合）**
@@ -78,8 +78,8 @@ license: Complete terms in LICENSE.txt
 このプロジェクトでは以下のフォントを使用：
 
 - **Display Font**: `Space Mono` (h1, h2, h3用) - 個性的な等幅フォント
-- **Body Font**: `Literata` (本文、h4-h6用) - 可読性の高いセリフ
-- **Monospace**: `JetBrains Mono` (コードブロック用) ※ローカルインストール前提、フォールバックあり
+- **Body Font**: システムフォントスタック（本文）、`Literata`（h4-h6見出し用） - 可読性の高いセリフ
+- **Monospace**: `JetBrains Mono` (インラインcode用) ※ローカルインストール前提、フォールバックあり
 
 ```css
 --font-display: 'Space Mono', monospace;
@@ -87,7 +87,10 @@ license: Complete terms in LICENSE.txt
 --font-mono: 'JetBrains Mono', 'SFMono-Regular', 'Consolas', monospace;
 ```
 
-**注意**: `JetBrains Mono` は Google Fonts から読み込まず、ローカルにインストールされている場合のみ使用されます。それ以外は `SFMono-Regular`、`Consolas` などのシステム等幅フォントにフォールバックします。環境依存を避けるため、コードブロックの表示確認は複数環境で行ってください。
+**注意**:
+- 本文（`body`）はシステムフォントスタック（`-apple-system, BlinkMacSystemFont, ...`）を使用。`Literata`（`var(--font-body)`）は h4-h6 見出しにのみ適用されます。
+- `JetBrains Mono` は Google Fonts から読み込まず、ローカルにインストールされている場合のみ使用されます。インラインの `code` 要素に `var(--font-mono)` が適用されますが、コードブロック（`pre code`）には `SFMono-Regular`、`Consolas` などのシステムフォントが直接指定されています。
+- 環境依存を避けるため、コードブロックの表示確認は複数環境で行ってください。
 
 ### タイプスケール
 
@@ -227,10 +230,11 @@ license: Complete terms in LICENSE.txt
 ### 最低基準
 
 - **コントラスト比**: WCAG AA準拠（通常テキスト4.5:1、大テキスト3:1）
-- **リンク色**: `--color-primary-700` (デフォルト), `--color-primary-900` (hover) ※WCAG AA 4.5:1準拠
+- **リンク色（現行実装）**: `--color-primary-500` (デフォルト), `--color-primary-700` (hover)
+- **リンク色（推奨）**: `--color-primary-700` (デフォルト), `--color-primary-900` (hover) ※WCAG AA 4.5:1準拠。新規実装・既存改修ではこちらに寄せること。
 - **ダークモード**: `prefers-color-scheme: dark` で対応
 
-**注意**: `--color-primary-500` (#0ea5e9) を白系背景（`--color-bg-primary` #fafafa）で使用すると、コントラスト比が約2.7:1となりWCAG AA基準を満たしません。通常テキストやリンクには必ず `--color-primary-700` (#0369a1) 以上を使用してください。
+**注意**: `--color-primary-500` (#0ea5e9) を白系背景（`--color-bg-primary` #fafafa）で使用すると、コントラスト比が約2.7:1となりWCAG AA基準を満たしません。既存の `site.css` ではリンクに `--color-primary-500` を使用していますが、順次 `--color-primary-700` (#0369a1) 以上への移行を検討してください。新規実装や改修では、通常テキストやリンクには必ず `--color-primary-700` 以上を使用することを推奨します。
 
 ### Do
 - ✅ CSS変数（`--color-*`）を使用

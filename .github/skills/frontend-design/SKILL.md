@@ -33,8 +33,8 @@ license: Complete terms in LICENSE.txt
 ### 最低基準
 
 #### コンテナ幅
-- **最大幅**: `max-width: 1200px` (`.container`)
-- **記事本文**: `max-width: 65ch` (可読性のため)
+- **最大幅**: `max-width: 720px` (`.container`) ※現状の `static/css/site.css` 実装値に準拠
+- **記事本文**: `max-width: 65ch` (可読性のため) ※現状は `body` で720px制限
 - **中央揃え**: `margin: 0 auto` + `padding: 0 1.5rem`（モバイル余白確保）
 
 #### グリッドシステム
@@ -43,10 +43,18 @@ license: Complete terms in LICENSE.txt
 - モバイルファーストで設計（基本は1カラム、デスクトップで複数カラム展開）
 
 #### レスポンシブブレークポイント
+
+**原則となる主要ブレークポイント（2軸）**
 ```css
 /* モバイル: デフォルト (< 768px) */
-/* タブレット: 768px */
-/* デスクトップ: 1024px */
+/* タブレット: 768px 〜 1023px */
+/* デスクトップ: 1024px 〜 */
+```
+
+**補助ブレークポイント（コンポーネント都合で追加する場合）**
+```css
+/* 例: 640px / 641px / 1025px など */
+/* 方針: ベースは 768px / 1024px に揃えつつ、必要最小限の補助ブレークポイントのみ追加する */
 ```
 
 ### Do
@@ -71,13 +79,15 @@ license: Complete terms in LICENSE.txt
 
 - **Display Font**: `Space Mono` (h1, h2, h3用) - 個性的な等幅フォント
 - **Body Font**: `Literata` (本文、h4-h6用) - 可読性の高いセリフ
-- **Monospace**: `JetBrains Mono` (コードブロック用)
+- **Monospace**: `JetBrains Mono` (コードブロック用) ※ローカルインストール前提、フォールバックあり
 
 ```css
 --font-display: 'Space Mono', monospace;
 --font-body: 'Literata', serif;
 --font-mono: 'JetBrains Mono', 'SFMono-Regular', 'Consolas', monospace;
 ```
+
+**注意**: `JetBrains Mono` は Google Fonts から読み込まず、ローカルにインストールされている場合のみ使用されます。それ以外は `SFMono-Regular`、`Consolas` などのシステム等幅フォントにフォールバックします。環境依存を避けるため、コードブロックの表示確認は複数環境で行ってください。
 
 ### タイプスケール
 
@@ -137,9 +147,11 @@ license: Complete terms in LICENSE.txt
 
 ### スペーシングシステム
 
-8pxベースのスペーシングスケールを推奨：
+**8pxベースのスペーシングスケールを推奨**（将来的なトークン追加提案）
 
 ```css
+/* 現状は直接 rem 値を使用（例: margin: 1rem, padding: 2rem） */
+/* 将来的に CSS 変数化する場合の提案値： */
 --space-1: 0.5rem;   /* 8px */
 --space-2: 1rem;     /* 16px */
 --space-3: 1.5rem;   /* 24px */
@@ -147,6 +159,8 @@ license: Complete terms in LICENSE.txt
 --space-6: 3rem;     /* 48px */
 --space-8: 4rem;     /* 64px */
 ```
+
+**注意**: 現状の `static/css/site.css` には `--space-*` トークンは定義されていません。現行ルールとしては、8pxベースの `rem` 値を直接使用してください（例: `margin: 2rem`, `padding: 1.5rem`）。将来的にデザイントークン化する場合は、上記の変数を `:root` に追加してください。
 
 ### 最低基準
 
@@ -210,8 +224,10 @@ license: Complete terms in LICENSE.txt
 ### 最低基準
 
 - **コントラスト比**: WCAG AA準拠（通常テキスト4.5:1、大テキスト3:1）
-- **リンク色**: `--color-primary-500` (デフォルト), `--color-primary-700` (hover)
+- **リンク色**: `--color-primary-700` (デフォルト), `--color-primary-900` (hover) ※WCAG AA 4.5:1準拠
 - **ダークモード**: `prefers-color-scheme: dark` で対応
+
+**注意**: `--color-primary-500` (#0ea5e9) を白系背景（`--color-bg-primary` #fafafa）で使用すると、コントラスト比が約2.7:1となりWCAG AA基準を満たしません。通常テキストやリンクには必ず `--color-primary-700` (#0369a1) 以上を使用してください。
 
 ### Do
 - ✅ CSS変数（`--color-*`）を使用
@@ -495,7 +511,9 @@ npm run test:animations    # アニメーション検証
 
 ### CI/CD統合
 
-すべてのテストは `.github/workflows/deploy-public.yml` で自動実行されます。PRマージ前に必ず通過させてください。
+主要なテストは `.github/workflows/deploy-public.yml` で自動実行されます（`test:published`, `test:404`, `test:taxonomy`, `test:link-validation`, `test:typography`, `test:slugify`）。PR マージ前には必ず CI がグリーンであることを確認してください。
+
+また、CI でカバーされていないテスト（例: `npm run test:a11y`, `npm run test:theme`, `npm run test:visual-effects`, `npm run test:animations` など）は、レビュアーと合意したタイミングでローカル実行し、結果を PR 上で共有してください。
 
 ---
 

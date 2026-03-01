@@ -73,11 +73,6 @@
 
 ## Requirements *(mandatory)*
 
-<!--
-  ACTION REQUIRED: The content in this section represents placeholders.
-  Fill them out with the right functional requirements.
--->
-
 ### Functional Requirements
 
 - **FR-001**: システムは技術記事を Markdown 形式で作成・編集・保存できること
@@ -112,11 +107,6 @@
 - **BuildArtifact**: 公開サイトに出力する静的ファイル
 
 ## Success Criteria *(mandatory)*
-
-<!--
-  ACTION REQUIRED: Define measurable success criteria.
-  These must be technology-agnostic and measurable.
--->
 
 ### Measurable Outcomes
 
@@ -167,9 +157,9 @@
 
 ### 検証方法
 
-1. **自動検証**: axe-core または axe-core を使ったスクリプト（`scripts/validate-a11y.js`）
+1. **自動検証**: axe-core を使ったスクリプト（`scripts/validate-a11y.js`）を手動実行またはCI統合
 2. **手動検証**: キーボードナビゲーション (Tab → Enter)、スクリーンリーダー (NVDA/VoiceOver) 簡易確認
-3. **CI/CD 検証**: GitHub Actions で axe-core 実行、ARIA 違反があれば fail
+3. **CI/CD 検証**: 現状は手動実行を推奨。将来的にGitHub Actionsで axe-core 実行を統合し、ARIA 違反があれば fail とする予定
 
 ### 非準拠の許容範囲
 
@@ -195,3 +185,208 @@
 - コメント機能やSNS連携
 - 有料会員向けの限定公開
 - 複数筆者による共同編集
+
+## Data Model
+
+記事は以下のFront Matterを持つMarkdownファイルとして管理されます：
+
+```yaml
+---
+title: "記事タイトル"
+date: 2026-02-14
+publishedAt: 2026-02-14
+published: true
+layout: layouts/article
+tags:
+  - sample
+  - tech
+category: general
+slug: 2026-02-14-sample-post
+author: 筆者
+---
+```
+
+**フィールドの使い分け**:
+- `date`: Eleventy のデフォルト日付フィールド（ファイルソート等に使用）
+- `publishedAt`: 公開日として明示的に表示する日付
+- 通常は両方を同じ値に設定します。`.eleventy.js` のコレクション定義において `publishedAt` が未設定の場合は `date` をソート用のフォールバックとして使用します。ただし、テンプレートでは `publishedAt` のみを表示用に参照します
+
+### 主要エンティティ
+
+- **Article**: タイトル、本文（Markdown）、公開状態（`published: true/false`）、公開日（`publishedAt`）、タグ（`tags`配列）、カテゴリー（`category`単数）、スラッグ（`slug`）、レイアウト、著者、SEOメタ情報（`seoTitle`、`seoDescription`）
+- **Tag**: 記事を横断的に整理するラベル（多対多関係）
+- **Category**: 記事の主分類（多対一関係）
+- **AnalyticsSummary**: 記事ごとのPV数と流入元の集計（Google Analytics 4から取得）
+
+詳細なデータモデル定義は [data-model.md](./data-model.md) を参照してください。
+
+## Performance Requirements
+
+このプロジェクトでは、以下のパフォーマンス目標を設定しています：
+
+### Core Web Vitals
+
+| Metric | Target | Monitoring |
+|--------|--------|------------|
+| LCP (Largest Contentful Paint) | ≤ 2.5s | Lighthouse CI + GA4 RUM |
+| INP (Interaction to Next Paint) | ≤ 200ms | GA4 RUM Events |
+| CLS (Cumulative Layout Shift) | ≤ 0.1 | Lighthouse CI |
+
+### Lighthouse スコア
+
+| Category | Target |
+|----------|--------|
+| Performance | ≥ 85 |
+| Accessibility | ≥ 95 |
+| Best Practices | ≥ 90 |
+| SEO | ≥ 92 |
+
+### バンドルサイズ予算
+
+| Resource | Budget |
+|----------|--------|
+| HTML | ≤ 50KB |
+| CSS (gzip) | ≤ 15KB |
+| JS (gzip) | ≤ 10KB |
+| Images (homepage) | ≤ 30KB |
+| Total (homepage) | ≤ 150KB |
+
+パフォーマンス予算の詳細は以下のドキュメントを参照してください：
+- [performance-budget.md](./performance-budget.md) - 予算値と監視スケジュール
+- [core-web-vitals.md](./core-web-vitals.md) - Core Web Vitals の詳細と最適化方法
+
+**運用上の前提**：
+- Lighthouse スコアや Core Web Vitals 等の閾値の「信頼できる唯一の情報源 (SSOT)」は `.lighthouserc.json` および CI workflow の設定とします
+- 本 spec 内の表や `performance-budget.md` に記載する具体的な目標値は、上記設定に追従して更新される対象とし、数値不整合が発生した場合は `.lighthouserc.json` / workflow 側を優先します
+- CI 上の `continue-on-error` の扱いなど、実際の判定条件も `.github/workflows/` 配下の定義に従います
+
+## Security
+
+### Content Security Policy
+
+- **現状**: CSP は未設定（将来適用予定）
+- **方針**: GitHub Pages で提供する静的サイトに対し、最小限の CSP を導入する
+  - `script-src` では Google Analytics 4（GA4）に必要なドメインのみ外部リソースとして許可する
+  - その他の外部スクリプト・インラインスクリプトは原則禁止とする
+
+### 脅威モデルと対策
+
+本ブログは静的サイト生成かつ「記事本文は信頼できる筆者のみが編集する」ことを前提としています：
+
+- **SQLインジェクション等**: サーバーサイド処理やデータベースを持たない構成のため、サーバー側で発生する攻撃面は原則として存在しません
+- **XSSリスク**: 記事本文をHTMLとしてそのまま出力する実装（`{{ content | safe }}`）では、筆者以外が編集できる場合や外部入力を取り込む場合にXSSリスクが残り得るため、脅威モデルに応じて入力サニタイズやCSP強化などの追加対策を検討すること
+
+### Dependency Management
+
+- Dependabot による依存関係の自動更新を推奨（GitHub リポジトリ設定で管理）
+- 週次または月次で依存関係の更新を確認
+- npm audit によるセキュリティスキャンをCI/CDに統合可能
+
+### Secrets Management
+
+- GitHub Secrets で GA4 測定IDを管理
+- 環境変数: `GA4_MEASUREMENT_ID`
+- 機密情報は GitHub Secrets でのみ管理し、`gh-pages` ブランチにはビルド済み静的ファイル（成果物）のみを公開
+
+## Testing Strategy
+
+### Validation Scripts
+
+本プロジェクトでは、以下のテストスクリプトを用意しています：
+
+**CI/CD で自動実行されるテスト** (`.github/workflows/deploy-public.yml`):
+- `npm run test:typography` - タイポグラフィ設定の検証
+- `npm run test:slugify` - スラッグ生成の一貫性検証
+- `npm run test:published` - Front Matter の `published` フィルター検証
+- `npm run test:404` - 404 エラーページの存在確認
+- `npm run test:taxonomy` - タグ・カテゴリーページの整合性検証
+- `npm run test:link-validation` - 内部リンク切れ検出（pathPrefix対応）
+- `npm run test:animations` - アニメーションとマイクロインタラクションの検証
+- `npm run test:visual-effects` - ビジュアルエフェクト（シャドウ、背景等）の検証
+
+**手動実行用のテスト**:
+- `npm run test:ga4` - Google Analytics 4 実装の確認
+- `npm run test:alt-text` - 画像の代替テキスト（alt属性）チェック
+- `npm run test:a11y` - アクセシビリティ検証（jsdomベース）
+- `npm run test:article-design` - 記事デザインの整合性検証
+
+### E2E Tests (Playwright)
+
+- ナビゲーションテスト（デスクトップ・モバイル）
+- ページ遷移の確認
+- アクセシビリティ検証
+- パフォーマンス予算の確認
+
+テストは Chromium と Firefox の両ブラウザで実行されます。ローカル環境では並列実行、CI環境では `workers: 1` によりシリアル実行されます。
+
+### CI Integration
+
+CI/CD で自動実行されるテストは以下のワークフローで実行されます：
+- `.github/workflows/deploy-public.yml` - ビルドとデプロイ前の検証
+- `.github/workflows/ci.yml` - Pull Request時の検証
+
+主要なテスト（ユニットテストや E2E など）が失敗した場合は CI が失敗し、本番デプロイを防止します。Lighthouse については現状レポート目的（`continue-on-error: true`）であり、閾値未達でもデプロイをブロックしません。
+
+## Deployment
+
+### GitHub Pages
+
+- **デプロイ先ブランチ**: `gh-pages`
+- **ビルドワークフロー**: `.github/workflows/deploy-public.yml`
+- **公開URL**: https://kosyo1204.github.io/my-main-blog/
+
+### デプロイワークフロー
+
+1. `master` または `develop` ブランチで開発
+2. Pull Request を作成 → CI実行（ビルド・テスト）
+   - `master`/`develop` 宛てPR: `.github/workflows/ci.yml` でE2Eテスト実行
+   - `develop`/`001-tech-blog` 宛てPR: `.github/workflows/lighthouse-ci.yml` でLighthouseスコア計測
+3. `master` ブランチへマージ → `deploy-public.yml` が自動実行
+4. `_site/` ディレクトリを `gh-pages` ブランチにデプロイ
+5. GitHub Pages が自動的に公開
+
+### 将来の拡張
+
+以下の機能拡張を計画しています：
+
+- **独自ドメイン設定** - DNS CNAME 設定のみで移行可能（Phase 1 想定）
+- **Cloudflare CDN 統合** - キャッシュとパフォーマンス最適化
+- **継続的なパフォーマンス監視** - Lighthouse CI の自動実行
+- **A/Bテスト基盤** - 記事レイアウトの最適化
+
+## Contribution Guidelines
+
+プルリクエストを作成する際は、以下のチェックリストを確認してください：
+
+### Pull Request Checklist
+
+- [ ] すべてのテストが通過している（`npm run test:*`）
+- [ ] Lighthouse スコアが予算内に収まっている
+- [ ] コミットメッセージが Conventional Commits 準拠（日本語）
+- [ ] ドキュメントの更新（必要に応じて）
+- [ ] コードスタイルが統一されている
+- [ ] アクセシビリティ基準（WCAG 2.1 Level AA）を満たしている
+
+詳細なコントリビューションガイドラインは [CONTRIBUTING.md](../../CONTRIBUTING.md) を参照してください。
+
+### コミットメッセージ形式
+
+```
+{type}({scope}): {description}
+```
+
+例：
+- `feat(記事): 新規投稿機能を実装`
+- `fix(UI): レスポンシブデザインを修正`
+- `docs(README): セットアップ手順を追加`
+
+### ブランチ戦略
+
+このプロジェクトでは以下のブランチ戦略を採用しています：
+
+- **master**: 本番環境（デプロイ用）
+- **develop**: 開発統合ブランチ
+- **feature/{name}**: 新機能開発
+- **hotfix/{name}**: 緊急修正
+
+※ 注意: CONTRIBUTING.md では本番ブランチを `main` と記載していますが、実際のワークフロー（`.github/workflows/*.yml`）では `master` を使用しています。今後の移行を検討中です。

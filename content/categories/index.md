@@ -10,15 +10,17 @@ permalink: /categories/index.html
 
 ## 利用可能なカテゴリー
 
-{% for category in collections.categories %}
-{% set articlesWithCategory = [] %}
-{% for article in collections.articles %}
-  {% if article.data.category == category %}
-    {% set articlesWithCategory = articlesWithCategory.concat(article) %}
-  {% endif %}
-{% endfor %}
-- **[{{ category }}]({{ ('/categories/' + (category | slugify) + '/') | url }})** ({{ articlesWithCategory | length }} 記事)
-{% endfor %}
+<div class="category-list">
+{%- for category in collections.categories -%}
+{%- set articlesWithCategory = [] -%}
+{%- for article in collections.articles -%}
+  {%- if article.data.category == category -%}
+    {%- set articlesWithCategory = articlesWithCategory.concat(article) -%}
+  {%- endif -%}
+{%- endfor -%}
+<a href="{{ ('/categories/' + (category | slugify) + '/') | url }}">{{ category }} ({{ articlesWithCategory | length }})</a>
+{%- endfor -%}
+</div>
 
 {% else %}
 

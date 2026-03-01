@@ -9,13 +9,31 @@ templateEngine: md,njk
 {% if collections.articles | length > 0 %}
 ### 最新の記事
 
-{% for article in collections.articles %}
-- **[{{ article.data.title }}]({{ article.url | url }})** — {{ article.data.publishedAt | dateISO }}
-  {% if article.data.tags %}
-    {% set tagList = article.data.tags | join(", ") %}
-  _Tags: {{ tagList }}_
-  {% endif %}
-{% endfor %}
+<div class="articles-grid">
+{%- for article in collections.articles -%}
+<article class="article-card">
+  <div class="article-meta">
+    <time datetime="{{ article.data.publishedAt | dateISO }}">{{ article.data.publishedAt | dateISO }}</time>
+    {%- if article.data.category -%}
+    <span class="article-category">{{ article.data.category }}</span>
+    {%- endif -%}
+  </div>
+  <h2 class="article-title">
+    <a href="{{ article.url | url }}">{{ article.data.title }}</a>
+  </h2>
+  {%- if article.data.excerpt -%}
+  <p class="article-excerpt">{{ article.data.excerpt }}</p>
+  {%- endif -%}
+  {%- if article.data.tags -%}
+  <div class="article-tags tag-list">
+    {%- for tag in article.data.tags -%}
+    <a href="{{ ('/tags/' + (tag | slugify) + '/') | url }}" class="tag">{{ tag }}</a>
+    {%- endfor -%}
+  </div>
+  {%- endif -%}
+</article>
+{%- endfor -%}
+</div>
 
 **[すべての記事を見る]({{ '/tags/' | url }})**
 {% else %}

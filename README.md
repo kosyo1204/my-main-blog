@@ -72,7 +72,7 @@
 
 ### 前提条件
 
-- Node.js 18以上
+- Node.js 18.17以上（18 LTS の最新バージョン推奨）
 - npm
 
 ### インストール
@@ -82,7 +82,7 @@
 npm install
 
 # Playwright ブラウザのインストール（E2Eテスト実行時のみ必要）
-npx playwright install chromium firefox
+npx playwright install --with-deps chromium firefox
 ```
 
 ### 開発サーバーの起動

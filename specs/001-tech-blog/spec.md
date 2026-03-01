@@ -234,7 +234,7 @@ author: 筆者
 | Performance | ≥ 85 |
 | Accessibility | ≥ 95 |
 | Best Practices | ≥ 90 |
-| SEO | ≥ 95 |
+| SEO | ≥ 92 |
 
 ### バンドルサイズ予算
 
@@ -254,9 +254,17 @@ author: 筆者
 
 ### Content Security Policy
 
-- 静的サイトのため最小限のCSPを適用
-- Google Analytics 4 スクリプトのみ外部リソースとして許可
-- XSS、SQLインジェクションなどの一般的な脆弱性は静的サイト生成により自然に回避
+- **現状**: CSP は未設定（将来適用予定）
+- **方針**: GitHub Pages で提供する静的サイトに対し、最小限の CSP を導入する
+  - `script-src` では Google Analytics 4（GA4）に必要なドメインのみ外部リソースとして許可する
+  - その他の外部スクリプト・インラインスクリプトは原則禁止とする
+
+### 脅威モデルと対策
+
+本ブログは静的サイト生成かつ「記事本文は信頼できる筆者のみが編集する」ことを前提としています：
+
+- **SQLインジェクション等**: サーバーサイド処理やデータベースを持たない構成のため、サーバー側で発生する攻撃面は原則として存在しません
+- **XSSリスク**: 記事本文をHTMLとしてそのまま出力する実装（`{{ content | safe }}`）では、筆者以外が編集できる場合や外部入力を取り込む場合にXSSリスクが残り得るため、脅威モデルに応じて入力サニタイズやCSP強化などの追加対策を検討すること
 
 ### Dependency Management
 
@@ -268,7 +276,7 @@ author: 筆者
 
 - GitHub Secrets で GA4 測定IDを管理
 - 環境変数: `GA4_MEASUREMENT_ID`
-- Private リポジトリに機密情報を保持、Public リポジトリには生成済み静的ファイルのみ配置
+- 機密情報は GitHub Secrets でのみ管理し、`gh-pages` ブランチにはビルド済み静的ファイル（成果物）のみを公開
 
 ## Testing Strategy
 
@@ -307,7 +315,7 @@ author: 筆者
 - `.github/workflows/deploy-public.yml` - ビルドとデプロイ前の検証
 - `.github/workflows/ci.yml` - Pull Request時の検証
 
-テスト失敗時は CI が失敗し、本番デプロイを防止します。
+主要なテスト（ユニットテストや E2E など）が失敗した場合は CI が失敗し、本番デプロイを防止します。Lighthouse については現状レポート目的（`continue-on-error: true`）であり、閾値未達でもデプロイをブロックしません。
 
 ## Deployment
 

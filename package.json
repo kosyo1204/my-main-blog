@@ -16,6 +16,7 @@
     "test:lint": "eslint . --ext .js",
     "test:theme": "node scripts/validate-theme.js",
     "test:a11y": "node scripts/validate-a11y.js",
+    "test:visual-effects": "node scripts/validate-visual-effects.js",
     "test:e2e": "playwright test"
   },
   "devDependencies": {

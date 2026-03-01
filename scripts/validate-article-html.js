@@ -14,6 +14,7 @@
 
 const fs = require('fs');
 const path = require('path');
+const { JSDOM } = require('jsdom');
 
 const SITE_DIR = path.join(__dirname, '..', '_site');
 const ARTICLES_DIR = path.join(SITE_DIR, 'articles');
@@ -33,18 +34,7 @@ function validateArticlePage(filePath, relativePath) {
     errors.push('DOCTYPE宣言が見つかりません');
   }
 
-  // 2. CSS linkタグの確認
-  if (!content.includes('<link rel="stylesheet"')) {
-    errors.push('CSS linkタグが見つかりません');
-  }
-
-  // 3. site.cssへの参照確認
-  if (!content.includes('href="/my-main-blog/css/site.css"') &&
-      !content.includes("href='/my-main-blog/css/site.css'")) {
-    errors.push('site.cssへの参照が見つかりません');
-  }
-
-  // 4. Front Matterの混入確認（YAML形式）
+  // 2. Front Matterの混入確認（YAML形式）- DOMパース前にチェック
   const lines = content.split('\n');
   for (let i = 0; i < Math.min(10, lines.length); i++) {
     if (lines[i].trim() === '---' && i < 5) {
@@ -55,23 +45,56 @@ function validateArticlePage(filePath, relativePath) {
     }
   }
 
-  // 5. 基本的なHTML構造の確認
-  if (!content.includes('<html')) {
-    errors.push('<html>タグが見つかりません');
-  }
-  if (!content.includes('<head>')) {
-    errors.push('<head>タグが見つかりません');
-  }
-  if (!content.includes('<body>')) {
-    errors.push('<body>タグが見つかりません');
-  }
+  // 3. DOMパースによる構造検証
+  try {
+    const dom = new JSDOM(content);
+    const document = dom.window.document;
 
-  // 6. メタタグの確認
-  if (!content.includes('<meta charset="UTF-8">')) {
-    errors.push('charset meta タグが見つかりません');
-  }
-  if (!content.includes('<meta name="viewport"')) {
-    errors.push('viewport meta タグが見つかりません');
+    // HTML基本構造の確認
+    const html = document.querySelector('html');
+    const head = document.querySelector('head');
+    const body = document.querySelector('body');
+
+    if (!html) {
+      errors.push('<html>要素が見つかりません');
+    }
+    if (!head) {
+      errors.push('<head>要素が見つかりません');
+    }
+    if (!body) {
+      errors.push('<body>要素が見つかりません');
+    }
+
+    // メタタグの確認
+    const charsetMeta = document.querySelector('meta[charset]');
+    if (!charsetMeta) {
+      errors.push('charset meta タグが見つかりません');
+    } else if (charsetMeta.getAttribute('charset').toUpperCase() !== 'UTF-8') {
+      errors.push('charset が UTF-8 ではありません');
+    }
+
+    const viewportMeta = document.querySelector('meta[name="viewport"]');
+    if (!viewportMeta) {
+      errors.push('viewport meta タグが見つかりません');
+    }
+
+    // CSS linkタグの確認
+    const stylesheetLinks = document.querySelectorAll('link[rel="stylesheet"]');
+    if (stylesheetLinks.length === 0) {
+      errors.push('CSS linkタグが見つかりません');
+    }
+
+    // site.cssへの参照確認
+    const siteCssLink = Array.from(stylesheetLinks).find(link => {
+      const href = link.getAttribute('href');
+      return href && href.includes('/my-main-blog/css/site.css');
+    });
+    if (!siteCssLink) {
+      errors.push('site.cssへの参照が見つかりません');
+    }
+
+  } catch (parseError) {
+    errors.push(`HTMLパースエラー: ${parseError.message}`);
   }
 
   if (errors.length > 0) {

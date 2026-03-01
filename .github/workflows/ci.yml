@@ -41,6 +41,7 @@ jobs:
         with:
           name: playwright-report
           path: playwright-report
+          if-no-files-found: ignore
 
       - name: Upload Playwright test results
         if: failure()
@@ -48,3 +49,4 @@ jobs:
         with:
           name: playwright-test-results
           path: test-results
+          if-no-files-found: ignore

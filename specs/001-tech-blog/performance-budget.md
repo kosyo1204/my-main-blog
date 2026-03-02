@@ -4,9 +4,10 @@ title: パフォーマンス予算
 
 # パフォーマンス予算 (Performance Budget)
 
-**最終更新**: 2026-02-15  
-**監視対象**: 本番環境 GitHub Pages  
+**最終更新**: 2026-03-01
+**監視対象**: 本番環境 GitHub Pages
 **計測方法**: Lighthouse CI (自動) + WebPageTest (月1回手動)
+**測定条件**: Lighthouse 3回実行、中央値を採用
 
 ---
 
@@ -26,10 +27,12 @@ title: パフォーマンス予算
 
 | カテゴリ | 目標値 | 現在値 |
 |---------|--------|--------|
-| **Performance** | ≥ 85 | TBD |
-| **Accessibility** | ≥ 95 | TBD |
-| **Best Practices** | ≥ 90 | TBD |
-| **SEO** | ≥ 95 | TBD |
+| **Performance** | ≥ 85 | 100 |
+| **Accessibility** | ≥ 95 | 91 |
+| **Best Practices** | ≥ 90 | 96 |
+| **SEO** | ≥ 95 | 100 |
+
+**注記**: Accessibility の CI 閾値は暫定で 91 として運用しており、UI Modernization (#2-#9) 完了後に 95 へ引き上げ予定です。
 
 ### バンドルサイズ予算
 

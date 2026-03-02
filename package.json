@@ -20,7 +20,8 @@
     "test:a11y": "node scripts/validate-a11y.js",
     "test:visual-effects": "node scripts/validate-visual-effects.js",
     "test:e2e": "playwright test",
-    "test:article-design": "node scripts/validate-article-design.js"
+    "test:article-design": "node scripts/validate-article-design.js",
+    "test:article-html": "node scripts/validate-article-html.js"
   },
   "devDependencies": {
     "@11ty/eleventy": "^2.0.0",

@@ -168,13 +168,11 @@ GitHub Actionsで自動的に測定されます。
 - 各ページ3回測定して中央値を採用
 
 **閾値**:
-```json
-{
-  "Performance": 85点以上,
-  "Accessibility": 91点以上,
-  "Best Practices": 90点以上,
-  "SEO": 95点以上
-}
+```text
+Performance:      85点以上 (minScore: 0.85)
+Accessibility:    91点以上 (minScore: 0.91)
+Best Practices:   90点以上 (minScore: 0.90)
+SEO:              95点以上 (minScore: 0.95)
 ```
 
 **結果の確認**:
@@ -213,10 +211,36 @@ GitHub Actionsで自動的に測定されます。
 | **画像** | ≤ 30KB | ホームページのヘッダー画像など |
 
 **測定方法**:
-```bash
-npm run build
-du -sh _site/
-```
+
+1. **ビルド成果物の gzip 後サイズを CLI で確認する**
+
+   ```bash
+   # ビルド
+   npm run build
+
+   # CSS (各ファイルの gzip 後サイズをバイト数で表示)
+   find _site -name "*.css" -print0 \
+     | xargs -0 -I{} sh -c 'gzip -c "{}" | wc -c | xargs printf "%8d bytes  %s\n" - "{}"'
+
+   # JavaScript (各ファイルの gzip 後サイズ)
+   find _site -name "*.js" -print0 \
+     | xargs -0 -I{} sh -c 'gzip -c "{}" | wc -c | xargs printf "%8d bytes  %s\n" - "{}"'
+
+   # HTML (主要ページの gzip 後サイズの例)
+   gzip -c _site/index.html | wc -c | xargs printf "index.html: %8d bytes (gzipped)\n"
+   ```
+
+   - CSS の合計が **15KB (gzip 後)** 以内か
+   - JavaScript の合計が **10KB (gzip 後)** 以内か
+   - ホームページ（例: `_site/index.html` の HTML/CSS/JS）が合計 **150KB 以内** に収まっているか
+
+2. **ブラウザの転送量（transfer size）でページ単位のサイズを確認する**
+
+   - Chrome などのブラウザで対象ページを開き、**DevTools → Network タブ** を開く
+   - 「**Disable cache**」にチェックを入れ、ページをハードリロード（Cmd/Ctrl+Shift+R）
+   - Network タブの一覧で、`Transferred`（または `Transfer Size`）列を表示し、HTML / CSS / JS / 画像の転送量を確認する
+   - 下部のサマリ（合計転送量）や、上部フィルタで「JS / CSS / Img」などを切り替えながら、予算表の各項目と比較する
+   - さらに精査が必要な場合は **Lighthouse** を実行し、レポート内の「Network / Total size」などの指標で合計転送量を確認する
 
 ---
 
@@ -236,7 +260,7 @@ du -sh _site/
 
 ### Red（エラー）— 即時対応が必要
 
-パフォーマンスが許容範囲を下回っています。CI/CDでビルドが失敗し、本番デプロイが防止されます。
+パフォーマンスが許容範囲を下回っています。対象ブランチのCI（Lighthouse CI）が失敗し、PRチェックが通らなくなります。
 
 | 項目 | 基準値 |
 |------|-------|

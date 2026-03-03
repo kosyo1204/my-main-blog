@@ -3,7 +3,7 @@
   <!-- ホームページ -->
   <url>
     <loc>https://myblog.github.io/</loc>
-    <lastmod>2026-03-01</lastmod>
+    <lastmod>2026-03-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -17,7 +17,7 @@
   <!-- タグ一覧ページ -->
   <url>
     <loc>https://myblog.github.io/tags/</loc>
-    <lastmod>2026-03-01</lastmod>
+    <lastmod>2026-03-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -25,7 +25,7 @@
   <!-- カテゴリー一覧ページ -->
   <url>
     <loc>https://myblog.github.io/categories/</loc>
-    <lastmod>2026-03-01</lastmod>
+    <lastmod>2026-03-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>
@@ -47,19 +47,19 @@
   <!-- タグ別ページ -->
   <url>
     <loc>https://myblog.github.io/tags/design/</loc>
-    <lastmod>2026-03-01</lastmod>
+    <lastmod>2026-03-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://myblog.github.io/tags/sample/</loc>
-    <lastmod>2026-03-01</lastmod>
+    <lastmod>2026-03-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://myblog.github.io/tags/test/</loc>
-    <lastmod>2026-03-01</lastmod>
+    <lastmod>2026-03-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -67,13 +67,13 @@
   <!-- カテゴリー別ページ -->
   <url>
     <loc>https://myblog.github.io/categories/general/</loc>
-    <lastmod>2026-03-01</lastmod>
+    <lastmod>2026-03-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://myblog.github.io/categories/デザイン/</loc>
-    <lastmod>2026-03-01</lastmod>
+    <lastmod>2026-03-03</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>

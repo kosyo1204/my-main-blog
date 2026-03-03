@@ -42,7 +42,7 @@ Google が定義する、ユーザー体験を測定する3つの重要な指標
 - 長時間実行されるタスクがメインスレッドをブロックしている
 - イベントリスナーが最適化されていない
 
-**注記**: INPは2024年9月にFID（First Input Delay）に代わって公式指標になりました。
+**注記**: INPは2024年3月12日にFID（First Input Delay）に代わって公式指標になりました。
 
 #### CLS (Cumulative Layout Shift)
 
@@ -218,21 +218,25 @@ SEO:              95点以上 (minScore: 0.95)
    # ビルド
    npm run build
 
-   # CSS (各ファイルの gzip 後サイズをバイト数で表示)
+   # CSS (各ファイルの gzip 後サイズをバイト数で表示し、合計も算出)
    find _site -name "*.css" -print0 \
-     | xargs -0 -I{} sh -c 'gzip -c "{}" | wc -c | xargs printf "%8d bytes  %s\n" - "{}"'
+     | xargs -0 -I{} sh -c 'gzip -c "{}" | wc -c | xargs printf "%8d bytes  %s\n" - "{}"' \
+     | tee /dev/stderr \
+     | awk '{sum += $1} END {printf "\n合計: %d bytes (%.2f KB)\n", sum, sum/1024}'
 
-   # JavaScript (各ファイルの gzip 後サイズ)
+   # JavaScript (各ファイルの gzip 後サイズと合計)
    find _site -name "*.js" -print0 \
-     | xargs -0 -I{} sh -c 'gzip -c "{}" | wc -c | xargs printf "%8d bytes  %s\n" - "{}"'
+     | xargs -0 -I{} sh -c 'gzip -c "{}" | wc -c | xargs printf "%8d bytes  %s\n" - "{}"' \
+     | tee /dev/stderr \
+     | awk '{sum += $1} END {printf "\n合計: %d bytes (%.2f KB)\n", sum, sum/1024}'
 
    # HTML (主要ページの gzip 後サイズの例)
    gzip -c _site/index.html | wc -c | xargs printf "index.html: %8d bytes (gzipped)\n"
    ```
 
-   - CSS の合計が **15KB (gzip 後)** 以内か
-   - JavaScript の合計が **10KB (gzip 後)** 以内か
-   - ホームページ（例: `_site/index.html` の HTML/CSS/JS）が合計 **150KB 以内** に収まっているか
+   - CSS の合計が **15KB (gzip 後)** 以内か確認
+   - JavaScript の合計が **10KB (gzip 後)** 以内か確認
+   - ホームページ（例: `_site/index.html` の HTML/CSS/JS）が合計 **150KB 以内** に収まっているか確認
 
 2. **ブラウザの転送量（transfer size）でページ単位のサイズを確認する**
 
@@ -250,6 +254,8 @@ SEO:              95点以上 (minScore: 0.95)
 
 パフォーマンスは許容範囲内ですが、改善の余地があります。月1回の定期監査で対応を検討します。
 
+**注記**: これらの基準値は手動監査で使用する指標です。CI（自動チェック）の閾値とは異なります。
+
 | 項目 | 基準値 |
 |------|-------|
 | **LCP** | 2.5秒 - 4.0秒 |
@@ -261,6 +267,14 @@ SEO:              95点以上 (minScore: 0.95)
 ### Red（エラー）— 即時対応が必要
 
 パフォーマンスが許容範囲を下回っています。対象ブランチのCI（Lighthouse CI）が失敗し、PRチェックが通らなくなります。
+
+**注記**: CI（Lighthouse CI）の実際の閾値は以下の通りです：
+- Performance: 85点未満で失敗
+- Accessibility: 91点未満で失敗
+- Best Practices: 90点未満で失敗
+- SEO: 95点未満で失敗
+
+下表は手動監査でのRed基準です：
 
 | 項目 | 基準値 |
 |------|-------|
@@ -317,7 +331,7 @@ du -sh _site/images/
 
 **確認コマンド**:
 ```bash
-npm run test:alt-text  # 画像のalt属性とサイズ指定を確認
+npm run test:alt-text  # 画像のalt属性を確認
 ```
 
 ### Accessibilityスコアが低い場合

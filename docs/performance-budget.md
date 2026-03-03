@@ -220,15 +220,13 @@ SEO:              95点以上 (minScore: 0.95)
 
    # CSS (各ファイルの gzip 後サイズをバイト数で表示し、合計も算出)
    find _site -name "*.css" -print0 \
-     | xargs -0 -I{} sh -c 'gzip -c "{}" | wc -c | xargs printf "%8d bytes  %s\n" - "{}"' \
-     | tee /dev/stderr \
-     | awk '{sum += $1} END {printf "\n合計: %d bytes (%.2f KB)\n", sum, sum/1024}'
+     | xargs -0 -I{} sh -c 'size=$(gzip -c "$1" | wc -c); printf "%8d bytes  %s\n" "$size" "$1"' _ "{}" \
+     | awk '{sum += $1; print} END {printf "\n合計: %d bytes (%.2f KB)\n", sum, sum/1024}'
 
    # JavaScript (各ファイルの gzip 後サイズと合計)
    find _site -name "*.js" -print0 \
-     | xargs -0 -I{} sh -c 'gzip -c "{}" | wc -c | xargs printf "%8d bytes  %s\n" - "{}"' \
-     | tee /dev/stderr \
-     | awk '{sum += $1} END {printf "\n合計: %d bytes (%.2f KB)\n", sum, sum/1024}'
+     | xargs -0 -I{} sh -c 'size=$(gzip -c "$1" | wc -c); printf "%8d bytes  %s\n" "$size" "$1"' _ "{}" \
+     | awk '{sum += $1; print} END {printf "\n合計: %d bytes (%.2f KB)\n", sum, sum/1024}'
 
    # HTML (主要ページの gzip 後サイズの例)
    gzip -c _site/index.html | wc -c | xargs printf "index.html: %8d bytes (gzipped)\n"
@@ -401,7 +399,7 @@ npm run test:alt-text    # 画像のalt属性確認
 
 **頻度**: 毎月第1月曜日
 **ツール**: WebPageTest + Lighthouse（手動実行）
-**レポート**: `specs/001-tech-blog/audit-logs/` に保存
+**レポート**: `specs/001-tech-blog/audit-logs/` に保存（`.gitkeep`で管理）
 
 ### 四半期レビュー
 

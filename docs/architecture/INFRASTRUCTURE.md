@@ -67,7 +67,7 @@ graph TB
 | ワークフロー | ファイル | トリガー | 目的 |
 |------------|---------|---------|------|
 | **CI** | `ci.yml` | push/PR (master, develop) | E2Eテスト実行 |
-| **Deploy** | `deploy-public.yml` | push/PR (master, develop) | ビルド、検証、デプロイ |
+| **Deploy** | `deploy-public.yml` | push/PR (master, develop) | ビルド/検証（master push時のみデプロイ） |
 | **Lighthouse CI** | `lighthouse-ci.yml` | push (001-tech-blog), PR (develop, 001-tech-blog) | パフォーマンス品質チェック |
 
 ---
@@ -78,7 +78,7 @@ graph TB
 
 ```mermaid
 flowchart TD
-    START([Push to master/develop])
+    START([Push/PR to master/develop])
     CHECKOUT[Checkout<br/>リポジトリクローン]
     SETUP[Setup Node.js 20<br/>npm ci]
 
@@ -274,7 +274,7 @@ gitGraph
     checkout develop
     merge 001-tech-blog tag: "PR merge"
 
-    checkout main
+    checkout master
     merge develop tag: "Deploy to GitHub Pages"
 ```
 

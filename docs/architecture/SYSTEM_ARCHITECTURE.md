@@ -181,7 +181,7 @@ description: "記事の概要"
 
 ### 5.3 コレクション
 
-Eleventyが自動生成するコレクション:
+Eleventyで定義しているカスタムコレクション:
 
 - `collections.articles` - すべての記事（日付順ソート）
 - `collections.tags` - すべてのタグ
@@ -245,7 +245,6 @@ flowchart LR
     START([npm run build])
     READ[コンテンツ読み込み<br/>content/**/*.md]
     PARSE[Front Matterパース<br/>メタデータ抽出]
-    FILTER[フィルター適用<br/>published: true]
     COLLECTION[コレクション生成<br/>articles/tags/categories]
     TEMPLATE[テンプレート適用<br/>.njk → HTML]
     COPY[静的ファイルコピー<br/>static/ → /]
@@ -254,8 +253,7 @@ flowchart LR
 
     START --> READ
     READ --> PARSE
-    PARSE --> FILTER
-    FILTER --> COLLECTION
+    PARSE --> COLLECTION
     COLLECTION --> TEMPLATE
     TEMPLATE --> COPY
     COPY --> OUTPUT
@@ -265,6 +263,8 @@ flowchart LR
     style END fill:#d4edda
     style OUTPUT fill:#fff3cd
 ```
+
+**注**: 公開フラグ (`published: true`) のチェックは、ビルド後に CI の `test:published` で検証されます。
 
 ---
 

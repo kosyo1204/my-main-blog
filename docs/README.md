@@ -10,6 +10,7 @@
 - [docs/docker/README.md](docker/README.md) — Docker 開発ガイド
 - [docs/git-workflow/README.md](git-workflow/README.md) — Git 運用ガイド
 - [docs/design/IMAGE_OPTIMIZATION.md](design/IMAGE_OPTIMIZATION.md) — 画像最適化ガイド
+- [docs/performance-budget.md](performance-budget.md) — パフォーマンス予算ガイド
 
 ---
 
@@ -60,3 +61,4 @@ Docker 開発環境に関するドキュメント
 
 - [ルート README](../README.md)
 - [Git 運用ガイド](git-workflow/README.md)
+- [パフォーマンス予算ガイド](performance-budget.md)

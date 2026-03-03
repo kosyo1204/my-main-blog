@@ -35,7 +35,7 @@ graph TB
     subgraph "ビルドプロセス (Eleventy)"
         ELEVENTY[Eleventy SSG<br/>Static Site Generator]
         FILTERS[フィルター<br/>dateISO/tagFilter/slugify]
-        SHORTCODES[ショートコード<br/>image/link]
+        SHORTCODES[ショートコード<br/>image]
         COLLECTIONS[コレクション<br/>articles/tags/categories]
     end
 
@@ -105,8 +105,8 @@ my-main-blog/
 │   ├── validate-article-html.js
 │   └── ... (その他)
 │
-├── tests/               # E2Eテスト
-│   └── e2e/            # Playwright テスト
+├── tests/               # E2Eテスト (Playwright)
+│   └── *.spec.js       # Playwright テスト
 │
 ├── .github/
 │   └── workflows/       # CI/CDワークフロー
@@ -159,9 +159,9 @@ sequenceDiagram
 | 機能 | 説明 |
 |------|------|
 | **パススルーコピー** | `static/` → `/` へ静的ファイルをコピー |
-| **フィルター** | `dateISO`, `tagFilter`, `slugify` など |
-| **ショートコード** | `image`, `link` などの再利用可能なコンポーネント |
-| **コレクション** | 記事を `published: true` でフィルタリング |
+| **フィルター** | `dateISO`, `tagFilter`, `slugify`, `date` など |
+| **ショートコード** | `image` 画像最適化コンポーネント |
+| **コレクション** | 記事を日付順でソート、タグ・カテゴリーを収集 |
 | **パスプレフィックス** | `/my-main-blog/` を全URLに付与 |
 
 ### 5.2 Front Matter (記事メタデータ)
@@ -183,9 +183,9 @@ description: "記事の概要"
 
 Eleventyが自動生成するコレクション:
 
-- `collections.articles` - 公開済み記事 (`published: true`)
-- `collections.allTags` - すべてのタグ
-- `collections.allCategories` - すべてのカテゴリー
+- `collections.articles` - すべての記事（日付順ソート）
+- `collections.tags` - すべてのタグ
+- `collections.categories` - すべてのカテゴリー
 
 ---
 
@@ -193,9 +193,8 @@ Eleventyが自動生成するコレクション:
 
 ```mermaid
 graph TD
-    BASE[_includes/base.njk<br/>基本レイアウト]
-    ARTICLE[_includes/article.njk<br/>記事レイアウト]
-    LIST[_includes/article-list.njk<br/>記事一覧]
+    BASE[_includes/layouts/base.njk<br/>基本レイアウト]
+    ARTICLE[_includes/layouts/article.njk<br/>記事レイアウト]
 
     INDEX[index.md<br/>トップページ]
     ARTICLE_MD[articles/*.md<br/>記事ページ]
@@ -203,16 +202,14 @@ graph TD
     CATEGORY[categories.njk<br/>カテゴリーページ]
 
     BASE --> ARTICLE
-    BASE --> LIST
+    BASE --> INDEX
+    BASE --> TAG
+    BASE --> CATEGORY
 
     ARTICLE --> ARTICLE_MD
-    LIST --> INDEX
-    LIST --> TAG
-    LIST --> CATEGORY
 
     style BASE fill:#e1f5ff
     style ARTICLE fill:#fff3cd
-    style LIST fill:#fff3cd
 ```
 
 ---

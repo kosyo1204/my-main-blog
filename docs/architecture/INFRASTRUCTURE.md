@@ -154,7 +154,7 @@ flowchart TD
     SETUP[Setup Node.js 20<br/>npm ci]
     BUILD[Build Site<br/>npm run build]
 
-    LHCI[Run Lighthouse CI<br/>npx @lhci/cli autorun]
+    LHCI[Run Lighthouse CI<br/>npx @lhci/cli@0.14.x autorun<br/>--config=.lighthouserc.json]
 
     subgraph "Lighthouse測定"
         COLLECT[3回測定<br/>中央値を採用]
@@ -250,9 +250,10 @@ flowchart TD
 Playwright を使用した自動ブラウザテスト:
 
 - ページナビゲーションの動作確認
-- フォーム送信のテスト
-- モバイル・デスクトップ表示の確認
-- アクセシビリティチェック
+- モバイルメニュー開閉およびモバイル・デスクトップ表示（レスポンシブ）の確認
+- 基本的なキーボード操作（Tab移動、Escキーなど）の確認
+- パフォーマンス予算の基本チェック（LCP測定）
+- HTML セマンティクス検証（main、nav、header、footer）
 
 ---
 
@@ -384,14 +385,16 @@ timeline
 
 ## 11. 環境変数とシークレット
 
-### GitHub Actions Secrets
+### GitHub Actions環境変数
 
-| シークレット | 用途 |
-|------------|------|
-| `GITHUB_TOKEN` | 自動生成トークン（PR コメント、デプロイ） |
-| `LHCI_GITHUB_TOKEN` | Lighthouse CI の GitHub統合 |
+ワークフロー内で使用される環境変数:
 
-**注意**: カスタムシークレットは現在未使用（すべて自動生成トークン）。
+| 環境変数 | 用途 | 設定元 |
+|---------|------|--------|
+| `LHCI_GITHUB_TOKEN` | Lighthouse CI の GitHub統合（PRコメント投稿） | `${{ secrets.GITHUB_TOKEN }}` (自動生成) |
+| `GITHUB_TOKEN` | GitHub API アクセス、デプロイ | `${{ secrets.GITHUB_TOKEN }}` (自動生成) |
+
+**注意**: すべてGitHub Actionsが自動生成するトークンを使用。カスタムシークレットは不要。
 
 ---
 

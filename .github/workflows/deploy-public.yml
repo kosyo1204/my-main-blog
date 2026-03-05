@@ -11,14 +11,17 @@ on:
       - develop
 
 permissions:
-  contents: write
-  pages: write
-  id-token: write
+  contents: read
 
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
     name: Build, Test, and Deploy
+    # Deploy step needs write permissions on master push, otherwise read-only
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
 
     steps:
       # Checkout code
@@ -82,7 +85,7 @@ jobs:
       # Ref: https://github.com/peaceiris/actions-gh-pages/releases/tag/v3.9.3
       - name: Deploy to GitHub Pages
         if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-        uses: peaceiris/actions-gh-pages@884a022ae1324d3c237eda2f031bf38156050999
+        uses: peaceiris/actions-gh-pages@373f7f2b595c1ea9b49d2257d53eaea2c7b4ce4e # v3.9.3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./_site

@@ -23,7 +23,7 @@
 # ✅ 推奨: コミット SHA でピン留め（参照情報付き）
 # peaceiris/actions-gh-pages@v3.9.3 (2023-03-30)
 # Ref: https://github.com/peaceiris/actions-gh-pages/releases/tag/v3.9.3
-- uses: peaceiris/actions-gh-pages@884a022ae1324d3c237eda2f031bf38156050999
+- uses: peaceiris/actions-gh-pages@373f7f2b595c1ea9b49d2257d53eaea2c7b4ce4e # v3.9.3
 ```
 
 #### 対象アクション
@@ -37,6 +37,44 @@
    - デプロイやリリースを実行
 
 2. **公式 GitHub アクション**（`actions/*`）は、通常バージョンタグでも問題ありませんが、SHA ピン留めも推奨されます
+
+### ワークフローの権限設定
+
+**原則**: 最小権限の原則に従い、必要最小限の権限のみを付与します。
+
+#### 権限レベル
+
+GitHub Actions では以下のレベルで権限を設定できます：
+
+1. **ワークフローレベル**: すべてのジョブに適用されるデフォルト権限
+2. **ジョブレベル**: 特定のジョブに対する権限（ワークフローレベルを上書き）
+
+**注意**: ステップレベルでの権限設定はサポートされていません。
+
+#### 推奨構成
+
+```yaml
+# ワークフローレベル: デフォルトは読み取り専用
+permissions:
+  contents: read
+
+jobs:
+  build-and-test:
+    # ジョブレベル: デプロイに必要な権限を付与
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+    steps:
+      # デプロイは条件付きで実行
+      - name: Deploy
+        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+        uses: peaceiris/actions-gh-pages@373f7f2b # v3.9.3
+```
+
+この構成により：
+- PR実行時も同じ権限が付与されますが、デプロイステップは `if` 条件により実行されません
+- 権限の範囲を明確にし、セキュリティリスクを理解しやすくします
 
 #### メンテナンス
 
@@ -53,7 +91,9 @@
 
 ### Deploy Workflow (.github/workflows/deploy-public.yml)
 
-- ✅ `peaceiris/actions-gh-pages`: コミット SHA でピン留め済み (v3.9.3 → 884a022)
+- ✅ `peaceiris/actions-gh-pages`: コミット SHA でピン留め済み (v3.9.3 → 373f7f2b)
+- ✅ ワークフローレベルで `contents: read` を設定
+- ✅ ジョブレベルでデプロイに必要な権限を明示的に付与
 
 ---
 

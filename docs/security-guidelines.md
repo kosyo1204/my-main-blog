@@ -53,6 +53,8 @@ GitHub Actions では以下のレベルで権限を設定できます：
 
 #### 推奨構成
 
+最小権限の原則に従い、build/test と deploy を別ジョブに分離します：
+
 ```yaml
 # ワークフローレベル: デフォルトは読み取り専用
 permissions:
@@ -60,21 +62,42 @@ permissions:
 
 jobs:
   build-and-test:
-    # ジョブレベル: デプロイに必要な権限を付与
+    runs-on: ubuntu-latest
+    # このジョブは読み取り専用権限のみ
+    steps:
+      - uses: actions/checkout@v4
+      - run: npm ci
+      - run: npm run build
+      - run: npm test
+      # ビルド成果物をアップロード
+      - uses: actions/upload-artifact@v4
+        with:
+          name: site-build
+          path: _site/
+
+  deploy:
+    runs-on: ubuntu-latest
+    needs: build-and-test
+    # デプロイジョブは master への push 時のみ実行
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    # デプロイに必要な最小限の権限のみ付与
     permissions:
       contents: write
-      pages: write
-      id-token: write
     steps:
-      # デプロイは条件付きで実行
-      - name: Deploy
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
-        uses: peaceiris/actions-gh-pages@373f7f2b # v3.9.3
+      - uses: actions/download-artifact@v4
+        with:
+          name: site-build
+          path: _site/
+      - uses: peaceiris/actions-gh-pages@373f7f2b595c1ea9b49d2257d53eaea2c7b4ce4e # v3.9.3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./_site
 ```
 
 この構成により：
-- PR実行時も同じ権限が付与されますが、デプロイステップは `if` 条件により実行されません
-- 権限の範囲を明確にし、セキュリティリスクを理解しやすくします
+- **PR実行時**: build-and-test ジョブのみが実行され、読み取り専用権限で動作
+- **master への push 時**: build-and-test → deploy の順で実行され、deploy ジョブのみが書き込み権限を持つ
+- ジョブレベルの `if` 条件により、deploy ジョブ自体が PR 実行時には作成されないため、権限も付与されない
 
 #### メンテナンス
 
@@ -91,9 +114,10 @@ jobs:
 
 ### Deploy Workflow (.github/workflows/deploy-public.yml)
 
-- ✅ `peaceiris/actions-gh-pages`: コミット SHA でピン留め済み (v3.9.3 → 373f7f2b)
+- ✅ `peaceiris/actions-gh-pages`: コミット SHA でピン留め済み (v3.9.3 → 373f7f2b595c1ea9b49d2257d53eaea2c7b4ce4e)
 - ✅ ワークフローレベルで `contents: read` を設定
-- ✅ ジョブレベルでデプロイに必要な権限を明示的に付与
+- ✅ build と deploy をジョブ分離し、deploy ジョブのみに `contents: write` を付与
+- ✅ deploy ジョブは master への push 時のみ実行される `if` 条件を使用
 
 ---
 

@@ -16,12 +16,7 @@ permissions:
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
-    name: Build, Test, and Deploy
-    # Deploy step needs write permissions on master push, otherwise read-only
-    permissions:
-      contents: write
-      pages: write
-      id-token: write
+    name: Build and Test
 
     steps:
       # Checkout code
@@ -79,22 +74,36 @@ jobs:
       - name: Test article HTML structure and CSS
         run: npm run test:article-html
 
-      # Deploy to GitHub Pages (on master push only)
+      # Upload build artifact for deploy job and PRs
+      - name: Upload build artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: site-build
+          path: _site/
+          retention-days: 1
+
+  deploy:
+    runs-on: ubuntu-latest
+    name: Deploy to GitHub Pages
+    needs: build-and-test
+    if: github.event_name == 'push' && github.ref == 'refs/heads/master'
+    permissions:
+      contents: write
+
+    steps:
+      # Download build artifact
+      - name: Download build artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: site-build
+          path: _site/
+
+      # Deploy to GitHub Pages
       # Security: Pinned to commit SHA instead of version tag to prevent supply chain attacks
       # peaceiris/actions-gh-pages@v3.9.3 (2023-03-30)
       # Ref: https://github.com/peaceiris/actions-gh-pages/releases/tag/v3.9.3
       - name: Deploy to GitHub Pages
-        if: github.event_name == 'push' && github.ref == 'refs/heads/master'
         uses: peaceiris/actions-gh-pages@373f7f2b595c1ea9b49d2257d53eaea2c7b4ce4e # v3.9.3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./_site
-
-      # Archive build output for pull requests
-      - name: Archive build output
-        if: github.event_name == 'pull_request'
-        uses: actions/upload-artifact@v4
-        with:
-          name: site-pr-${{ github.event.pull_request.number }}
-          path: _site/
-          retention-days: 5

@@ -7,6 +7,8 @@
 ## まず読む
 
 - [docs/requirements/REQUIREMENTS.md](requirements/REQUIREMENTS.md) — 要件定義
+- [docs/architecture/SYSTEM_ARCHITECTURE.md](architecture/SYSTEM_ARCHITECTURE.md) — システム構成図
+- [docs/architecture/INFRASTRUCTURE.md](architecture/INFRASTRUCTURE.md) — インフラ構成（CI/CD）
 - [docs/docker/README.md](docker/README.md) — Docker 開発ガイド
 - [docs/git-workflow/README.md](git-workflow/README.md) — Git 運用ガイド
 - [docs/design/IMAGE_OPTIMIZATION.md](design/IMAGE_OPTIMIZATION.md) — 画像最適化ガイド
@@ -15,6 +17,12 @@
 ---
 
 ## 📁 ディレクトリ構成
+
+### [architecture/](architecture/SYSTEM_ARCHITECTURE.md)
+システム構成とインフラ構成に関するドキュメント
+
+- [SYSTEM_ARCHITECTURE.md](architecture/SYSTEM_ARCHITECTURE.md) — システムアーキテクチャ図
+- [INFRASTRUCTURE.md](architecture/INFRASTRUCTURE.md) — インフラ構成（CI/CDパイプライン）
 
 ### [git-workflow/](git-workflow/README.md)
 Git 運用に関するドキュメント

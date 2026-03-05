@@ -11,6 +11,7 @@
 - [docs/git-workflow/README.md](git-workflow/README.md) — Git 運用ガイド
 - [docs/design/IMAGE_OPTIMIZATION.md](design/IMAGE_OPTIMIZATION.md) — 画像最適化ガイド
 - [docs/performance-budget.md](performance-budget.md) — パフォーマンス予算ガイド
+- [docs/security-guidelines.md](security-guidelines.md) — セキュリティガイドライン
 
 ---
 

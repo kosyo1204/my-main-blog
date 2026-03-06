@@ -75,12 +75,15 @@ jobs:
         run: npm run test:article-html
 
       # Upload build artifact for deploy job and PRs
+      # Skip for develop branch pushes (deploy job won't run anyway)
       - name: Upload build artifact
+        if: github.event_name == 'pull_request' || (github.event_name == 'push' && github.ref == 'refs/heads/master')
         uses: actions/upload-artifact@v4
         with:
           name: site-build
           path: _site/
-          retention-days: 1
+          # PR: 7 days (for review), master push: 1 day (deployed immediately)
+          retention-days: ${{ github.event_name == 'pull_request' && 7 || 1 }}
 
   deploy:
     runs-on: ubuntu-latest

@@ -13,6 +13,7 @@
 - [docs/git-workflow/README.md](git-workflow/README.md) — Git 運用ガイド
 - [docs/design/IMAGE_OPTIMIZATION.md](design/IMAGE_OPTIMIZATION.md) — 画像最適化ガイド
 - [docs/performance-budget.md](performance-budget.md) — パフォーマンス予算ガイド
+- [docs/security-guidelines.md](security-guidelines.md) — セキュリティガイドライン
 
 ---
 
@@ -60,7 +61,8 @@ Docker 開発環境に関するドキュメント
 ## ドキュメントの追加ルール
 
 - 新規ドキュメントは `docs/` 配下の適切なカテゴリに追加する
-- 1トピック1ファイルを基本とし、ファイル名は英大文字+アンダースコアで統一する
+- 1トピック1ファイルを基本とし、ファイル名は kebab-case（小文字+ハイフン）で統一する（例: `security-guidelines.md`, `performance-budget.md`）
+- サブディレクトリ内のドキュメントは、英大文字+アンダースコアも可（例: `COMMIT_CONVENTION.md`, `REQUIREMENTS.md`）
 - 追加後はこの `docs/README.md` にリンクを追記する
 
 ---

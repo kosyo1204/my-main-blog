@@ -1,3 +1,12 @@
+<!--
+このファイルは GitHub Copilot 用のカスタム命令ファイルです。
+GitHub Copilot がコード生成・レビュー・コミットメッセージ作成時に参照します。
+
+関連ファイル:
+- .github/agents/README.md - Agentディレクトリの説明
+- .specify/JAPANESE_OUTPUT_POLICY.md - Speckit日本語出力ポリシー
+-->
+
 # Copilot Instructions
 
 ## 言語設定
